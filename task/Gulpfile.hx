@@ -55,6 +55,7 @@ class Gulpfile
 
   private static inline function reload(event:GulpEvent):Void
   {
+    trace("Reloading...");
     gulp.src('$WEBROOT/**')
       .pipe(connect.reload());
   }

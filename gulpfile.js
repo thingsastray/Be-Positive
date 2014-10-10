@@ -105,6 +105,7 @@ Gulpfile.watch_task = function(cb) {
 	Gulpfile.gulp.watch(["" + "./bin/html5" + "/**"],Gulpfile.reload);
 };
 Gulpfile.reload = function(event) {
+	console.log("Reloading...");
 	Gulpfile.gulp.src("" + "./bin/html5" + "/**").pipe(Gulpfile.connect.reload());
 };
 var StringBuf = function() {

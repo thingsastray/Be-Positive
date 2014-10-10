@@ -2564,7 +2564,7 @@ MainScene.__super__ = com.haxepunk.Scene;
 MainScene.prototype = $extend(com.haxepunk.Scene.prototype,{
 	begin: function() {
 		haxe.Log.trace("Hello Console",{ fileName : "MainScene.hx", lineNumber : 7, className : "MainScene", methodName : "begin"});
-		this.add(new com.haxepunk.Entity(100,100,new com.haxepunk.graphics.Text("Hello World")));
+		this.add(new com.haxepunk.Entity(100,100,new com.haxepunk.graphics.Text(BloodTransfusionRules.rule1)));
 	}
 	,__class__: MainScene
 });
