@@ -1663,15 +1663,19 @@ __ASSET__font_5.__super__ = openfl.text.Font;
 __ASSET__font_5.prototype = $extend(openfl.text.Font.prototype,{
 	__class__: __ASSET__font_5
 });
-var Person = function() {
+var Person = function(main) {
+	this.main = main;
 };
 $hxClasses["Person"] = Person;
 Person.__name__ = ["Person"];
 Person.prototype = {
-	__class__: Person
+	main: null
+	,__class__: Person
 };
-var Donor = function() {
-	Person.call(this);
+var Donor = function(main) {
+	Person.call(this,main);
+	haxe.Log.trace("spawned donor",{ fileName : "Donor.hx", lineNumber : 5, className : "Donor", methodName : "new"});
+	haxe.Log.trace("spawned donor",{ fileName : "Donor.hx", lineNumber : 6, className : "Donor", methodName : "new"});
 };
 $hxClasses["Donor"] = Donor;
 Donor.__name__ = ["Donor"];
@@ -2586,6 +2590,33 @@ MainScene.prototype = $extend(com.haxepunk.Scene.prototype,{
 	,begin: function() {
 		this.simulator = new Simulator(this);
 	}
+	,spawn: function(t) {
+		switch(t) {
+		case Patient:
+			this.patients.add(new Patient(this));
+			break;
+		case Donor:
+			this.donors.add(new Donor(this));
+			break;
+		}
+	}
+	,spawner: function(age) {
+		if(Std.random(100) == 0) switch(Patient) {
+		case Patient:
+			this.patients.add(new Patient(this));
+			break;
+		case Donor:
+			this.donors.add(new Donor(this));
+			break;
+		} else if(Std.random(100) == 0) switch(Donor) {
+		case Patient:
+			this.patients.add(new Patient(this));
+			break;
+		case Donor:
+			this.donors.add(new Donor(this));
+			break;
+		}
+	}
 	,__class__: MainScene
 });
 var IMap = function() { };
@@ -2649,8 +2680,9 @@ NMEPreloader.prototype = $extend(openfl.display.Sprite.prototype,{
 	}
 	,__class__: NMEPreloader
 });
-var Patient = function() {
-	Person.call(this);
+var Patient = function(main) {
+	Person.call(this,main);
+	haxe.Log.trace("spawned patient",{ fileName : "Patient.hx", lineNumber : 5, className : "Patient", methodName : "new"});
 };
 $hxClasses["Patient"] = Patient;
 Patient.__name__ = ["Patient"];
@@ -2720,7 +2752,7 @@ var Simulator = function(main) {
 	try {
 		this.simulation_speed = BloodTransfusionRules.simulation_speed;
 	} catch( e ) {
-		this.simulation_speed = 10.0;
+		this.simulation_speed = 50.0;
 	}
 	this.change_simulation_speed(this.simulation_speed);
 };
@@ -2734,10 +2766,10 @@ Simulator.prototype = {
 	,change_simulation_speed: function(new_speed) {
 		if(this.ticker != null) this.ticker.stop();
 		if(new_speed > 100) {
-			haxe.Log.trace("Warning! capped speed " + new_speed + " down to max: 100.0",{ fileName : "Simulator.hx", lineNumber : 45, className : "Simulator", methodName : "change_simulation_speed"});
+			haxe.Log.trace("Warning! capped speed " + new_speed + " down to max: 100.0",{ fileName : "Simulator.hx", lineNumber : 46, className : "Simulator", methodName : "change_simulation_speed"});
 			new_speed = 100.0;
 		} else if(new_speed < 1) {
-			haxe.Log.trace("Warning! capped speed " + new_speed + " up to min: 1.0",{ fileName : "Simulator.hx", lineNumber : 48, className : "Simulator", methodName : "change_simulation_speed"});
+			haxe.Log.trace("Warning! capped speed " + new_speed + " up to min: 1.0",{ fileName : "Simulator.hx", lineNumber : 49, className : "Simulator", methodName : "change_simulation_speed"});
 			new_speed = 1.0;
 		}
 		this.simulation_speed = new_speed;
@@ -2746,6 +2778,7 @@ Simulator.prototype = {
 	}
 	,tick: function() {
 		this.age++;
+		this.main.spawner(this.age);
 	}
 	,__class__: Simulator
 };
@@ -16965,8 +16998,10 @@ ApplicationMain.total = 0;
 openfl.display.DisplayObject.__instanceCount = 0;
 openfl.display.DisplayObject.__worldRenderDirty = 0;
 openfl.display.DisplayObject.__worldTransformDirty = 0;
+MainScene.SPAWN_PATIENT_RATE = 100;
+MainScene.SPAWN_DONOR_RATE = 100;
 Simulator.MAX_SIMULATION_SPEED = 10000;
-Simulator.DEFAULT_SIMULATION_SPEED = 10.0;
+Simulator.DEFAULT_SIMULATION_SPEED = 50.0;
 openfl.geom.Matrix.__identity = new openfl.geom.Matrix();
 com.haxepunk.HXP.VERSION = "2.5.3";
 com.haxepunk.HXP.INT_MIN_VALUE = -2147483648;

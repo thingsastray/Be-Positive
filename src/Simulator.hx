@@ -1,10 +1,11 @@
 /*
   stepper that runs on it's own loop, separate from render loop
 
-  1.0(min) => 10,000 ms
-  10.0 => 1,000 ms
-  100.0(max) => 100 ms
-  1000.0 => 1
+  1.0(min)      => 10,000 ms
+  10.0          => 1,000 ms
+  20.0(default) => 500 ms
+  100.0(max)    => 100 ms
+  1000.0        => 1
 
   10000 / new_speed = interval in ms
 
@@ -13,7 +14,7 @@ import haxe.Timer;
 class Simulator
 {
   private static inline var MAX_SIMULATION_SPEED:Int = 10000;
-  private static inline var DEFAULT_SIMULATION_SPEED:Float = 10.0;
+  private static inline var DEFAULT_SIMULATION_SPEED:Float = 50.0;
   private var simulation_speed:Float;
 
   private var main:MainScene;
@@ -57,6 +58,7 @@ class Simulator
   private inline function tick():Void
   {
     age++;
+    main.spawner(age);
 
   }
 
