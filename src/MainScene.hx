@@ -6,9 +6,13 @@ class MainScene extends Scene
   private static inline var DEFAULT_SIMULATION_SPEED:Float = 10.0;
 
   private var simulation_speed:Float;
+  private var patients:List<Patient>;
+  private var donors:List<Donor>;
 
   public function new()
   {
+    patients = new List<Patient>();
+    donors = new List<Donor>();
 
     simulation_speed = try{
       BloodTransfusionRules.simulation_speed;
