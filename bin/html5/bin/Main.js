@@ -1663,6 +1663,22 @@ __ASSET__font_5.__super__ = openfl.text.Font;
 __ASSET__font_5.prototype = $extend(openfl.text.Font.prototype,{
 	__class__: __ASSET__font_5
 });
+var Person = function() {
+};
+$hxClasses["Person"] = Person;
+Person.__name__ = ["Person"];
+Person.prototype = {
+	__class__: Person
+};
+var Donor = function() {
+	Person.call(this);
+};
+$hxClasses["Donor"] = Donor;
+Donor.__name__ = ["Donor"];
+Donor.__super__ = Person;
+Donor.prototype = $extend(Person.prototype,{
+	__class__: Donor
+});
 var EReg = function(r,opt) {
 	opt = opt.split("u").join("");
 	this.r = new RegExp(r,opt);
@@ -2556,15 +2572,25 @@ com.haxepunk.Scene.prototype = $extend(com.haxepunk.Tweener.prototype,{
 	,__properties__: $extend(com.haxepunk.Tweener.prototype.__properties__,{get_uniqueTypes:"get_uniqueTypes",get_layerNearest:"get_layerNearest",get_layerFarthest:"get_layerFarthest",get_nearest:"get_nearest",get_farthest:"get_farthest",get_layers:"get_layers",get_first:"get_first",get_count:"get_count",get_mouseY:"get_mouseY",get_mouseX:"get_mouseX"})
 });
 var MainScene = function() {
+	this.patients = new List();
+	this.donors = new List();
+	try {
+		this.simulation_speed = BloodTransfusionRules.simulation_speed;
+	} catch( e ) {
+		this.simulation_speed = 1.0;
+	}
 	com.haxepunk.Scene.call(this);
 };
 $hxClasses["MainScene"] = MainScene;
 MainScene.__name__ = ["MainScene"];
 MainScene.__super__ = com.haxepunk.Scene;
 MainScene.prototype = $extend(com.haxepunk.Scene.prototype,{
-	begin: function() {
-		haxe.Log.trace("Hello Console",{ fileName : "MainScene.hx", lineNumber : 7, className : "MainScene", methodName : "begin"});
-		this.add(new com.haxepunk.Entity(100,100,new com.haxepunk.graphics.Text(BloodTransfusionRules.rule1)));
+	simulation_speed: null
+	,patients: null
+	,donors: null
+	,begin: function() {
+		haxe.Log.trace(this.simulation_speed,{ fileName : "MainScene.hx", lineNumber : 28, className : "MainScene", methodName : "begin"});
+		this.add(new com.haxepunk.Entity(100,100,new com.haxepunk.graphics.Text(null,this.simulation_speed)));
 	}
 	,__class__: MainScene
 });
@@ -2628,6 +2654,15 @@ NMEPreloader.prototype = $extend(openfl.display.Sprite.prototype,{
 		this.progress.set_scaleX(percentLoaded);
 	}
 	,__class__: NMEPreloader
+});
+var Patient = function() {
+	Person.call(this);
+};
+$hxClasses["Patient"] = Patient;
+Patient.__name__ = ["Patient"];
+Patient.__super__ = Person;
+Patient.prototype = $extend(Person.prototype,{
+	__class__: Patient
 });
 var Reflect = function() { };
 $hxClasses["Reflect"] = Reflect;
@@ -16901,6 +16936,7 @@ ApplicationMain.total = 0;
 openfl.display.DisplayObject.__instanceCount = 0;
 openfl.display.DisplayObject.__worldRenderDirty = 0;
 openfl.display.DisplayObject.__worldTransformDirty = 0;
+MainScene.DEFAULT_SIMULATION_SPEED = 1.0;
 openfl.geom.Matrix.__identity = new openfl.geom.Matrix();
 com.haxepunk.HXP.VERSION = "2.5.3";
 com.haxepunk.HXP.INT_MIN_VALUE = -2147483648;
