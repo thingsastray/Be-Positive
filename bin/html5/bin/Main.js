@@ -2574,23 +2574,17 @@ com.haxepunk.Scene.prototype = $extend(com.haxepunk.Tweener.prototype,{
 var MainScene = function() {
 	this.patients = new List();
 	this.donors = new List();
-	try {
-		this.simulation_speed = BloodTransfusionRules.simulation_speed;
-	} catch( e ) {
-		this.simulation_speed = 1.0;
-	}
 	com.haxepunk.Scene.call(this);
 };
 $hxClasses["MainScene"] = MainScene;
 MainScene.__name__ = ["MainScene"];
 MainScene.__super__ = com.haxepunk.Scene;
 MainScene.prototype = $extend(com.haxepunk.Scene.prototype,{
-	simulation_speed: null
+	simulator: null
 	,patients: null
 	,donors: null
 	,begin: function() {
-		haxe.Log.trace(this.simulation_speed,{ fileName : "MainScene.hx", lineNumber : 28, className : "MainScene", methodName : "begin"});
-		this.add(new com.haxepunk.Entity(100,100,new com.haxepunk.graphics.Text(null,this.simulation_speed)));
+		this.simulator = new Simulator(this);
 	}
 	,__class__: MainScene
 });
@@ -2719,6 +2713,41 @@ Reflect.makeVarArgs = function(f) {
 		var a = Array.prototype.slice.call(arguments);
 		return f(a);
 	};
+};
+var Simulator = function(main) {
+	this.main = main;
+	this.age = 0;
+	try {
+		this.simulation_speed = BloodTransfusionRules.simulation_speed;
+	} catch( e ) {
+		this.simulation_speed = 10.0;
+	}
+	this.change_simulation_speed(100);
+};
+$hxClasses["Simulator"] = Simulator;
+Simulator.__name__ = ["Simulator"];
+Simulator.prototype = {
+	simulation_speed: null
+	,main: null
+	,ticker: null
+	,age: null
+	,change_simulation_speed: function(new_speed) {
+		if(this.ticker != null) this.ticker.stop();
+		if(new_speed > 100) {
+			haxe.Log.trace("Warning! capped speed " + new_speed + " down to max: 100.0",{ fileName : "Simulator.hx", lineNumber : 45, className : "Simulator", methodName : "change_simulation_speed"});
+			new_speed = 100.0;
+		} else if(new_speed < 1) {
+			haxe.Log.trace("Warning! capped speed " + new_speed + " up to min: 1.0",{ fileName : "Simulator.hx", lineNumber : 48, className : "Simulator", methodName : "change_simulation_speed"});
+			new_speed = 1.0;
+		}
+		this.simulation_speed = new_speed;
+		this.ticker = new haxe.Timer(10000 / this.simulation_speed | 0);
+		this.ticker.run = $bind(this,this.tick);
+	}
+	,tick: function() {
+		this.age++;
+	}
+	,__class__: Simulator
 };
 var Std = function() { };
 $hxClasses["Std"] = Std;
@@ -16936,7 +16965,8 @@ ApplicationMain.total = 0;
 openfl.display.DisplayObject.__instanceCount = 0;
 openfl.display.DisplayObject.__worldRenderDirty = 0;
 openfl.display.DisplayObject.__worldTransformDirty = 0;
-MainScene.DEFAULT_SIMULATION_SPEED = 1.0;
+Simulator.MAX_SIMULATION_SPEED = 10000;
+Simulator.DEFAULT_SIMULATION_SPEED = 10.0;
 openfl.geom.Matrix.__identity = new openfl.geom.Matrix();
 com.haxepunk.HXP.VERSION = "2.5.3";
 com.haxepunk.HXP.INT_MIN_VALUE = -2147483648;
