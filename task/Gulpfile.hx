@@ -50,14 +50,25 @@ class Gulpfile
 
   private static inline function watch_task(?cb:Void->Void):Void
   {
-    gulp.watch(['$WEBROOT/**'], reload);
+    gulp.watch(['$WEBROOT/**/*.js'], reload);
   }
 
   private static inline function reload(event:GulpEvent):Void
   {
-    trace("Reloading...");
-    gulp.src('$WEBROOT/**')
-      .pipe(connect.reload());
+    trace('Reloading... ${event.path}');
+
+    haxe.Timer.delay(function()
+      {
+        gulp.src(event.path)
+          .pipe(connect.reload());
+        trace("Reloaded");
+      },
+      if( StringTools.endsWith(event.path, "Be-Positive.js")){
+        0;
+      }else{
+        3000;
+      }
+    );
   }
   
 }
