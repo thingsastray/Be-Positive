@@ -31,7 +31,7 @@ class Simulator
       DEFAULT_SIMULATION_SPEED;
     }
 
-    change_simulation_speed(100);
+    change_simulation_speed(simulation_speed);
 
   }
 

@@ -2722,7 +2722,7 @@ var Simulator = function(main) {
 	} catch( e ) {
 		this.simulation_speed = 10.0;
 	}
-	this.change_simulation_speed(100);
+	this.change_simulation_speed(this.simulation_speed);
 };
 $hxClasses["Simulator"] = Simulator;
 Simulator.__name__ = ["Simulator"];
