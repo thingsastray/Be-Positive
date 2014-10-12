@@ -1402,6 +1402,32 @@ DocumentClass.__super__ = Main;
 DocumentClass.prototype = $extend(Main.prototype,{
 	__class__: DocumentClass
 });
+var BloodType = $hxClasses["BloodType"] = { __ename__ : true, __constructs__ : ["AB_POS","AB_NEG","A_POS","A_NEG","B_POS","B_NEG","O_POS","O_NEG"] };
+BloodType.AB_POS = ["AB_POS",0];
+BloodType.AB_POS.toString = $estr;
+BloodType.AB_POS.__enum__ = BloodType;
+BloodType.AB_NEG = ["AB_NEG",1];
+BloodType.AB_NEG.toString = $estr;
+BloodType.AB_NEG.__enum__ = BloodType;
+BloodType.A_POS = ["A_POS",2];
+BloodType.A_POS.toString = $estr;
+BloodType.A_POS.__enum__ = BloodType;
+BloodType.A_NEG = ["A_NEG",3];
+BloodType.A_NEG.toString = $estr;
+BloodType.A_NEG.__enum__ = BloodType;
+BloodType.B_POS = ["B_POS",4];
+BloodType.B_POS.toString = $estr;
+BloodType.B_POS.__enum__ = BloodType;
+BloodType.B_NEG = ["B_NEG",5];
+BloodType.B_NEG.toString = $estr;
+BloodType.B_NEG.__enum__ = BloodType;
+BloodType.O_POS = ["O_POS",6];
+BloodType.O_POS.toString = $estr;
+BloodType.O_POS.__enum__ = BloodType;
+BloodType.O_NEG = ["O_NEG",7];
+BloodType.O_NEG.toString = $estr;
+BloodType.O_NEG.__enum__ = BloodType;
+BloodType.__empty_constructs__ = [BloodType.AB_POS,BloodType.AB_NEG,BloodType.A_POS,BloodType.A_NEG,BloodType.B_POS,BloodType.B_NEG,BloodType.O_POS,BloodType.O_NEG];
 com.haxepunk.Tweener = function() {
 	this.active = true;
 	this.autoClear = false;
@@ -1609,6 +1635,9 @@ Type.getClassFields = function(c) {
 Type.getEnumConstructs = function(e) {
 	var a = e.__constructs__;
 	return a.slice();
+};
+Type.allEnums = function(e) {
+	return e.__empty_constructs__;
 };
 com.haxepunk.masks = {};
 com.haxepunk.masks.Hitbox = function(width,height,x,y) {
@@ -3447,6 +3476,7 @@ com.haxepunk.Entity.prototype = $extend(com.haxepunk.Tweener.prototype,{
 	,__properties__: $extend(com.haxepunk.Tweener.prototype.__properties__,{set_name:"set_name",get_name:"get_name",set_graphic:"set_graphic",get_graphic:"get_graphic",set_mask:"set_mask",get_mask:"get_mask",set_type:"set_type",get_type:"get_type",set_layer:"set_layer",get_layer:"get_layer",get_bottom:"get_bottom",get_top:"get_top",get_right:"get_right",get_left:"get_left",get_centerY:"get_centerY",get_centerX:"get_centerX",get_halfHeight:"get_halfHeight",get_halfWidth:"get_halfWidth",get_scene:"get_scene",get_world:"get_world",get_onCamera:"get_onCamera",set_y:"set_y",get_y:"get_y",set_x:"set_x",get_x:"get_x"})
 });
 var Clinic = function() {
+	this.bank = { AB_POS : 5, AB_NEG : 5, A_POS : 5, A_NEG : 5, B_POS : 5, B_NEG : 5, O_POS : 5, O_NEG : 5};
 	com.haxepunk.Entity.call(this,450,200,new com.haxepunk.graphics.Image(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE?(function($this) {
 		var $r;
 		var e = com.haxepunk.ds.Either.Right(com.haxepunk.graphics.atlas.Atlas.loadImageAsRegion((function($this) {
@@ -3468,7 +3498,8 @@ $hxClasses["Clinic"] = Clinic;
 Clinic.__name__ = ["Clinic"];
 Clinic.__super__ = com.haxepunk.Entity;
 Clinic.prototype = $extend(com.haxepunk.Entity.prototype,{
-	__class__: Clinic
+	bank: null
+	,__class__: Clinic
 });
 openfl.AssetLibrary = function() {
 };
@@ -3753,6 +3784,7 @@ var Person = function(main) {
 	this.main = main;
 	if(Std.random(2) == 0) this.gender = Gender.MALE; else this.gender = Gender.FEMALE;
 	this.move_speed = 3.9;
+	this.blood_type = Type.allEnums(BloodType)[Std.random(Type.allEnums(BloodType).length)];
 	this.sprite = new com.haxepunk.graphics.Spritemap(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE?(function($this) {
 		var $r;
 		var e = com.haxepunk.ds.Either.Right(new com.haxepunk.graphics.atlas.TileAtlas((function($this) {
@@ -3769,10 +3801,19 @@ var Person = function(main) {
 		$r = e1;
 		return $r;
 	}(this)),72,72,$bind(this,this.sprite_loaded));
+	this.blood_badge_text = new com.haxepunk.graphics.Text(Person.badge_text(this.blood_type),0,0,null,null,{ size : 16});
+	this.blood_badge = new com.haxepunk.Entity(0,0,this.blood_badge_text);
+	this.main.add(this.blood_badge);
 	com.haxepunk.Entity.call(this,-80,Std.random(480));
 };
 $hxClasses["Person"] = Person;
 Person.__name__ = ["Person"];
+Person.badge_text = function(bt) {
+	var str = Std.string(bt);
+	str = StringTools.replace(str,"_POS","+");
+	str = StringTools.replace(str,"_NEG","-");
+	return str;
+};
 Person.__super__ = com.haxepunk.Entity;
 Person.prototype = $extend(com.haxepunk.Entity.prototype,{
 	main: null
@@ -3780,10 +3821,19 @@ Person.prototype = $extend(com.haxepunk.Entity.prototype,{
 	,gender: null
 	,destination: null
 	,move_speed: null
+	,blood_type: null
+	,blood_badge_text: null
+	,blood_badge: null
 	,update: function() {
+		this.blood_badge.visible = this.visible;
+		this.blood_badge.x = (this.followCamera?this.x + com.haxepunk.HXP.camera.x:this.x) + 28;
+		this.blood_badge.y = (this.followCamera?this.y + com.haxepunk.HXP.camera.y:this.y) + -9;
 		if(this.destination != null) {
 			if(this.distanceToPoint(this.destination.x,this.destination.y,null) < 1) this.arrive(); else this.moveTowards(this.destination.x,this.destination.y,this.move_speed,null,null);
 		}
+	}
+	,removed: function() {
+		this.main.remove(this.blood_badge);
 	}
 	,sprite_loaded: function() {
 	}
@@ -3803,6 +3853,7 @@ var Donor = function(main) {
 	this.sprite.add("YAY",this.toGenderGFX([1]));
 	this.sprite.play("IDLE");
 	this.addGraphic(this.sprite);
+	this.blood_badge_text.setTextProperty("color",16711680);
 	this.destination = com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230});
 };
 $hxClasses["Donor"] = Donor;
@@ -4762,6 +4813,7 @@ var Patient = function(main) {
 	this.sprite.add("DEAD",this.toGenderGFX([5]));
 	this.sprite.play("SICK_BEFORE");
 	this.addGraphic(this.sprite);
+	this.blood_badge_text.setTextProperty("color",255);
 	this.destination = com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230});
 };
 $hxClasses["Patient"] = Patient;
@@ -4793,6 +4845,7 @@ Gender.MALE.__enum__ = Gender;
 Gender.FEMALE = ["FEMALE",1];
 Gender.FEMALE.toString = $estr;
 Gender.FEMALE.__enum__ = Gender;
+Gender.__empty_constructs__ = [Gender.MALE,Gender.FEMALE];
 var Simulator = function(main) {
 	this.main = main;
 	this.age = 0;
@@ -4812,9 +4865,9 @@ Simulator.prototype = {
 	,age: null
 	,change_simulation_speed: function(new_speed) {
 		if(this.ticker != null) this.ticker.stop();
-		if(new_speed > 100) {
-			haxe.Log.trace("Warning! capped speed " + new_speed + " down to max: 100.0",{ fileName : "Simulator.hx", lineNumber : 46, className : "Simulator", methodName : "change_simulation_speed"});
-			new_speed = 100.0;
+		if(new_speed > 200) {
+			haxe.Log.trace("Warning! capped speed " + new_speed + " down to max: 200.0",{ fileName : "Simulator.hx", lineNumber : 46, className : "Simulator", methodName : "change_simulation_speed"});
+			new_speed = 200.0;
 		} else if(new_speed < 1) {
 			haxe.Log.trace("Warning! capped speed " + new_speed + " up to min: 1.0",{ fileName : "Simulator.hx", lineNumber : 49, className : "Simulator", methodName : "change_simulation_speed"});
 			new_speed = 1.0;
@@ -4894,6 +4947,7 @@ StringTools.fastCodeAt = function(s,index) {
 	return s.charCodeAt(index);
 };
 var XmlType = $hxClasses["XmlType"] = { __ename__ : true, __constructs__ : [] };
+XmlType.__empty_constructs__ = [];
 var Xml = function() {
 };
 $hxClasses["Xml"] = Xml;
@@ -5236,6 +5290,7 @@ com.haxepunk.RenderMode.BUFFER.__enum__ = com.haxepunk.RenderMode;
 com.haxepunk.RenderMode.HARDWARE = ["HARDWARE",1];
 com.haxepunk.RenderMode.HARDWARE.toString = $estr;
 com.haxepunk.RenderMode.HARDWARE.__enum__ = com.haxepunk.RenderMode;
+com.haxepunk.RenderMode.__empty_constructs__ = [com.haxepunk.RenderMode.BUFFER,com.haxepunk.RenderMode.HARDWARE];
 com.haxepunk.Screen = function() {
 	this._shakeY = 0;
 	this._shakeX = 0;
@@ -5481,6 +5536,7 @@ com.haxepunk.TweenType.Looping.__enum__ = com.haxepunk.TweenType;
 com.haxepunk.TweenType.OneShot = ["OneShot",2];
 com.haxepunk.TweenType.OneShot.toString = $estr;
 com.haxepunk.TweenType.OneShot.__enum__ = com.haxepunk.TweenType;
+com.haxepunk.TweenType.__empty_constructs__ = [com.haxepunk.TweenType.Persist,com.haxepunk.TweenType.Looping,com.haxepunk.TweenType.OneShot];
 com.haxepunk.Tween = function(duration,type,complete,ease) {
 	this._target = duration;
 	if(type == null) type = com.haxepunk.TweenType.Persist;
@@ -5575,6 +5631,7 @@ com.haxepunk.debug.TraceCapture.No.__enum__ = com.haxepunk.debug.TraceCapture;
 com.haxepunk.debug.TraceCapture.Yes = ["Yes",1];
 com.haxepunk.debug.TraceCapture.Yes.toString = $estr;
 com.haxepunk.debug.TraceCapture.Yes.__enum__ = com.haxepunk.debug.TraceCapture;
+com.haxepunk.debug.TraceCapture.__empty_constructs__ = [com.haxepunk.debug.TraceCapture.No,com.haxepunk.debug.TraceCapture.Yes];
 com.haxepunk.debug.Console = function() {
 	this.debugDraw = true;
 	this.init();
@@ -6439,6 +6496,7 @@ com.haxepunk.ds = {};
 com.haxepunk.ds.Either = $hxClasses["com.haxepunk.ds.Either"] = { __ename__ : true, __constructs__ : ["Left","Right"] };
 com.haxepunk.ds.Either.Left = function(v) { var $x = ["Left",0,v]; $x.__enum__ = com.haxepunk.ds.Either; $x.toString = $estr; return $x; };
 com.haxepunk.ds.Either.Right = function(v) { var $x = ["Right",1,v]; $x.__enum__ = com.haxepunk.ds.Either; $x.toString = $estr; return $x; };
+com.haxepunk.ds.Either.__empty_constructs__ = [];
 com.haxepunk.graphics = {};
 com.haxepunk.graphics.Animation = function(name,frames,frameRate,loop,parent) {
 	if(loop == null) loop = true;
@@ -9019,6 +9077,7 @@ com.haxepunk.masks.TileType.BottomLeft.__enum__ = com.haxepunk.masks.TileType;
 com.haxepunk.masks.TileType.BottomRight = ["BottomRight",7];
 com.haxepunk.masks.TileType.BottomRight.toString = $estr;
 com.haxepunk.masks.TileType.BottomRight.__enum__ = com.haxepunk.masks.TileType;
+com.haxepunk.masks.TileType.__empty_constructs__ = [com.haxepunk.masks.TileType.Empty,com.haxepunk.masks.TileType.Solid,com.haxepunk.masks.TileType.AboveSlope,com.haxepunk.masks.TileType.BelowSlope,com.haxepunk.masks.TileType.TopLeft,com.haxepunk.masks.TileType.TopRight,com.haxepunk.masks.TileType.BottomLeft,com.haxepunk.masks.TileType.BottomRight];
 com.haxepunk.masks.SlopedGrid = function(width,height,tileWidth,tileHeight,x,y) {
 	if(y == null) y = 0;
 	if(x == null) x = 0;
@@ -10020,6 +10079,7 @@ com.haxepunk.utils.GestureMode.MULTI_MOVE.__enum__ = com.haxepunk.utils.GestureM
 com.haxepunk.utils.GestureMode.FINISHED = ["FINISHED",5];
 com.haxepunk.utils.GestureMode.FINISHED.toString = $estr;
 com.haxepunk.utils.GestureMode.FINISHED.__enum__ = com.haxepunk.utils.GestureMode;
+com.haxepunk.utils.GestureMode.__empty_constructs__ = [com.haxepunk.utils.GestureMode.READY,com.haxepunk.utils.GestureMode.SINGLE_TOUCH,com.haxepunk.utils.GestureMode.SINGLE_MOVE,com.haxepunk.utils.GestureMode.MULTI_TOUCH,com.haxepunk.utils.GestureMode.MULTI_MOVE,com.haxepunk.utils.GestureMode.FINISHED];
 com.haxepunk.utils.Gesture = function() { };
 $hxClasses["com.haxepunk.utils.Gesture"] = com.haxepunk.utils.Gesture;
 com.haxepunk.utils.Gesture.__name__ = ["com","haxepunk","utils","Gesture"];
@@ -10450,6 +10510,7 @@ com.haxepunk.utils.JoyButtonState.BUTTON_PRESSED.__enum__ = com.haxepunk.utils.J
 com.haxepunk.utils.JoyButtonState.BUTTON_RELEASED = ["BUTTON_RELEASED",3];
 com.haxepunk.utils.JoyButtonState.BUTTON_RELEASED.toString = $estr;
 com.haxepunk.utils.JoyButtonState.BUTTON_RELEASED.__enum__ = com.haxepunk.utils.JoyButtonState;
+com.haxepunk.utils.JoyButtonState.__empty_constructs__ = [com.haxepunk.utils.JoyButtonState.BUTTON_ON,com.haxepunk.utils.JoyButtonState.BUTTON_OFF,com.haxepunk.utils.JoyButtonState.BUTTON_PRESSED,com.haxepunk.utils.JoyButtonState.BUTTON_RELEASED];
 com.haxepunk.utils.Joystick = function() {
 	this.buttons = new haxe.ds.IntMap();
 	this.ball = new openfl.geom.Point(0,0);
@@ -10647,6 +10708,7 @@ haxe.StackItem.Module = function(m) { var $x = ["Module",1,m]; $x.__enum__ = hax
 haxe.StackItem.FilePos = function(s,file,line) { var $x = ["FilePos",2,s,file,line]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; };
 haxe.StackItem.Method = function(classname,method) { var $x = ["Method",3,classname,method]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; };
 haxe.StackItem.LocalFunction = function(v) { var $x = ["LocalFunction",4,v]; $x.__enum__ = haxe.StackItem; $x.toString = $estr; return $x; };
+haxe.StackItem.__empty_constructs__ = [haxe.StackItem.CFunction];
 haxe.CallStack = function() { };
 $hxClasses["haxe.CallStack"] = haxe.CallStack;
 haxe.CallStack.__name__ = ["haxe","CallStack"];
@@ -11271,6 +11333,7 @@ haxe.io.Error.OutsideBounds = ["OutsideBounds",2];
 haxe.io.Error.OutsideBounds.toString = $estr;
 haxe.io.Error.OutsideBounds.__enum__ = haxe.io.Error;
 haxe.io.Error.Custom = function(e) { var $x = ["Custom",3,e]; $x.__enum__ = haxe.io.Error; $x.toString = $estr; return $x; };
+haxe.io.Error.__empty_constructs__ = [haxe.io.Error.Blocked,haxe.io.Error.Overflow,haxe.io.Error.OutsideBounds];
 haxe.io.Path = function(path) {
 	switch(path) {
 	case ".":case "..":
@@ -12185,6 +12248,7 @@ openfl.AssetType.TEMPLATE.__enum__ = openfl.AssetType;
 openfl.AssetType.TEXT = ["TEXT",7];
 openfl.AssetType.TEXT.toString = $estr;
 openfl.AssetType.TEXT.__enum__ = openfl.AssetType;
+openfl.AssetType.__empty_constructs__ = [openfl.AssetType.BINARY,openfl.AssetType.FONT,openfl.AssetType.IMAGE,openfl.AssetType.MOVIE_CLIP,openfl.AssetType.MUSIC,openfl.AssetType.SOUND,openfl.AssetType.TEMPLATE,openfl.AssetType.TEXT];
 openfl.Lib = function() { };
 $hxClasses["openfl.Lib"] = openfl.Lib;
 openfl.Lib.__name__ = ["openfl","Lib"];
@@ -13590,6 +13654,7 @@ openfl.display.BlendMode.SCREEN.__enum__ = openfl.display.BlendMode;
 openfl.display.BlendMode.SUBTRACT = ["SUBTRACT",13];
 openfl.display.BlendMode.SUBTRACT.toString = $estr;
 openfl.display.BlendMode.SUBTRACT.__enum__ = openfl.display.BlendMode;
+openfl.display.BlendMode.__empty_constructs__ = [openfl.display.BlendMode.ADD,openfl.display.BlendMode.ALPHA,openfl.display.BlendMode.DARKEN,openfl.display.BlendMode.DIFFERENCE,openfl.display.BlendMode.ERASE,openfl.display.BlendMode.HARDLIGHT,openfl.display.BlendMode.INVERT,openfl.display.BlendMode.LAYER,openfl.display.BlendMode.LIGHTEN,openfl.display.BlendMode.MULTIPLY,openfl.display.BlendMode.NORMAL,openfl.display.BlendMode.OVERLAY,openfl.display.BlendMode.SCREEN,openfl.display.BlendMode.SUBTRACT];
 openfl.display.FrameLabel = function(name,frame) {
 	openfl.events.EventDispatcher.call(this);
 	this.__name = name;
@@ -13619,6 +13684,7 @@ openfl.display.GradientType.RADIAL.__enum__ = openfl.display.GradientType;
 openfl.display.GradientType.LINEAR = ["LINEAR",1];
 openfl.display.GradientType.LINEAR.toString = $estr;
 openfl.display.GradientType.LINEAR.__enum__ = openfl.display.GradientType;
+openfl.display.GradientType.__empty_constructs__ = [openfl.display.GradientType.RADIAL,openfl.display.GradientType.LINEAR];
 openfl.display.Graphics = function() {
 	this.__commands = new Array();
 	this.__halfStrokeWidth = 0;
@@ -14171,6 +14237,7 @@ openfl.display.DrawCommand.EndFill.__enum__ = openfl.display.DrawCommand;
 openfl.display.DrawCommand.LineStyle = function(thickness,color,alpha,pixelHinting,scaleMode,caps,joints,miterLimit) { var $x = ["LineStyle",8,thickness,color,alpha,pixelHinting,scaleMode,caps,joints,miterLimit]; $x.__enum__ = openfl.display.DrawCommand; $x.toString = $estr; return $x; };
 openfl.display.DrawCommand.LineTo = function(x,y) { var $x = ["LineTo",9,x,y]; $x.__enum__ = openfl.display.DrawCommand; $x.toString = $estr; return $x; };
 openfl.display.DrawCommand.MoveTo = function(x,y) { var $x = ["MoveTo",10,x,y]; $x.__enum__ = openfl.display.DrawCommand; $x.toString = $estr; return $x; };
+openfl.display.DrawCommand.__empty_constructs__ = [openfl.display.DrawCommand.EndFill];
 openfl.display.GraphicsPathWinding = $hxClasses["openfl.display.GraphicsPathWinding"] = { __ename__ : true, __constructs__ : ["EVEN_ODD","NON_ZERO"] };
 openfl.display.GraphicsPathWinding.EVEN_ODD = ["EVEN_ODD",0];
 openfl.display.GraphicsPathWinding.EVEN_ODD.toString = $estr;
@@ -14178,6 +14245,7 @@ openfl.display.GraphicsPathWinding.EVEN_ODD.__enum__ = openfl.display.GraphicsPa
 openfl.display.GraphicsPathWinding.NON_ZERO = ["NON_ZERO",1];
 openfl.display.GraphicsPathWinding.NON_ZERO.toString = $estr;
 openfl.display.GraphicsPathWinding.NON_ZERO.__enum__ = openfl.display.GraphicsPathWinding;
+openfl.display.GraphicsPathWinding.__empty_constructs__ = [openfl.display.GraphicsPathWinding.EVEN_ODD,openfl.display.GraphicsPathWinding.NON_ZERO];
 openfl.display.IGraphicsData = function() { };
 $hxClasses["openfl.display.IGraphicsData"] = openfl.display.IGraphicsData;
 openfl.display.IGraphicsData.__name__ = ["openfl","display","IGraphicsData"];
@@ -14204,6 +14272,7 @@ openfl.display.GraphicsDataType.BITMAP.__enum__ = openfl.display.GraphicsDataTyp
 openfl.display.GraphicsDataType.END = ["END",5];
 openfl.display.GraphicsDataType.END.toString = $estr;
 openfl.display.GraphicsDataType.END.__enum__ = openfl.display.GraphicsDataType;
+openfl.display.GraphicsDataType.__empty_constructs__ = [openfl.display.GraphicsDataType.STROKE,openfl.display.GraphicsDataType.SOLID,openfl.display.GraphicsDataType.GRADIENT,openfl.display.GraphicsDataType.PATH,openfl.display.GraphicsDataType.BITMAP,openfl.display.GraphicsDataType.END];
 openfl.display.InterpolationMethod = $hxClasses["openfl.display.InterpolationMethod"] = { __ename__ : true, __constructs__ : ["RGB","LINEAR_RGB"] };
 openfl.display.InterpolationMethod.RGB = ["RGB",0];
 openfl.display.InterpolationMethod.RGB.toString = $estr;
@@ -14211,6 +14280,7 @@ openfl.display.InterpolationMethod.RGB.__enum__ = openfl.display.InterpolationMe
 openfl.display.InterpolationMethod.LINEAR_RGB = ["LINEAR_RGB",1];
 openfl.display.InterpolationMethod.LINEAR_RGB.toString = $estr;
 openfl.display.InterpolationMethod.LINEAR_RGB.__enum__ = openfl.display.InterpolationMethod;
+openfl.display.InterpolationMethod.__empty_constructs__ = [openfl.display.InterpolationMethod.RGB,openfl.display.InterpolationMethod.LINEAR_RGB];
 openfl.display.LineScaleMode = $hxClasses["openfl.display.LineScaleMode"] = { __ename__ : true, __constructs__ : ["HORIZONTAL","NONE","NORMAL","VERTICAL"] };
 openfl.display.LineScaleMode.HORIZONTAL = ["HORIZONTAL",0];
 openfl.display.LineScaleMode.HORIZONTAL.toString = $estr;
@@ -14224,6 +14294,7 @@ openfl.display.LineScaleMode.NORMAL.__enum__ = openfl.display.LineScaleMode;
 openfl.display.LineScaleMode.VERTICAL = ["VERTICAL",3];
 openfl.display.LineScaleMode.VERTICAL.toString = $estr;
 openfl.display.LineScaleMode.VERTICAL.__enum__ = openfl.display.LineScaleMode;
+openfl.display.LineScaleMode.__empty_constructs__ = [openfl.display.LineScaleMode.HORIZONTAL,openfl.display.LineScaleMode.NONE,openfl.display.LineScaleMode.NORMAL,openfl.display.LineScaleMode.VERTICAL];
 openfl.display.Loader = function() {
 	openfl.display.Sprite.call(this);
 	this.contentLoaderInfo = openfl.display.LoaderInfo.create(this);
@@ -14400,6 +14471,7 @@ openfl.display.PixelSnapping.AUTO.__enum__ = openfl.display.PixelSnapping;
 openfl.display.PixelSnapping.ALWAYS = ["ALWAYS",2];
 openfl.display.PixelSnapping.ALWAYS.toString = $estr;
 openfl.display.PixelSnapping.ALWAYS.__enum__ = openfl.display.PixelSnapping;
+openfl.display.PixelSnapping.__empty_constructs__ = [openfl.display.PixelSnapping.NEVER,openfl.display.PixelSnapping.AUTO,openfl.display.PixelSnapping.ALWAYS];
 openfl.display.Shape = function() {
 	openfl.display.DisplayObject.call(this);
 };
@@ -14486,6 +14558,7 @@ openfl.display.SpreadMethod.REFLECT.__enum__ = openfl.display.SpreadMethod;
 openfl.display.SpreadMethod.PAD = ["PAD",2];
 openfl.display.SpreadMethod.PAD.toString = $estr;
 openfl.display.SpreadMethod.PAD.__enum__ = openfl.display.SpreadMethod;
+openfl.display.SpreadMethod.__empty_constructs__ = [openfl.display.SpreadMethod.REPEAT,openfl.display.SpreadMethod.REFLECT,openfl.display.SpreadMethod.PAD];
 openfl.display.Stage = function(width,height,element,color) {
 	this.__mouseY = 0;
 	this.__mouseX = 0;
@@ -15128,6 +15201,7 @@ openfl.display.StageAlign.BOTTOM_LEFT.__enum__ = openfl.display.StageAlign;
 openfl.display.StageAlign.BOTTOM = ["BOTTOM",7];
 openfl.display.StageAlign.BOTTOM.toString = $estr;
 openfl.display.StageAlign.BOTTOM.__enum__ = openfl.display.StageAlign;
+openfl.display.StageAlign.__empty_constructs__ = [openfl.display.StageAlign.TOP_RIGHT,openfl.display.StageAlign.TOP_LEFT,openfl.display.StageAlign.TOP,openfl.display.StageAlign.RIGHT,openfl.display.StageAlign.LEFT,openfl.display.StageAlign.BOTTOM_RIGHT,openfl.display.StageAlign.BOTTOM_LEFT,openfl.display.StageAlign.BOTTOM];
 openfl.display.StageDisplayState = $hxClasses["openfl.display.StageDisplayState"] = { __ename__ : true, __constructs__ : ["NORMAL","FULL_SCREEN","FULL_SCREEN_INTERACTIVE"] };
 openfl.display.StageDisplayState.NORMAL = ["NORMAL",0];
 openfl.display.StageDisplayState.NORMAL.toString = $estr;
@@ -15138,6 +15212,7 @@ openfl.display.StageDisplayState.FULL_SCREEN.__enum__ = openfl.display.StageDisp
 openfl.display.StageDisplayState.FULL_SCREEN_INTERACTIVE = ["FULL_SCREEN_INTERACTIVE",2];
 openfl.display.StageDisplayState.FULL_SCREEN_INTERACTIVE.toString = $estr;
 openfl.display.StageDisplayState.FULL_SCREEN_INTERACTIVE.__enum__ = openfl.display.StageDisplayState;
+openfl.display.StageDisplayState.__empty_constructs__ = [openfl.display.StageDisplayState.NORMAL,openfl.display.StageDisplayState.FULL_SCREEN,openfl.display.StageDisplayState.FULL_SCREEN_INTERACTIVE];
 openfl.display.StageScaleMode = $hxClasses["openfl.display.StageScaleMode"] = { __ename__ : true, __constructs__ : ["SHOW_ALL","NO_SCALE","NO_BORDER","EXACT_FIT"] };
 openfl.display.StageScaleMode.SHOW_ALL = ["SHOW_ALL",0];
 openfl.display.StageScaleMode.SHOW_ALL.toString = $estr;
@@ -15151,6 +15226,7 @@ openfl.display.StageScaleMode.NO_BORDER.__enum__ = openfl.display.StageScaleMode
 openfl.display.StageScaleMode.EXACT_FIT = ["EXACT_FIT",3];
 openfl.display.StageScaleMode.EXACT_FIT.toString = $estr;
 openfl.display.StageScaleMode.EXACT_FIT.__enum__ = openfl.display.StageScaleMode;
+openfl.display.StageScaleMode.__empty_constructs__ = [openfl.display.StageScaleMode.SHOW_ALL,openfl.display.StageScaleMode.NO_SCALE,openfl.display.StageScaleMode.NO_BORDER,openfl.display.StageScaleMode.EXACT_FIT];
 openfl.display.Tilesheet = function(image) {
 	this.__bitmap = image;
 	this.__centerPoints = new Array();
@@ -15198,6 +15274,7 @@ openfl.display.TriangleCulling.NONE.__enum__ = openfl.display.TriangleCulling;
 openfl.display.TriangleCulling.POSITIVE = ["POSITIVE",2];
 openfl.display.TriangleCulling.POSITIVE.toString = $estr;
 openfl.display.TriangleCulling.POSITIVE.__enum__ = openfl.display.TriangleCulling;
+openfl.display.TriangleCulling.__empty_constructs__ = [openfl.display.TriangleCulling.NEGATIVE,openfl.display.TriangleCulling.NONE,openfl.display.TriangleCulling.POSITIVE];
 openfl.errors = {};
 openfl.errors.Error = function(message,id) {
 	if(id == null) id = 0;
@@ -16057,6 +16134,7 @@ openfl.net.URLLoaderDataFormat.TEXT.__enum__ = openfl.net.URLLoaderDataFormat;
 openfl.net.URLLoaderDataFormat.VARIABLES = ["VARIABLES",2];
 openfl.net.URLLoaderDataFormat.VARIABLES.toString = $estr;
 openfl.net.URLLoaderDataFormat.VARIABLES.__enum__ = openfl.net.URLLoaderDataFormat;
+openfl.net.URLLoaderDataFormat.__empty_constructs__ = [openfl.net.URLLoaderDataFormat.BINARY,openfl.net.URLLoaderDataFormat.TEXT,openfl.net.URLLoaderDataFormat.VARIABLES];
 openfl.net.URLRequest = function(inURL) {
 	if(inURL != null) this.url = inURL;
 	this.requestHeaders = [];
@@ -16216,6 +16294,7 @@ openfl.text.FontStyle.BOLD_ITALIC.__enum__ = openfl.text.FontStyle;
 openfl.text.FontStyle.BOLD = ["BOLD",3];
 openfl.text.FontStyle.BOLD.toString = $estr;
 openfl.text.FontStyle.BOLD.__enum__ = openfl.text.FontStyle;
+openfl.text.FontStyle.__empty_constructs__ = [openfl.text.FontStyle.REGULAR,openfl.text.FontStyle.ITALIC,openfl.text.FontStyle.BOLD_ITALIC,openfl.text.FontStyle.BOLD];
 openfl.text.FontType = $hxClasses["openfl.text.FontType"] = { __ename__ : true, __constructs__ : ["DEVICE","EMBEDDED","EMBEDDED_CFF"] };
 openfl.text.FontType.DEVICE = ["DEVICE",0];
 openfl.text.FontType.DEVICE.toString = $estr;
@@ -16226,6 +16305,7 @@ openfl.text.FontType.EMBEDDED.__enum__ = openfl.text.FontType;
 openfl.text.FontType.EMBEDDED_CFF = ["EMBEDDED_CFF",2];
 openfl.text.FontType.EMBEDDED_CFF.toString = $estr;
 openfl.text.FontType.EMBEDDED_CFF.__enum__ = openfl.text.FontType;
+openfl.text.FontType.__empty_constructs__ = [openfl.text.FontType.DEVICE,openfl.text.FontType.EMBEDDED,openfl.text.FontType.EMBEDDED_CFF];
 openfl.text.GridFitType = $hxClasses["openfl.text.GridFitType"] = { __ename__ : true, __constructs__ : ["NONE","PIXEL","SUBPIXEL"] };
 openfl.text.GridFitType.NONE = ["NONE",0];
 openfl.text.GridFitType.NONE.toString = $estr;
@@ -16236,6 +16316,7 @@ openfl.text.GridFitType.PIXEL.__enum__ = openfl.text.GridFitType;
 openfl.text.GridFitType.SUBPIXEL = ["SUBPIXEL",2];
 openfl.text.GridFitType.SUBPIXEL.toString = $estr;
 openfl.text.GridFitType.SUBPIXEL.__enum__ = openfl.text.GridFitType;
+openfl.text.GridFitType.__empty_constructs__ = [openfl.text.GridFitType.NONE,openfl.text.GridFitType.PIXEL,openfl.text.GridFitType.SUBPIXEL];
 openfl.text.TextField = function() {
 	openfl.display.InteractiveObject.call(this);
 	this.__width = 100;
@@ -16814,6 +16895,7 @@ openfl.text.TextFieldAutoSize.NONE.__enum__ = openfl.text.TextFieldAutoSize;
 openfl.text.TextFieldAutoSize.RIGHT = ["RIGHT",3];
 openfl.text.TextFieldAutoSize.RIGHT.toString = $estr;
 openfl.text.TextFieldAutoSize.RIGHT.__enum__ = openfl.text.TextFieldAutoSize;
+openfl.text.TextFieldAutoSize.__empty_constructs__ = [openfl.text.TextFieldAutoSize.CENTER,openfl.text.TextFieldAutoSize.LEFT,openfl.text.TextFieldAutoSize.NONE,openfl.text.TextFieldAutoSize.RIGHT];
 openfl.text.TextFieldType = $hxClasses["openfl.text.TextFieldType"] = { __ename__ : true, __constructs__ : ["DYNAMIC","INPUT"] };
 openfl.text.TextFieldType.DYNAMIC = ["DYNAMIC",0];
 openfl.text.TextFieldType.DYNAMIC.toString = $estr;
@@ -16821,6 +16903,7 @@ openfl.text.TextFieldType.DYNAMIC.__enum__ = openfl.text.TextFieldType;
 openfl.text.TextFieldType.INPUT = ["INPUT",1];
 openfl.text.TextFieldType.INPUT.toString = $estr;
 openfl.text.TextFieldType.INPUT.__enum__ = openfl.text.TextFieldType;
+openfl.text.TextFieldType.__empty_constructs__ = [openfl.text.TextFieldType.DYNAMIC,openfl.text.TextFieldType.INPUT];
 openfl.text.TextFormat = function(font,size,color,bold,italic,underline,url,target,align,leftMargin,rightMargin,indent,leading) {
 	this.font = font;
 	this.size = size;
@@ -16906,6 +16989,7 @@ openfl.text.TextFormatAlign.JUSTIFY.__enum__ = openfl.text.TextFormatAlign;
 openfl.text.TextFormatAlign.CENTER = ["CENTER",3];
 openfl.text.TextFormatAlign.CENTER.toString = $estr;
 openfl.text.TextFormatAlign.CENTER.__enum__ = openfl.text.TextFormatAlign;
+openfl.text.TextFormatAlign.__empty_constructs__ = [openfl.text.TextFormatAlign.LEFT,openfl.text.TextFormatAlign.RIGHT,openfl.text.TextFormatAlign.JUSTIFY,openfl.text.TextFormatAlign.CENTER];
 openfl.text.TextLineMetrics = function(x,width,height,ascent,descent,leading) {
 	this.x = x;
 	this.width = width;
@@ -17057,6 +17141,7 @@ openfl.ui.MultitouchInputMode.TOUCH_POINT.__enum__ = openfl.ui.MultitouchInputMo
 openfl.ui.MultitouchInputMode.GESTURE = ["GESTURE",2];
 openfl.ui.MultitouchInputMode.GESTURE.toString = $estr;
 openfl.ui.MultitouchInputMode.GESTURE.__enum__ = openfl.ui.MultitouchInputMode;
+openfl.ui.MultitouchInputMode.__empty_constructs__ = [openfl.ui.MultitouchInputMode.NONE,openfl.ui.MultitouchInputMode.TOUCH_POINT,openfl.ui.MultitouchInputMode.GESTURE];
 openfl.utils = {};
 openfl.utils.ByteArray = function() {
 	this.littleEndian = false;
@@ -17471,10 +17556,13 @@ Clinic.X = 450;
 Clinic.Y = 200;
 Clinic.DOOR_X = 470;
 Clinic.DOOR_Y = 230;
+Clinic.DEFAULT_INITIAL_STOCK = 5;
 Clinic.GFX_PATH = "graphics/clinic.png";
 Person.GFX_OFFSET = 6;
 Person.GFX_PATH = "graphics/persons_72x72.png";
 Person.DEFAULT_MOVESPEED = 3.9;
+Person.BLOOD_BADGE_OFFSET_X = 28;
+Person.BLOOD_BADGE_OFFSET_Y = -9;
 Donor.IDLE = "IDLE";
 Donor.YAY = "YAY";
 Donor.GFX_IDLE = 0;

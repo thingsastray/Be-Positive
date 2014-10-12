@@ -4,7 +4,7 @@
   1.0(min)      => 10,000 ms
   10.0          => 1,000 ms
   20.0(default) => 500 ms
-  100.0(max)    => 100 ms
+  200.0(max)    => 50 ms
   1000.0        => 1
 
   10000 / new_speed = interval in ms
@@ -42,9 +42,9 @@ class Simulator
       ticker.stop();
     }
     // cap at 100
-    if(new_speed > 100){
-      trace('Warning! capped speed $new_speed down to max: 100.0');
-      new_speed = 100.0;
+    if(new_speed > 200){
+      trace('Warning! capped speed $new_speed down to max: 200.0');
+      new_speed = 200.0;
     }else if(new_speed < 1){
       trace('Warning! capped speed $new_speed up to min: 1.0');
       new_speed = 1.0;

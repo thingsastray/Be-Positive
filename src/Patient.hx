@@ -22,8 +22,10 @@ class Patient extends Person
     sprite.add(SICK_AFTER, toGenderGFX([GFX_SICK_AFTER]) );
     sprite.add(DEAD, toGenderGFX([GFX_DEAD]) );
     sprite.play(SICK_BEFORE);
-    
+
     addGraphic(sprite);
+
+    this.blood_badge_text.setTextProperty("color", 0x0000FF);
 
 
     // when born, go to the clinic
