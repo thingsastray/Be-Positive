@@ -181,6 +181,28 @@ import openfl.Lib;
 		
 		
 		
+		var image = new Image ();
+		id = "graphics/clinic.png";
+		images.set (id, image);
+		image.onload = image_onLoad;
+		image.src = id;
+		//var loader:Loader = new Loader();
+		//loaders.set("graphics/clinic.png", loader);
+		total ++;
+		
+		
+		
+		var image = new Image ();
+		id = "graphics/persons_72x72.png";
+		images.set (id, image);
+		image.onload = image_onLoad;
+		image.src = id;
+		//var loader:Loader = new Loader();
+		//loaders.set("graphics/persons_72x72.png", loader);
+		total ++;
+		
+		
+		
 		
 		
 		if (total == 0) {

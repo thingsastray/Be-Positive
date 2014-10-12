@@ -85,6 +85,18 @@ ApplicationMain.embed = $hx_exports.openfl.embed = function(elementName,width,he
 	image9.onload = ApplicationMain.image_onLoad;
 	image9.src = id;
 	ApplicationMain.total++;
+	var image10 = new Image();
+	id = "graphics/clinic.png";
+	ApplicationMain.images.set(id,image10);
+	image10.onload = ApplicationMain.image_onLoad;
+	image10.src = id;
+	ApplicationMain.total++;
+	var image11 = new Image();
+	id = "graphics/persons_72x72.png";
+	ApplicationMain.images.set(id,image11);
+	image11.onload = ApplicationMain.image_onLoad;
+	image11.src = id;
+	ApplicationMain.total++;
 	if(ApplicationMain.total == 0) ApplicationMain.start(); else {
 		var $it0 = ApplicationMain.urlLoaders.keys();
 		while( $it0.hasNext() ) {
@@ -138,8 +150,8 @@ ApplicationMain.preloader_onComplete = function(event) {
 	if(hasMain) Reflect.callMethod(Main,Reflect.field(Main,"main"),[]); else {
 		var instance = Type.createInstance(DocumentClass,[]);
 		if(js.Boot.__instanceof(instance,openfl.display.DisplayObject)) openfl.Lib.current.addChild(instance); else {
-			haxe.Log.trace("Error: No entry point found",{ fileName : "ApplicationMain.hx", lineNumber : 294, className : "ApplicationMain", methodName : "preloader_onComplete"});
-			haxe.Log.trace("If you are using DCE with a static main, you may need to @:keep the function",{ fileName : "ApplicationMain.hx", lineNumber : 295, className : "ApplicationMain", methodName : "preloader_onComplete"});
+			haxe.Log.trace("Error: No entry point found",{ fileName : "ApplicationMain.hx", lineNumber : 316, className : "ApplicationMain", methodName : "preloader_onComplete"});
+			haxe.Log.trace("If you are using DCE with a static main, you may need to @:keep the function",{ fileName : "ApplicationMain.hx", lineNumber : 317, className : "ApplicationMain", methodName : "preloader_onComplete"});
 		}
 	}
 };
@@ -1498,6 +1510,12 @@ var DefaultAssetLibrary = function() {
 	id = "font/04B_03__.ttf.png";
 	this.path.set(id,id);
 	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/clinic.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/persons_72x72.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
 	id = "font/04B_03__.ttf";
 	this.className.set(id,__ASSET__font_5);
 	this.type.set(id,openfl.AssetType.FONT);
@@ -1663,182 +1681,6 @@ __ASSET__font_5.__super__ = openfl.text.Font;
 __ASSET__font_5.prototype = $extend(openfl.text.Font.prototype,{
 	__class__: __ASSET__font_5
 });
-var Person = function(main) {
-	this.main = main;
-};
-$hxClasses["Person"] = Person;
-Person.__name__ = ["Person"];
-Person.prototype = {
-	main: null
-	,__class__: Person
-};
-var Donor = function(main) {
-	Person.call(this,main);
-	haxe.Log.trace("spawned donor",{ fileName : "Donor.hx", lineNumber : 5, className : "Donor", methodName : "new"});
-	haxe.Log.trace("spawned donor",{ fileName : "Donor.hx", lineNumber : 6, className : "Donor", methodName : "new"});
-};
-$hxClasses["Donor"] = Donor;
-Donor.__name__ = ["Donor"];
-Donor.__super__ = Person;
-Donor.prototype = $extend(Person.prototype,{
-	__class__: Donor
-});
-var EReg = function(r,opt) {
-	opt = opt.split("u").join("");
-	this.r = new RegExp(r,opt);
-};
-$hxClasses["EReg"] = EReg;
-EReg.__name__ = ["EReg"];
-EReg.prototype = {
-	r: null
-	,match: function(s) {
-		if(this.r.global) this.r.lastIndex = 0;
-		this.r.m = this.r.exec(s);
-		this.r.s = s;
-		return this.r.m != null;
-	}
-	,matched: function(n) {
-		if(this.r.m != null && n >= 0 && n < this.r.m.length) return this.r.m[n]; else throw "EReg::matched";
-	}
-	,matchedPos: function() {
-		if(this.r.m == null) throw "No string matched";
-		return { pos : this.r.m.index, len : this.r.m[0].length};
-	}
-	,replace: function(s,by) {
-		return s.replace(this.r,by);
-	}
-	,__class__: EReg
-};
-var HxOverrides = function() { };
-$hxClasses["HxOverrides"] = HxOverrides;
-HxOverrides.__name__ = ["HxOverrides"];
-HxOverrides.strDate = function(s) {
-	var _g = s.length;
-	switch(_g) {
-	case 8:
-		var k = s.split(":");
-		var d = new Date();
-		d.setTime(0);
-		d.setUTCHours(k[0]);
-		d.setUTCMinutes(k[1]);
-		d.setUTCSeconds(k[2]);
-		return d;
-	case 10:
-		var k1 = s.split("-");
-		return new Date(k1[0],k1[1] - 1,k1[2],0,0,0);
-	case 19:
-		var k2 = s.split(" ");
-		var y = k2[0].split("-");
-		var t = k2[1].split(":");
-		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
-	default:
-		throw "Invalid date format : " + s;
-	}
-};
-HxOverrides.cca = function(s,index) {
-	var x = s.charCodeAt(index);
-	if(x != x) return undefined;
-	return x;
-};
-HxOverrides.substr = function(s,pos,len) {
-	if(pos != null && pos != 0 && len != null && len < 0) return "";
-	if(len == null) len = s.length;
-	if(pos < 0) {
-		pos = s.length + pos;
-		if(pos < 0) pos = 0;
-	} else if(len < 0) len = s.length + len - pos;
-	return s.substr(pos,len);
-};
-HxOverrides.indexOf = function(a,obj,i) {
-	var len = a.length;
-	if(i < 0) {
-		i += len;
-		if(i < 0) i = 0;
-	}
-	while(i < len) {
-		if(a[i] === obj) return i;
-		i++;
-	}
-	return -1;
-};
-HxOverrides.remove = function(a,obj) {
-	var i = HxOverrides.indexOf(a,obj,0);
-	if(i == -1) return false;
-	a.splice(i,1);
-	return true;
-};
-HxOverrides.iter = function(a) {
-	return { cur : 0, arr : a, hasNext : function() {
-		return this.cur < this.arr.length;
-	}, next : function() {
-		return this.arr[this.cur++];
-	}};
-};
-var List = function() {
-	this.length = 0;
-};
-$hxClasses["List"] = List;
-List.__name__ = ["List"];
-List.prototype = {
-	h: null
-	,q: null
-	,length: null
-	,add: function(item) {
-		var x = [item];
-		if(this.h == null) this.h = x; else this.q[1] = x;
-		this.q = x;
-		this.length++;
-	}
-	,push: function(item) {
-		var x = [item,this.h];
-		this.h = x;
-		if(this.q == null) this.q = x;
-		this.length++;
-	}
-	,first: function() {
-		if(this.h == null) return null; else return this.h[0];
-	}
-	,last: function() {
-		if(this.q == null) return null; else return this.q[0];
-	}
-	,pop: function() {
-		if(this.h == null) return null;
-		var x = this.h[0];
-		this.h = this.h[1];
-		if(this.h == null) this.q = null;
-		this.length--;
-		return x;
-	}
-	,isEmpty: function() {
-		return this.h == null;
-	}
-	,remove: function(v) {
-		var prev = null;
-		var l = this.h;
-		while(l != null) {
-			if(l[0] == v) {
-				if(prev == null) this.h = l[1]; else prev[1] = l[1];
-				if(this.q == l) this.q = prev;
-				this.length--;
-				return true;
-			}
-			prev = l;
-			l = l[1];
-		}
-		return false;
-	}
-	,iterator: function() {
-		return { h : this.h, hasNext : function() {
-			return this.h != null;
-		}, next : function() {
-			if(this.h == null) return null;
-			var x = this.h[0];
-			this.h = this.h[1];
-			return x;
-		}};
-	}
-	,__class__: List
-};
 com.haxepunk.Tweener = function() {
 	this.active = true;
 	this.autoClear = false;
@@ -1901,950 +1743,70 @@ com.haxepunk.Tweener.prototype = {
 	,__class__: com.haxepunk.Tweener
 	,__properties__: {get_hasTween:"get_hasTween"}
 };
-com.haxepunk.Scene = function() {
-	com.haxepunk.Tweener.call(this);
-	this.visible = true;
-	this.camera = new openfl.geom.Point();
-	this.sprite = new openfl.display.Sprite();
-	this._layerList = new Array();
-	this._add = new Array();
-	this._remove = new Array();
-	this._recycle = new Array();
-	this._update = new List();
-	this._layerDisplay = new haxe.ds.IntMap();
-	this._layers = new haxe.ds.IntMap();
-	this._types = new haxe.ds.StringMap();
-	this._classCount = new haxe.ds.StringMap();
-	this._recycled = new haxe.ds.StringMap();
-	this._entityNames = new haxe.ds.StringMap();
+com.haxepunk.Mask = function() {
+	this._parent = com.haxepunk.Entity._EMPTY;
+	this._class = Type.getClassName(Type.getClass(this));
+	this._check = new haxe.ds.StringMap();
+	var key = Type.getClassName(com.haxepunk.Mask);
+	this._check.set(key,$bind(this,this.collideMask));
+	var key1 = Type.getClassName(com.haxepunk.masks.Masklist);
+	this._check.set(key1,$bind(this,this.collideMasklist));
 };
-$hxClasses["com.haxepunk.Scene"] = com.haxepunk.Scene;
-com.haxepunk.Scene.__name__ = ["com","haxepunk","Scene"];
-com.haxepunk.Scene.squareRects = function(x1,y1,w1,h1,x2,y2,w2,h2) {
-	if(x1 < x2 + w2 && x2 < x1 + w1) {
-		if(y1 < y2 + h2 && y2 < y1 + h1) return 0;
-		if(y1 > y2) return (y1 - (y2 + h2)) * (y1 - (y2 + h2));
-		return (y2 - (y1 + h1)) * (y2 - (y1 + h1));
+$hxClasses["com.haxepunk.Mask"] = com.haxepunk.Mask;
+com.haxepunk.Mask.__name__ = ["com","haxepunk","Mask"];
+com.haxepunk.Mask.prototype = {
+	get_parent: function() {
+		if(this._parent != com.haxepunk.Entity._EMPTY) return this._parent; else return null;
 	}
-	if(y1 < y2 + h2 && y2 < y1 + h1) {
-		if(x1 > x2) return (x1 - (x2 + w2)) * (x1 - (x2 + w2));
-		return (x2 - (x1 + w1)) * (x2 - (x1 + w1));
+	,set_parent: function(value) {
+		if(value == null) this._parent = com.haxepunk.Entity._EMPTY; else {
+			this._parent = value;
+			this.update();
+		}
+		return value;
 	}
-	if(x1 > x2) {
-		if(y1 > y2) return com.haxepunk.HXP.distanceSquared(x2 + w2,y2 + h2,x1,y1);
-		return com.haxepunk.HXP.distanceSquared(x2 + w2,y2,x1,y1 + h1);
+	,list: null
+	,collide: function(mask) {
+		var cbFunc = this._check.get(mask._class);
+		if(cbFunc != null) return cbFunc(mask);
+		cbFunc = mask._check.get(this._class);
+		if(cbFunc != null) return cbFunc(this);
+		return false;
 	}
-	if(y1 > y2) return com.haxepunk.HXP.distanceSquared(x2,y2 + h2,x1 + w1,y1);
-	return com.haxepunk.HXP.distanceSquared(x2,y2,x1 + w1,y1 + h1);
-};
-com.haxepunk.Scene.squarePointRect = function(px,py,rx,ry,rw,rh) {
-	if(px >= rx && px <= rx + rw) {
-		if(py >= ry && py <= ry + rh) return 0;
-		if(py > ry) return (py - (ry + rh)) * (py - (ry + rh));
-		return (ry - py) * (ry - py);
+	,collideMask: function(other) {
+		return this._parent.get_x() - this._parent.originX + this._parent.width > other._parent.get_x() - other._parent.originX && this._parent.get_y() - this._parent.originY + this._parent.height > other._parent.get_y() - other._parent.originY && this._parent.get_x() - this._parent.originX < other._parent.get_x() - other._parent.originX + other._parent.width && this._parent.get_y() - this._parent.originY < other._parent.get_y() - other._parent.originY + other._parent.height;
 	}
-	if(py >= ry && py <= ry + rh) {
-		if(px > rx) return (px - (rx + rw)) * (px - (rx + rw));
-		return (rx - px) * (rx - px);
+	,collideMasklist: function(other) {
+		return other.collide(this);
 	}
-	if(px > rx) {
-		if(py > ry) return com.haxepunk.HXP.distanceSquared(rx + rw,ry + rh,px,py);
-		return com.haxepunk.HXP.distanceSquared(rx + rw,ry,px,py);
-	}
-	if(py > ry) return com.haxepunk.HXP.distanceSquared(rx,ry + rh,px,py);
-	return (px - rx) * (px - rx) + (py - ry) * (py - ry);
-};
-com.haxepunk.Scene.__super__ = com.haxepunk.Tweener;
-com.haxepunk.Scene.prototype = $extend(com.haxepunk.Tweener.prototype,{
-	visible: null
-	,camera: null
-	,begin: function() {
-	}
-	,end: function() {
-	}
-	,focusGained: function() {
-	}
-	,focusLost: function() {
+	,debugDraw: function(graphics,scaleX,scaleY) {
 	}
 	,update: function() {
-		var $it0 = this._update.iterator();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			if(e.active) {
-				if(e.get_hasTween()) e.updateTweens();
-				e.update();
-			}
-			if(e._graphic != null && e._graphic.active) e._graphic.update();
-		}
 	}
-	,showLayer: function(layer,show) {
-		if(show == null) show = true;
-		this._layerDisplay.set(layer,show);
-	}
-	,layerVisible: function(layer) {
-		return !this._layerDisplay.exists(layer) || this._layerDisplay.get(layer);
-	}
-	,layerSort: function(a,b) {
-		return b - a;
-	}
-	,render: function() {
-		if(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE) {
-			com.haxepunk.graphics.atlas.AtlasData._scene = this;
-			com.haxepunk.graphics.atlas.AtlasData._scene.sprite.get_graphics().clear();
-		}
-		var _g = 0;
-		var _g1 = this._layerList;
-		while(_g < _g1.length) {
-			var layer = _g1[_g];
-			++_g;
-			if(!(!this._layerDisplay.exists(layer) || this._layerDisplay.get(layer))) continue;
-			var $it0 = this._layers.get(layer).iterator();
-			while( $it0.hasNext() ) {
-				var e = $it0.next();
-				if(e.visible) e.render();
-			}
-		}
-		if(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE) {
-			if(com.haxepunk.graphics.atlas.AtlasData.active != null) {
-				if(com.haxepunk.graphics.atlas.AtlasData.active != null) com.haxepunk.graphics.atlas.AtlasData.active.flush();
-				com.haxepunk.graphics.atlas.AtlasData.active = null;
-			}
-			null;
-		}
-	}
-	,mouseX: null
-	,get_mouseX: function() {
-		return Std["int"](com.haxepunk.HXP.screen.get_mouseX() + this.camera.x);
-	}
-	,mouseY: null
-	,get_mouseY: function() {
-		return Std["int"](com.haxepunk.HXP.screen.get_mouseY() + this.camera.y);
-	}
-	,sprite: null
-	,add: function(e) {
-		this._add[this._add.length] = e;
-		return e;
-	}
-	,remove: function(e) {
-		this._remove[this._remove.length] = e;
-		return e;
-	}
-	,removeAll: function() {
-		var $it0 = this._update.iterator();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			this._remove[this._remove.length] = e;
-		}
-	}
-	,addList: function(list) {
-		var $it0 = $iterator(list)();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			this.add(e);
-		}
-	}
-	,removeList: function(list) {
-		var $it0 = $iterator(list)();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			this.remove(e);
-		}
-	}
-	,addGraphic: function(graphic,layer,x,y) {
-		if(y == null) y = 0;
-		if(x == null) x = 0;
-		if(layer == null) layer = 0;
-		var e = new com.haxepunk.Entity(x,y,graphic);
-		e.set_layer(layer);
-		e.active = false;
-		return this.add(e);
-	}
-	,addMask: function(mask,type,x,y) {
-		if(y == null) y = 0;
-		if(x == null) x = 0;
-		var e = new com.haxepunk.Entity(x,y,null,mask);
-		if(type != "") e.set_type(type);
-		e.active = e.visible = false;
-		return this.add(e);
-	}
-	,create: function(classType,addToScene,constructorsArgs) {
-		if(addToScene == null) addToScene = true;
-		var className = Type.getClassName(classType);
-		var e = this._recycled.get(className);
-		if(e != null) {
-			this._recycled.set(className,e._recycleNext);
-			e._recycleNext = null;
-		} else if(constructorsArgs != null) e = Type.createInstance(classType,constructorsArgs); else e = Type.createInstance(classType,[]);
-		if(addToScene) return this.add(e); else return e;
-	}
-	,recycle: function(e) {
-		this._recycle[this._recycle.length] = e;
-		return this.remove(e);
-	}
-	,clearRecycled: function(classType) {
-		var className = Type.getClassName(classType);
-		var e = this._recycled.get(className);
-		var n;
-		while(e != null) {
-			n = e._recycleNext;
-			e._recycleNext = null;
-			e = n;
-		}
-		this._recycled.remove(className);
-	}
-	,clearRecycledAll: function() {
-		var e;
-		var $it0 = this._recycled.iterator();
-		while( $it0.hasNext() ) {
-			var e1 = $it0.next();
-			this.clearRecycled(Type.getClass(e1));
-		}
-	}
-	,bringToFront: function(e) {
-		if(e._scene != this) return false;
-		var list = this._layers.get(e._layer);
-		list.remove(e);
-		list.push(e);
-		return true;
-	}
-	,sendToBack: function(e) {
-		if(e._scene != this) return false;
-		var list = this._layers.get(e._layer);
-		list.remove(e);
-		list.add(e);
-		return true;
-	}
-	,bringForward: function(e) {
-		if(e._scene != this) return false;
-		return true;
-	}
-	,sendBackward: function(e) {
-		if(e._scene != this) return false;
-		return true;
-	}
-	,isAtFront: function(e) {
-		return e == this._layers.get(e._layer).first();
-	}
-	,isAtBack: function(e) {
-		return e == this._layers.get(e._layer).last();
-	}
-	,collideRect: function(type,rX,rY,rWidth,rHeight) {
-		if(this._types.exists(type)) {
-			var $it0 = this._types.get(type).iterator();
-			while( $it0.hasNext() ) {
-				var e = $it0.next();
-				if(e.collidable && e.collideRect(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x,e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y,rX,rY,rWidth,rHeight)) return e;
-			}
-		}
-		return null;
-	}
-	,collidePoint: function(type,pX,pY) {
-		var result = null;
-		if(this._types.exists(type)) {
-			var $it0 = this._types.get(type).iterator();
-			while( $it0.hasNext() ) {
-				var e = $it0.next();
-				if(e.collidable && e.collidePoint(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x,e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y,pX,pY)) {
-					if(result == null) result = e; else if(e._layer < result._layer) result = e;
-				}
-			}
-		}
-		return result;
-	}
-	,collideLine: function(type,fromX,fromY,toX,toY,precision,p) {
-		if(precision == null) precision = 1;
-		if(precision < 1) precision = 1;
-		if(Math.sqrt((toX - fromX) * (toX - fromX) + (toY - fromY) * (toY - fromY)) < precision) {
-			if(p != null) {
-				if(fromX == toX && fromY == toY) {
-					p.x = toX;
-					p.y = toY;
-					return this.collidePoint(type,toX,toY);
-				}
-				return this.collideLine(type,fromX,fromY,toX,toY,1,p);
-			} else return this.collidePoint(type,fromX,toY);
-		}
-		var xDelta = Std["int"](Math.abs(toX - fromX));
-		var yDelta = Std["int"](Math.abs(toY - fromY));
-		var xSign;
-		if(toX > fromX) xSign = precision; else xSign = -precision;
-		var ySign;
-		if(toY > fromY) ySign = precision; else ySign = -precision;
-		var x = fromX;
-		var y = fromY;
-		var e;
-		if(xDelta > yDelta) {
-			ySign *= yDelta / xDelta;
-			if(xSign > 0) while(x < toX) {
-				if((e = this.collidePoint(type,x,y)) != null) {
-					if(p == null) return e;
-					if(precision < 2) {
-						p.x = x - xSign;
-						p.y = y - ySign;
-						return e;
-					}
-					return this.collideLine(type,x - xSign | 0,y - ySign | 0,toX,toY,1,p);
-				}
-				x += xSign;
-				y += ySign;
-			} else while(x > toX) {
-				if((e = this.collidePoint(type,x,y)) != null) {
-					if(p == null) return e;
-					if(precision < 2) {
-						p.x = x - xSign;
-						p.y = y - ySign;
-						return e;
-					}
-					return this.collideLine(type,x - xSign | 0,y - ySign | 0,toX,toY,1,p);
-				}
-				x += xSign;
-				y += ySign;
-			}
-		} else {
-			xSign *= xDelta / yDelta;
-			if(ySign > 0) while(y < toY) {
-				if((e = this.collidePoint(type,x,y)) != null) {
-					if(p == null) return e;
-					if(precision < 2) {
-						p.x = x - xSign;
-						p.y = y - ySign;
-						return e;
-					}
-					return this.collideLine(type,x - xSign | 0,y - ySign | 0,toX,toY,1,p);
-				}
-				x += xSign;
-				y += ySign;
-			} else while(y > toY) {
-				if((e = this.collidePoint(type,x,y)) != null) {
-					if(p == null) return e;
-					if(precision < 2) {
-						p.x = x - xSign;
-						p.y = y - ySign;
-						return e;
-					}
-					return this.collideLine(type,x - xSign | 0,y - ySign | 0,toX,toY,1,p);
-				}
-				x += xSign;
-				y += ySign;
-			}
-		}
-		if(precision > 1) {
-			if(p == null) return this.collidePoint(type,toX,toY);
-			if(this.collidePoint(type,toX,toY) != null) return this.collideLine(type,x - xSign | 0,y - ySign | 0,toX,toY,1,p);
-		}
-		if(p != null) {
-			p.x = toX;
-			p.y = toY;
-		}
-		return null;
-	}
-	,collideRectInto: function(type,rX,rY,rWidth,rHeight,into) {
-		var n = into.length;
-		if(this._types.exists(type)) {
-			var $it0 = this._types.get(type).iterator();
-			while( $it0.hasNext() ) {
-				var e = $it0.next();
-				if(e.collidable && e.collideRect(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x,e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y,rX,rY,rWidth,rHeight)) into[n++] = e;
-			}
-		}
-	}
-	,collideCircleInto: function(type,circleX,circleY,radius,into) {
-		if(!this._types.exists(type)) return;
-		var n = into.length;
-		radius *= radius;
-		var $it0 = this._types.get(type).iterator();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			if(com.haxepunk.HXP.distanceSquared(circleX,circleY,e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x,e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) < radius) into[n++] = e;
-		}
-	}
-	,collidePointInto: function(type,pX,pY,into) {
-		if(!this._types.exists(type)) return;
-		var n = into.length;
-		var $it0 = this._types.get(type).iterator();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			if(e.collidable && e.collidePoint(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x,e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y,pX,pY)) into[n++] = e;
-		}
-	}
-	,nearestToRect: function(type,x,y,width,height) {
-		if(!this._types.exists(type)) return null;
-		var nearDist = 179 * Math.pow(10,306);
-		var near = null;
-		var dist;
-		var $it0 = this._types.get(type).iterator();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			dist = com.haxepunk.Scene.squareRects(x,y,width,height,(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x) - e.originX,(e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) - e.originY,e.width,e.height);
-			if(dist < nearDist) {
-				nearDist = dist;
-				near = e;
-			}
-		}
-		return near;
-	}
-	,nearestToEntity: function(type,e,useHitboxes) {
-		if(useHitboxes == null) useHitboxes = false;
-		if(!this._types.exists(type)) return null;
-		if(useHitboxes) return this.nearestToRect(type,(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x) - e.originX,(e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) - e.originY,e.width,e.height);
-		var nearDist = 179 * Math.pow(10,306);
-		var near = null;
-		var dist;
-		var x;
-		x = (e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x) - e.originX;
-		var y;
-		y = (e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) - e.originY;
-		var $it0 = this._types.get(type).iterator();
-		while( $it0.hasNext() ) {
-			var n = $it0.next();
-			dist = (x - (n.followCamera?n.x + com.haxepunk.HXP.camera.x:n.x)) * (x - (n.followCamera?n.x + com.haxepunk.HXP.camera.x:n.x)) + (y - (n.followCamera?n.y + com.haxepunk.HXP.camera.y:n.y)) * (y - (n.followCamera?n.y + com.haxepunk.HXP.camera.y:n.y));
-			if(dist < nearDist) {
-				nearDist = dist;
-				near = n;
-			}
-		}
-		return near;
-	}
-	,nearestToClass: function(type,e,classType,useHitboxes) {
-		if(useHitboxes == null) useHitboxes = false;
-		if(!this._types.exists(type)) return null;
-		if(useHitboxes) return this.nearestToRect(type,(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x) - e.originX,(e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) - e.originY,e.width,e.height);
-		var nearDist = 179 * Math.pow(10,306);
-		var near = null;
-		var dist;
-		var x;
-		x = (e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x) - e.originX;
-		var y;
-		y = (e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) - e.originY;
-		var $it0 = this._types.get(type).iterator();
-		while( $it0.hasNext() ) {
-			var n = $it0.next();
-			dist = (x - (n.followCamera?n.x + com.haxepunk.HXP.camera.x:n.x)) * (x - (n.followCamera?n.x + com.haxepunk.HXP.camera.x:n.x)) + (y - (n.followCamera?n.y + com.haxepunk.HXP.camera.y:n.y)) * (y - (n.followCamera?n.y + com.haxepunk.HXP.camera.y:n.y));
-			if(dist < nearDist && js.Boot.__instanceof(e,classType)) {
-				nearDist = dist;
-				near = n;
-			}
-		}
-		return near;
-	}
-	,nearestToPoint: function(type,x,y,useHitboxes) {
-		if(useHitboxes == null) useHitboxes = false;
-		if(!this._types.exists(type)) return null;
-		var nearDist = 179 * Math.pow(10,306);
-		var near = null;
-		var dist;
-		if(useHitboxes) {
-			var $it0 = this._types.get(type).iterator();
-			while( $it0.hasNext() ) {
-				var n = $it0.next();
-				dist = com.haxepunk.Scene.squarePointRect(x,y,(n.followCamera?n.x + com.haxepunk.HXP.camera.x:n.x) - n.originX,(n.followCamera?n.y + com.haxepunk.HXP.camera.y:n.y) - n.originY,n.width,n.height);
-				if(dist < nearDist) {
-					nearDist = dist;
-					near = n;
-				}
-			}
-		} else {
-			var $it1 = this._types.get(type).iterator();
-			while( $it1.hasNext() ) {
-				var n1 = $it1.next();
-				dist = (x - (n1.followCamera?n1.x + com.haxepunk.HXP.camera.x:n1.x)) * (x - (n1.followCamera?n1.x + com.haxepunk.HXP.camera.x:n1.x)) + (y - (n1.followCamera?n1.y + com.haxepunk.HXP.camera.y:n1.y)) * (y - (n1.followCamera?n1.y + com.haxepunk.HXP.camera.y:n1.y));
-				if(dist < nearDist) {
-					nearDist = dist;
-					near = n1;
-				}
-			}
-		}
-		return near;
-	}
-	,get_count: function() {
-		return this._update.length;
-	}
-	,typeCount: function(type) {
-		if(this._types.exists(type)) return this._types.get(type).length; else return 0;
-	}
-	,classCount: function(c) {
-		if(this._classCount.exists(c)) return this._classCount.get(c); else return 0;
-	}
-	,layerCount: function(layer) {
-		if(this._layers.exists(layer)) return this._layers.get(layer).length; else return 0;
-	}
-	,first: null
-	,get_first: function() {
-		return this._update.first();
-	}
-	,layers: null
-	,get_layers: function() {
-		return this._layerList.length;
-	}
-	,entitiesForType: function(type) {
-		if(this._types.exists(type)) return this._types.get(type); else return null;
-	}
-	,classFirst: function(c) {
-		var $it0 = this._update.iterator();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			if(js.Boot.__instanceof(e,c)) return e;
-		}
-		return null;
-	}
-	,layerFirst: function(layer) {
-		if(this._layers.exists(layer)) return this._layers.get(layer).first(); else return null;
-	}
-	,layerLast: function(layer) {
-		if(this._layers.exists(layer)) return this._layers.get(layer).last(); else return null;
-	}
-	,farthest: null
-	,get_farthest: function() {
-		if(this._layerList.length == 0) return null;
-		return this._layers.get(this._layerList[this._layerList.length - 1]).last();
-	}
-	,nearest: null
-	,get_nearest: function() {
-		if(this._layerList.length == 0) return null;
-		return this._layers.get(this._layerList[0]).first();
-	}
-	,layerFarthest: null
-	,get_layerFarthest: function() {
-		if(this._layerList.length == 0) return 0;
-		return this._layerList[this._layerList.length - 1];
-	}
-	,layerNearest: null
-	,get_layerNearest: function() {
-		if(this._layerList.length == 0) return 0;
-		return this._layerList[0];
-	}
-	,uniqueTypes: null
-	,get_uniqueTypes: function() {
-		var i = 0;
-		var $it0 = this._types.iterator();
-		while( $it0.hasNext() ) {
-			var type = $it0.next();
-			i++;
-		}
-		return i;
-	}
-	,getType: function(type,into) {
-		if(!this._types.exists(type)) return;
-		var n = into.length;
-		var $it0 = this._types.get(type).iterator();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			into[n++] = e;
-		}
-	}
-	,getClass: function(c,into) {
-		var n = into.length;
-		var $it0 = this._update.iterator();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			if(js.Boot.__instanceof(e,c)) into[n++] = e;
-		}
-	}
-	,getLayer: function(layer,into) {
-		var n = into.length;
-		var $it0 = this._layers.get(layer).iterator();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			into[n++] = e;
-		}
-	}
-	,getAll: function(into) {
-		var n = into.length;
-		var $it0 = this._update.iterator();
-		while( $it0.hasNext() ) {
-			var e = $it0.next();
-			into[n++] = e;
-		}
-	}
-	,getInstance: function(name) {
-		return this._entityNames.get(name);
-	}
-	,updateLists: function(shouldAdd) {
-		if(shouldAdd == null) shouldAdd = true;
-		var e;
-		if(this._remove.length > 0) {
-			var _g = 0;
-			var _g1 = this._remove;
-			while(_g < _g1.length) {
-				var e1 = _g1[_g];
-				++_g;
-				if(e1._scene == null) {
-					var idx = HxOverrides.indexOf(this._add,e1,0);
-					if(idx >= 0) this._add.splice(idx,1);
-					continue;
-				}
-				if(e1._scene != this) continue;
-				e1.removed();
-				e1._scene = null;
-				this.removeUpdate(e1);
-				this.removeRender(e1);
-				if(e1._type != "") this.removeType(e1);
-				if(e1._name != "") this._entityNames.remove(e1._name);
-				if(e1.autoClear && e1.get_hasTween()) e1.clearTweens();
-			}
-			this._remove.length = 0;
-		}
-		if(shouldAdd && this._add.length > 0) {
-			var _g2 = 0;
-			var _g11 = this._add;
-			while(_g2 < _g11.length) {
-				var e2 = _g11[_g2];
-				++_g2;
-				if(e2._scene != null) continue;
-				e2._scene = this;
-				this.addUpdate(e2);
-				this.addRender(e2);
-				if(e2._type != "") this.addType(e2);
-				if(e2._name != "") this._entityNames.set(e2._name,e2);
-				e2.added();
-			}
-			this._add.length = 0;
-		}
-		if(this._recycle.length > 0) {
-			var _g3 = 0;
-			var _g12 = this._recycle;
-			while(_g3 < _g12.length) {
-				var e3 = _g12[_g3];
-				++_g3;
-				if(e3._scene != null || e3._recycleNext != null) continue;
-				e3._recycleNext = this._recycled.get(e3._class);
-				this._recycled.set(e3._class,e3);
-			}
-			this._recycle.length = 0;
-		}
-	}
-	,addUpdate: function(e) {
-		this._update.add(e);
-		if(this._classCount.get(e._class) != 0) this._classCount.set(e._class,0);
-		var value = this._classCount.get(e._class) + 1;
-		this._classCount.set(e._class,value);
-	}
-	,removeUpdate: function(e) {
-		this._update.remove(e);
-		var value = this._classCount.get(e._class) - 1;
-		this._classCount.set(e._class,value);
-	}
-	,addRender: function(e) {
-		var list;
-		if(this._layers.exists(e._layer)) list = this._layers.get(e._layer); else {
-			list = new List();
-			this._layers.set(e._layer,list);
-			if(this._layerList.length == 0) this._layerList[0] = e._layer; else com.haxepunk.HXP.insertSortedKey(this._layerList,e._layer,$bind(this,this.layerSort));
-		}
-		list.add(e);
-	}
-	,removeRender: function(e) {
-		var list = this._layers.get(e._layer);
-		list.remove(e);
-		if(list.length == 0) {
-			HxOverrides.remove(this._layerList,e._layer);
-			this._layers.remove(e._layer);
-		}
-	}
-	,addType: function(e) {
-		var list;
-		if(this._types.exists(e._type)) list = this._types.get(e._type); else {
-			list = new List();
-			this._types.set(e._type,list);
-		}
-		list.push(e);
-	}
-	,removeType: function(e) {
-		if(!this._types.exists(e._type)) return;
-		var list = this._types.get(e._type);
-		list.remove(e);
-		if(list.length == 0) this._types.remove(e._type);
-	}
-	,registerName: function(e) {
-		this._entityNames.set(e._name,e);
-	}
-	,unregisterName: function(e) {
-		this._entityNames.remove(e._name);
-	}
-	,_add: null
-	,_remove: null
-	,_recycle: null
-	,_update: null
-	,_layerList: null
-	,_layerDisplay: null
-	,_layers: null
-	,_classCount: null
-	,_types: null
-	,_recycled: null
-	,_entityNames: null
-	,__class__: com.haxepunk.Scene
-	,__properties__: $extend(com.haxepunk.Tweener.prototype.__properties__,{get_uniqueTypes:"get_uniqueTypes",get_layerNearest:"get_layerNearest",get_layerFarthest:"get_layerFarthest",get_nearest:"get_nearest",get_farthest:"get_farthest",get_layers:"get_layers",get_first:"get_first",get_count:"get_count",get_mouseY:"get_mouseY",get_mouseX:"get_mouseX"})
-});
-var MainScene = function() {
-	this.patients = new List();
-	this.donors = new List();
-	com.haxepunk.Scene.call(this);
-};
-$hxClasses["MainScene"] = MainScene;
-MainScene.__name__ = ["MainScene"];
-MainScene.__super__ = com.haxepunk.Scene;
-MainScene.prototype = $extend(com.haxepunk.Scene.prototype,{
-	simulator: null
-	,patients: null
-	,donors: null
-	,begin: function() {
-		this.simulator = new Simulator(this);
-	}
-	,spawn: function(t) {
-		switch(t) {
-		case Patient:
-			this.patients.add(new Patient(this));
-			break;
-		case Donor:
-			this.donors.add(new Donor(this));
-			break;
-		}
-	}
-	,spawner: function(age) {
-		if(Std.random(100) == 0) switch(Patient) {
-		case Patient:
-			this.patients.add(new Patient(this));
-			break;
-		case Donor:
-			this.donors.add(new Donor(this));
-			break;
-		} else if(Std.random(100) == 0) switch(Donor) {
-		case Patient:
-			this.patients.add(new Patient(this));
-			break;
-		case Donor:
-			this.donors.add(new Donor(this));
-			break;
-		}
-	}
-	,__class__: MainScene
-});
-var IMap = function() { };
-$hxClasses["IMap"] = IMap;
-IMap.__name__ = ["IMap"];
-Math.__name__ = ["Math"];
-var NMEPreloader = function() {
-	openfl.display.Sprite.call(this);
-	var backgroundColor = this.getBackgroundColor();
-	var r = backgroundColor >> 16 & 255;
-	var g = backgroundColor >> 8 & 255;
-	var b = backgroundColor & 255;
-	var perceivedLuminosity = 0.299 * r + 0.587 * g + 0.114 * b;
-	var color = 0;
-	if(perceivedLuminosity < 70) color = 16777215;
-	var x = 30;
-	var height = 9;
-	var y = this.getHeight() / 2 - height / 2;
-	var width = this.getWidth() - x * 2;
-	var padding = 3;
-	this.outline = new openfl.display.Sprite();
-	this.outline.get_graphics().lineStyle(1,color,0.15,true);
-	this.outline.get_graphics().drawRoundRect(0,0,width,height,padding * 2,padding * 2);
-	this.outline.set_x(x);
-	this.outline.set_y(y);
-	this.addChild(this.outline);
-	this.progress = new openfl.display.Sprite();
-	this.progress.get_graphics().beginFill(color,0.35);
-	this.progress.get_graphics().drawRect(0,0,width - padding * 2,height - padding * 2);
-	this.progress.set_x(x + padding);
-	this.progress.set_y(y + padding);
-	this.progress.set_scaleX(0);
-	this.addChild(this.progress);
-};
-$hxClasses["NMEPreloader"] = NMEPreloader;
-NMEPreloader.__name__ = ["NMEPreloader"];
-NMEPreloader.__super__ = openfl.display.Sprite;
-NMEPreloader.prototype = $extend(openfl.display.Sprite.prototype,{
-	outline: null
-	,progress: null
-	,getBackgroundColor: function() {
-		return 3355443;
-	}
-	,getHeight: function() {
-		var height = 480;
-		if(height > 0) return height; else return openfl.Lib.current.stage.stageHeight;
-	}
-	,getWidth: function() {
-		var width = 640;
-		if(width > 0) return width; else return openfl.Lib.current.stage.stageWidth;
-	}
-	,onInit: function() {
-	}
-	,onLoaded: function() {
-		this.dispatchEvent(new openfl.events.Event(openfl.events.Event.COMPLETE));
-	}
-	,onUpdate: function(bytesLoaded,bytesTotal) {
-		var percentLoaded = bytesLoaded / bytesTotal;
-		if(percentLoaded > 1) percentLoaded == 1;
-		this.progress.set_scaleX(percentLoaded);
-	}
-	,__class__: NMEPreloader
-});
-var Patient = function(main) {
-	Person.call(this,main);
-	haxe.Log.trace("spawned patient",{ fileName : "Patient.hx", lineNumber : 5, className : "Patient", methodName : "new"});
-};
-$hxClasses["Patient"] = Patient;
-Patient.__name__ = ["Patient"];
-Patient.__super__ = Person;
-Patient.prototype = $extend(Person.prototype,{
-	__class__: Patient
-});
-var Reflect = function() { };
-$hxClasses["Reflect"] = Reflect;
-Reflect.__name__ = ["Reflect"];
-Reflect.hasField = function(o,field) {
-	return Object.prototype.hasOwnProperty.call(o,field);
-};
-Reflect.field = function(o,field) {
-	try {
-		return o[field];
-	} catch( e ) {
-		return null;
-	}
-};
-Reflect.setField = function(o,field,value) {
-	o[field] = value;
-};
-Reflect.getProperty = function(o,field) {
-	var tmp;
-	if(o == null) return null; else if(o.__properties__ && (tmp = o.__properties__["get_" + field])) return o[tmp](); else return o[field];
-};
-Reflect.setProperty = function(o,field,value) {
-	var tmp;
-	if(o.__properties__ && (tmp = o.__properties__["set_" + field])) o[tmp](value); else o[field] = value;
-};
-Reflect.callMethod = function(o,func,args) {
-	return func.apply(o,args);
-};
-Reflect.fields = function(o) {
-	var a = [];
-	if(o != null) {
-		var hasOwnProperty = Object.prototype.hasOwnProperty;
-		for( var f in o ) {
-		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) a.push(f);
-		}
-	}
-	return a;
-};
-Reflect.isFunction = function(f) {
-	return typeof(f) == "function" && !(f.__name__ || f.__ename__);
-};
-Reflect.isObject = function(v) {
-	if(v == null) return false;
-	var t = typeof(v);
-	return t == "string" || t == "object" && v.__enum__ == null || t == "function" && (v.__name__ || v.__ename__) != null;
-};
-Reflect.deleteField = function(o,field) {
-	if(!Object.prototype.hasOwnProperty.call(o,field)) return false;
-	delete(o[field]);
-	return true;
-};
-Reflect.makeVarArgs = function(f) {
-	return function() {
-		var a = Array.prototype.slice.call(arguments);
-		return f(a);
-	};
-};
-var Simulator = function(main) {
-	this.main = main;
-	this.age = 0;
-	try {
-		this.simulation_speed = BloodTransfusionRules.simulation_speed;
-	} catch( e ) {
-		this.simulation_speed = 50.0;
-	}
-	this.change_simulation_speed(this.simulation_speed);
-};
-$hxClasses["Simulator"] = Simulator;
-Simulator.__name__ = ["Simulator"];
-Simulator.prototype = {
-	simulation_speed: null
-	,main: null
-	,ticker: null
-	,age: null
-	,change_simulation_speed: function(new_speed) {
-		if(this.ticker != null) this.ticker.stop();
-		if(new_speed > 100) {
-			haxe.Log.trace("Warning! capped speed " + new_speed + " down to max: 100.0",{ fileName : "Simulator.hx", lineNumber : 46, className : "Simulator", methodName : "change_simulation_speed"});
-			new_speed = 100.0;
-		} else if(new_speed < 1) {
-			haxe.Log.trace("Warning! capped speed " + new_speed + " up to min: 1.0",{ fileName : "Simulator.hx", lineNumber : 49, className : "Simulator", methodName : "change_simulation_speed"});
-			new_speed = 1.0;
-		}
-		this.simulation_speed = new_speed;
-		this.ticker = new haxe.Timer(10000 / this.simulation_speed | 0);
-		this.ticker.run = $bind(this,this.tick);
-	}
-	,tick: function() {
-		this.age++;
-		this.main.spawner(this.age);
-	}
-	,__class__: Simulator
-};
-var Std = function() { };
-$hxClasses["Std"] = Std;
-Std.__name__ = ["Std"];
-Std.string = function(s) {
-	return js.Boot.__string_rec(s,"");
-};
-Std["int"] = function(x) {
-	return x | 0;
-};
-Std.parseInt = function(x) {
-	var v = parseInt(x,10);
-	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) v = parseInt(x);
-	if(isNaN(v)) return null;
-	return v;
-};
-Std.parseFloat = function(x) {
-	return parseFloat(x);
-};
-Std.random = function(x) {
-	if(x <= 0) return 0; else return Math.floor(Math.random() * x);
-};
-var StringBuf = function() {
-	this.b = "";
-};
-$hxClasses["StringBuf"] = StringBuf;
-StringBuf.__name__ = ["StringBuf"];
-StringBuf.prototype = {
-	b: null
-	,add: function(x) {
-		this.b += Std.string(x);
-	}
-	,addSub: function(s,pos,len) {
-		if(len == null) this.b += HxOverrides.substr(s,pos,null); else this.b += HxOverrides.substr(s,pos,len);
-	}
-	,__class__: StringBuf
-};
-var StringTools = function() { };
-$hxClasses["StringTools"] = StringTools;
-StringTools.__name__ = ["StringTools"];
-StringTools.urlEncode = function(s) {
-	return encodeURIComponent(s);
-};
-StringTools.urlDecode = function(s) {
-	return decodeURIComponent(s.split("+").join(" "));
-};
-StringTools.startsWith = function(s,start) {
-	return s.length >= start.length && HxOverrides.substr(s,0,start.length) == start;
-};
-StringTools.replace = function(s,sub,by) {
-	return s.split(sub).join(by);
-};
-StringTools.hex = function(n,digits) {
-	var s = "";
-	var hexChars = "0123456789ABCDEF";
-	do {
-		s = hexChars.charAt(n & 15) + s;
-		n >>>= 4;
-	} while(n > 0);
-	if(digits != null) while(s.length < digits) s = "0" + s;
-	return s;
-};
-StringTools.fastCodeAt = function(s,index) {
-	return s.charCodeAt(index);
+	,project: function(axis,projection) {
+		var cur;
+		var max = -Infinity;
+		var min = Infinity;
+		cur = -this._parent.originX * axis.x - this._parent.originY * axis.y;
+		if(cur < min) min = cur;
+		if(cur > max) max = cur;
+		cur = (-this._parent.originX + this._parent.width) * axis.x - this._parent.originY * axis.y;
+		if(cur < min) min = cur;
+		if(cur > max) max = cur;
+		cur = -this._parent.originX * axis.x + (-this._parent.originY + this._parent.height) * axis.y;
+		if(cur < min) min = cur;
+		if(cur > max) max = cur;
+		cur = (-this._parent.originX + this._parent.width) * axis.x + (-this._parent.originY + this._parent.height) * axis.y;
+		if(cur < min) min = cur;
+		if(cur > max) max = cur;
+		projection.min = min;
+		projection.max = max;
+	}
+	,_class: null
+	,_check: null
+	,_parent: null
+	,__class__: com.haxepunk.Mask
+	,__properties__: {set_parent:"set_parent",get_parent:"get_parent"}
 };
 var Type = function() { };
 $hxClasses["Type"] = Type;
@@ -2926,225 +1888,6 @@ Type.getClassFields = function(c) {
 Type.getEnumConstructs = function(e) {
 	var a = e.__constructs__;
 	return a.slice();
-};
-var XmlType = $hxClasses["XmlType"] = { __ename__ : true, __constructs__ : [] };
-var Xml = function() {
-};
-$hxClasses["Xml"] = Xml;
-Xml.__name__ = ["Xml"];
-Xml.Element = null;
-Xml.PCData = null;
-Xml.CData = null;
-Xml.Comment = null;
-Xml.DocType = null;
-Xml.ProcessingInstruction = null;
-Xml.Document = null;
-Xml.parse = function(str) {
-	return haxe.xml.Parser.parse(str);
-};
-Xml.createElement = function(name) {
-	var r = new Xml();
-	r.nodeType = Xml.Element;
-	r._children = new Array();
-	r._attributes = new haxe.ds.StringMap();
-	r.set_nodeName(name);
-	return r;
-};
-Xml.createPCData = function(data) {
-	var r = new Xml();
-	r.nodeType = Xml.PCData;
-	r.set_nodeValue(data);
-	return r;
-};
-Xml.createCData = function(data) {
-	var r = new Xml();
-	r.nodeType = Xml.CData;
-	r.set_nodeValue(data);
-	return r;
-};
-Xml.createComment = function(data) {
-	var r = new Xml();
-	r.nodeType = Xml.Comment;
-	r.set_nodeValue(data);
-	return r;
-};
-Xml.createDocType = function(data) {
-	var r = new Xml();
-	r.nodeType = Xml.DocType;
-	r.set_nodeValue(data);
-	return r;
-};
-Xml.createProcessingInstruction = function(data) {
-	var r = new Xml();
-	r.nodeType = Xml.ProcessingInstruction;
-	r.set_nodeValue(data);
-	return r;
-};
-Xml.createDocument = function() {
-	var r = new Xml();
-	r.nodeType = Xml.Document;
-	r._children = new Array();
-	return r;
-};
-Xml.prototype = {
-	nodeType: null
-	,_nodeName: null
-	,_nodeValue: null
-	,_attributes: null
-	,_children: null
-	,_parent: null
-	,get_nodeName: function() {
-		if(this.nodeType != Xml.Element) throw "bad nodeType";
-		return this._nodeName;
-	}
-	,set_nodeName: function(n) {
-		if(this.nodeType != Xml.Element) throw "bad nodeType";
-		return this._nodeName = n;
-	}
-	,set_nodeValue: function(v) {
-		if(this.nodeType == Xml.Element || this.nodeType == Xml.Document) throw "bad nodeType";
-		return this._nodeValue = v;
-	}
-	,get: function(att) {
-		if(this.nodeType != Xml.Element) throw "bad nodeType";
-		return this._attributes.get(att);
-	}
-	,set: function(att,value) {
-		if(this.nodeType != Xml.Element) throw "bad nodeType";
-		this._attributes.set(att,value);
-	}
-	,exists: function(att) {
-		if(this.nodeType != Xml.Element) throw "bad nodeType";
-		return this._attributes.exists(att);
-	}
-	,elements: function() {
-		if(this._children == null) throw "bad nodetype";
-		return { cur : 0, x : this._children, hasNext : function() {
-			var k = this.cur;
-			var l = this.x.length;
-			while(k < l) {
-				if(this.x[k].nodeType == Xml.Element) break;
-				k += 1;
-			}
-			this.cur = k;
-			return k < l;
-		}, next : function() {
-			var k1 = this.cur;
-			var l1 = this.x.length;
-			while(k1 < l1) {
-				var n = this.x[k1];
-				k1 += 1;
-				if(n.nodeType == Xml.Element) {
-					this.cur = k1;
-					return n;
-				}
-			}
-			return null;
-		}};
-	}
-	,firstElement: function() {
-		if(this._children == null) throw "bad nodetype";
-		var cur = 0;
-		var l = this._children.length;
-		while(cur < l) {
-			var n = this._children[cur];
-			if(n.nodeType == Xml.Element) return n;
-			cur++;
-		}
-		return null;
-	}
-	,addChild: function(x) {
-		if(this._children == null) throw "bad nodetype";
-		if(x._parent != null) HxOverrides.remove(x._parent._children,x);
-		x._parent = this;
-		this._children.push(x);
-	}
-	,__class__: Xml
-	,__properties__: {set_nodeValue:"set_nodeValue",set_nodeName:"set_nodeName",get_nodeName:"get_nodeName"}
-};
-com.haxepunk._Entity = {};
-com.haxepunk._Entity.SolidType_Impl_ = function() { };
-$hxClasses["com.haxepunk._Entity.SolidType_Impl_"] = com.haxepunk._Entity.SolidType_Impl_;
-com.haxepunk._Entity.SolidType_Impl_.__name__ = ["com","haxepunk","_Entity","SolidType_Impl_"];
-com.haxepunk._Entity.SolidType_Impl_.__properties__ = {get_type:"get_type"}
-com.haxepunk._Entity.SolidType_Impl_._new = function(e) {
-	return e;
-};
-com.haxepunk._Entity.SolidType_Impl_.get_type = function(this1) {
-	return this1;
-};
-com.haxepunk._Entity.SolidType_Impl_.fromLeft = function(v) {
-	var e = com.haxepunk.ds.Either.Left(v);
-	return e;
-};
-com.haxepunk._Entity.SolidType_Impl_.fromRight = function(v) {
-	var e = com.haxepunk.ds.Either.Right(v);
-	return e;
-};
-com.haxepunk.Mask = function() {
-	this._parent = com.haxepunk.Entity._EMPTY;
-	this._class = Type.getClassName(Type.getClass(this));
-	this._check = new haxe.ds.StringMap();
-	var key = Type.getClassName(com.haxepunk.Mask);
-	this._check.set(key,$bind(this,this.collideMask));
-	var key1 = Type.getClassName(com.haxepunk.masks.Masklist);
-	this._check.set(key1,$bind(this,this.collideMasklist));
-};
-$hxClasses["com.haxepunk.Mask"] = com.haxepunk.Mask;
-com.haxepunk.Mask.__name__ = ["com","haxepunk","Mask"];
-com.haxepunk.Mask.prototype = {
-	get_parent: function() {
-		if(this._parent != com.haxepunk.Entity._EMPTY) return this._parent; else return null;
-	}
-	,set_parent: function(value) {
-		if(value == null) this._parent = com.haxepunk.Entity._EMPTY; else {
-			this._parent = value;
-			this.update();
-		}
-		return value;
-	}
-	,list: null
-	,collide: function(mask) {
-		var cbFunc = this._check.get(mask._class);
-		if(cbFunc != null) return cbFunc(mask);
-		cbFunc = mask._check.get(this._class);
-		if(cbFunc != null) return cbFunc(this);
-		return false;
-	}
-	,collideMask: function(other) {
-		return this._parent.get_x() - this._parent.originX + this._parent.width > other._parent.get_x() - other._parent.originX && this._parent.get_y() - this._parent.originY + this._parent.height > other._parent.get_y() - other._parent.originY && this._parent.get_x() - this._parent.originX < other._parent.get_x() - other._parent.originX + other._parent.width && this._parent.get_y() - this._parent.originY < other._parent.get_y() - other._parent.originY + other._parent.height;
-	}
-	,collideMasklist: function(other) {
-		return other.collide(this);
-	}
-	,debugDraw: function(graphics,scaleX,scaleY) {
-	}
-	,update: function() {
-	}
-	,project: function(axis,projection) {
-		var cur;
-		var max = -Infinity;
-		var min = Infinity;
-		cur = -this._parent.originX * axis.x - this._parent.originY * axis.y;
-		if(cur < min) min = cur;
-		if(cur > max) max = cur;
-		cur = (-this._parent.originX + this._parent.width) * axis.x - this._parent.originY * axis.y;
-		if(cur < min) min = cur;
-		if(cur > max) max = cur;
-		cur = -this._parent.originX * axis.x + (-this._parent.originY + this._parent.height) * axis.y;
-		if(cur < min) min = cur;
-		if(cur > max) max = cur;
-		cur = (-this._parent.originX + this._parent.width) * axis.x + (-this._parent.originY + this._parent.height) * axis.y;
-		if(cur < min) min = cur;
-		if(cur > max) max = cur;
-		projection.min = min;
-		projection.max = max;
-	}
-	,_class: null
-	,_check: null
-	,_parent: null
-	,__class__: com.haxepunk.Mask
-	,__properties__: {set_parent:"set_parent",get_parent:"get_parent"}
 };
 com.haxepunk.masks = {};
 com.haxepunk.masks.Hitbox = function(width,height,x,y) {
@@ -3501,6 +2244,62 @@ openfl.geom.Point.prototype = {
 	}
 	,__class__: openfl.geom.Point
 	,__properties__: {get_length:"get_length"}
+};
+var Reflect = function() { };
+$hxClasses["Reflect"] = Reflect;
+Reflect.__name__ = ["Reflect"];
+Reflect.hasField = function(o,field) {
+	return Object.prototype.hasOwnProperty.call(o,field);
+};
+Reflect.field = function(o,field) {
+	try {
+		return o[field];
+	} catch( e ) {
+		return null;
+	}
+};
+Reflect.setField = function(o,field,value) {
+	o[field] = value;
+};
+Reflect.getProperty = function(o,field) {
+	var tmp;
+	if(o == null) return null; else if(o.__properties__ && (tmp = o.__properties__["get_" + field])) return o[tmp](); else return o[field];
+};
+Reflect.setProperty = function(o,field,value) {
+	var tmp;
+	if(o.__properties__ && (tmp = o.__properties__["set_" + field])) o[tmp](value); else o[field] = value;
+};
+Reflect.callMethod = function(o,func,args) {
+	return func.apply(o,args);
+};
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) a.push(f);
+		}
+	}
+	return a;
+};
+Reflect.isFunction = function(f) {
+	return typeof(f) == "function" && !(f.__name__ || f.__ename__);
+};
+Reflect.isObject = function(v) {
+	if(v == null) return false;
+	var t = typeof(v);
+	return t == "string" || t == "object" && v.__enum__ == null || t == "function" && (v.__name__ || v.__ename__) != null;
+};
+Reflect.deleteField = function(o,field) {
+	if(!Object.prototype.hasOwnProperty.call(o,field)) return false;
+	delete(o[field]);
+	return true;
+};
+Reflect.makeVarArgs = function(f) {
+	return function() {
+		var a = Array.prototype.slice.call(arguments);
+		return f(a);
+	};
 };
 openfl.geom.Matrix = function(a,b,c,d,tx,ty) {
 	if(ty == null) ty = 0;
@@ -4926,6 +3725,1281 @@ com.haxepunk.Entity.prototype = $extend(com.haxepunk.Tweener.prototype,{
 	,__class__: com.haxepunk.Entity
 	,__properties__: $extend(com.haxepunk.Tweener.prototype.__properties__,{set_name:"set_name",get_name:"get_name",set_graphic:"set_graphic",get_graphic:"get_graphic",set_mask:"set_mask",get_mask:"get_mask",set_type:"set_type",get_type:"get_type",set_layer:"set_layer",get_layer:"get_layer",get_bottom:"get_bottom",get_top:"get_top",get_right:"get_right",get_left:"get_left",get_centerY:"get_centerY",get_centerX:"get_centerX",get_halfHeight:"get_halfHeight",get_halfWidth:"get_halfWidth",get_scene:"get_scene",get_world:"get_world",get_onCamera:"get_onCamera",set_y:"set_y",get_y:"get_y",set_x:"set_x",get_x:"get_x"})
 });
+var Person = function(main) {
+	this.main = main;
+	if(Std.random(2) == 0) this.gender = Gender.MALE; else this.gender = Gender.FEMALE;
+	this.sprite = new com.haxepunk.graphics.Spritemap(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE?(function($this) {
+		var $r;
+		var e = com.haxepunk.ds.Either.Right(new com.haxepunk.graphics.atlas.TileAtlas((function($this) {
+			var $r;
+			var data = com.haxepunk.graphics.atlas.AtlasData.getAtlasDataByName("graphics/persons_72x72.png",true);
+			$r = data;
+			return $r;
+		}($this))));
+		$r = e;
+		return $r;
+	}(this)):(function($this) {
+		var $r;
+		var e1 = com.haxepunk.ds.Either.Left(com.haxepunk.HXP.getBitmap("graphics/persons_72x72.png"));
+		$r = e1;
+		return $r;
+	}(this)),72,72,$bind(this,this.sprite_loaded));
+	com.haxepunk.Entity.call(this,-80,Std.random(480));
+};
+$hxClasses["Person"] = Person;
+Person.__name__ = ["Person"];
+Person.__super__ = com.haxepunk.Entity;
+Person.prototype = $extend(com.haxepunk.Entity.prototype,{
+	main: null
+	,sprite: null
+	,gender: null
+	,sprite_loaded: function() {
+	}
+	,toGenderGFX: function(frames) {
+		if(this.gender == Gender.FEMALE) return frames.map(function(frame) {
+			return frame + 6;
+		}); else return frames;
+	}
+	,__class__: Person
+});
+var Donor = function(main) {
+	Person.call(this,main);
+	haxe.Log.trace("spawned donor",{ fileName : "Donor.hx", lineNumber : 9, className : "Donor", methodName : "new"});
+	this.sprite.add("IDLE",this.toGenderGFX([0]));
+	this.sprite.add("YAY",this.toGenderGFX([1]));
+	this.addGraphic(this.sprite);
+};
+$hxClasses["Donor"] = Donor;
+Donor.__name__ = ["Donor"];
+Donor.__super__ = Person;
+Donor.prototype = $extend(Person.prototype,{
+	sprite_loaded: function() {
+		this.sprite.play("IDLE");
+	}
+	,__class__: Donor
+});
+var EReg = function(r,opt) {
+	opt = opt.split("u").join("");
+	this.r = new RegExp(r,opt);
+};
+$hxClasses["EReg"] = EReg;
+EReg.__name__ = ["EReg"];
+EReg.prototype = {
+	r: null
+	,match: function(s) {
+		if(this.r.global) this.r.lastIndex = 0;
+		this.r.m = this.r.exec(s);
+		this.r.s = s;
+		return this.r.m != null;
+	}
+	,matched: function(n) {
+		if(this.r.m != null && n >= 0 && n < this.r.m.length) return this.r.m[n]; else throw "EReg::matched";
+	}
+	,matchedPos: function() {
+		if(this.r.m == null) throw "No string matched";
+		return { pos : this.r.m.index, len : this.r.m[0].length};
+	}
+	,replace: function(s,by) {
+		return s.replace(this.r,by);
+	}
+	,__class__: EReg
+};
+var HxOverrides = function() { };
+$hxClasses["HxOverrides"] = HxOverrides;
+HxOverrides.__name__ = ["HxOverrides"];
+HxOverrides.strDate = function(s) {
+	var _g = s.length;
+	switch(_g) {
+	case 8:
+		var k = s.split(":");
+		var d = new Date();
+		d.setTime(0);
+		d.setUTCHours(k[0]);
+		d.setUTCMinutes(k[1]);
+		d.setUTCSeconds(k[2]);
+		return d;
+	case 10:
+		var k1 = s.split("-");
+		return new Date(k1[0],k1[1] - 1,k1[2],0,0,0);
+	case 19:
+		var k2 = s.split(" ");
+		var y = k2[0].split("-");
+		var t = k2[1].split(":");
+		return new Date(y[0],y[1] - 1,y[2],t[0],t[1],t[2]);
+	default:
+		throw "Invalid date format : " + s;
+	}
+};
+HxOverrides.cca = function(s,index) {
+	var x = s.charCodeAt(index);
+	if(x != x) return undefined;
+	return x;
+};
+HxOverrides.substr = function(s,pos,len) {
+	if(pos != null && pos != 0 && len != null && len < 0) return "";
+	if(len == null) len = s.length;
+	if(pos < 0) {
+		pos = s.length + pos;
+		if(pos < 0) pos = 0;
+	} else if(len < 0) len = s.length + len - pos;
+	return s.substr(pos,len);
+};
+HxOverrides.indexOf = function(a,obj,i) {
+	var len = a.length;
+	if(i < 0) {
+		i += len;
+		if(i < 0) i = 0;
+	}
+	while(i < len) {
+		if(a[i] === obj) return i;
+		i++;
+	}
+	return -1;
+};
+HxOverrides.remove = function(a,obj) {
+	var i = HxOverrides.indexOf(a,obj,0);
+	if(i == -1) return false;
+	a.splice(i,1);
+	return true;
+};
+HxOverrides.iter = function(a) {
+	return { cur : 0, arr : a, hasNext : function() {
+		return this.cur < this.arr.length;
+	}, next : function() {
+		return this.arr[this.cur++];
+	}};
+};
+var List = function() {
+	this.length = 0;
+};
+$hxClasses["List"] = List;
+List.__name__ = ["List"];
+List.prototype = {
+	h: null
+	,q: null
+	,length: null
+	,add: function(item) {
+		var x = [item];
+		if(this.h == null) this.h = x; else this.q[1] = x;
+		this.q = x;
+		this.length++;
+	}
+	,push: function(item) {
+		var x = [item,this.h];
+		this.h = x;
+		if(this.q == null) this.q = x;
+		this.length++;
+	}
+	,first: function() {
+		if(this.h == null) return null; else return this.h[0];
+	}
+	,last: function() {
+		if(this.q == null) return null; else return this.q[0];
+	}
+	,pop: function() {
+		if(this.h == null) return null;
+		var x = this.h[0];
+		this.h = this.h[1];
+		if(this.h == null) this.q = null;
+		this.length--;
+		return x;
+	}
+	,isEmpty: function() {
+		return this.h == null;
+	}
+	,remove: function(v) {
+		var prev = null;
+		var l = this.h;
+		while(l != null) {
+			if(l[0] == v) {
+				if(prev == null) this.h = l[1]; else prev[1] = l[1];
+				if(this.q == l) this.q = prev;
+				this.length--;
+				return true;
+			}
+			prev = l;
+			l = l[1];
+		}
+		return false;
+	}
+	,iterator: function() {
+		return { h : this.h, hasNext : function() {
+			return this.h != null;
+		}, next : function() {
+			if(this.h == null) return null;
+			var x = this.h[0];
+			this.h = this.h[1];
+			return x;
+		}};
+	}
+	,__class__: List
+};
+com.haxepunk.Scene = function() {
+	com.haxepunk.Tweener.call(this);
+	this.visible = true;
+	this.camera = new openfl.geom.Point();
+	this.sprite = new openfl.display.Sprite();
+	this._layerList = new Array();
+	this._add = new Array();
+	this._remove = new Array();
+	this._recycle = new Array();
+	this._update = new List();
+	this._layerDisplay = new haxe.ds.IntMap();
+	this._layers = new haxe.ds.IntMap();
+	this._types = new haxe.ds.StringMap();
+	this._classCount = new haxe.ds.StringMap();
+	this._recycled = new haxe.ds.StringMap();
+	this._entityNames = new haxe.ds.StringMap();
+};
+$hxClasses["com.haxepunk.Scene"] = com.haxepunk.Scene;
+com.haxepunk.Scene.__name__ = ["com","haxepunk","Scene"];
+com.haxepunk.Scene.squareRects = function(x1,y1,w1,h1,x2,y2,w2,h2) {
+	if(x1 < x2 + w2 && x2 < x1 + w1) {
+		if(y1 < y2 + h2 && y2 < y1 + h1) return 0;
+		if(y1 > y2) return (y1 - (y2 + h2)) * (y1 - (y2 + h2));
+		return (y2 - (y1 + h1)) * (y2 - (y1 + h1));
+	}
+	if(y1 < y2 + h2 && y2 < y1 + h1) {
+		if(x1 > x2) return (x1 - (x2 + w2)) * (x1 - (x2 + w2));
+		return (x2 - (x1 + w1)) * (x2 - (x1 + w1));
+	}
+	if(x1 > x2) {
+		if(y1 > y2) return com.haxepunk.HXP.distanceSquared(x2 + w2,y2 + h2,x1,y1);
+		return com.haxepunk.HXP.distanceSquared(x2 + w2,y2,x1,y1 + h1);
+	}
+	if(y1 > y2) return com.haxepunk.HXP.distanceSquared(x2,y2 + h2,x1 + w1,y1);
+	return com.haxepunk.HXP.distanceSquared(x2,y2,x1 + w1,y1 + h1);
+};
+com.haxepunk.Scene.squarePointRect = function(px,py,rx,ry,rw,rh) {
+	if(px >= rx && px <= rx + rw) {
+		if(py >= ry && py <= ry + rh) return 0;
+		if(py > ry) return (py - (ry + rh)) * (py - (ry + rh));
+		return (ry - py) * (ry - py);
+	}
+	if(py >= ry && py <= ry + rh) {
+		if(px > rx) return (px - (rx + rw)) * (px - (rx + rw));
+		return (rx - px) * (rx - px);
+	}
+	if(px > rx) {
+		if(py > ry) return com.haxepunk.HXP.distanceSquared(rx + rw,ry + rh,px,py);
+		return com.haxepunk.HXP.distanceSquared(rx + rw,ry,px,py);
+	}
+	if(py > ry) return com.haxepunk.HXP.distanceSquared(rx,ry + rh,px,py);
+	return (px - rx) * (px - rx) + (py - ry) * (py - ry);
+};
+com.haxepunk.Scene.__super__ = com.haxepunk.Tweener;
+com.haxepunk.Scene.prototype = $extend(com.haxepunk.Tweener.prototype,{
+	visible: null
+	,camera: null
+	,begin: function() {
+	}
+	,end: function() {
+	}
+	,focusGained: function() {
+	}
+	,focusLost: function() {
+	}
+	,update: function() {
+		var $it0 = this._update.iterator();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			if(e.active) {
+				if(e.get_hasTween()) e.updateTweens();
+				e.update();
+			}
+			if(e._graphic != null && e._graphic.active) e._graphic.update();
+		}
+	}
+	,showLayer: function(layer,show) {
+		if(show == null) show = true;
+		this._layerDisplay.set(layer,show);
+	}
+	,layerVisible: function(layer) {
+		return !this._layerDisplay.exists(layer) || this._layerDisplay.get(layer);
+	}
+	,layerSort: function(a,b) {
+		return b - a;
+	}
+	,render: function() {
+		if(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE) {
+			com.haxepunk.graphics.atlas.AtlasData._scene = this;
+			com.haxepunk.graphics.atlas.AtlasData._scene.sprite.get_graphics().clear();
+		}
+		var _g = 0;
+		var _g1 = this._layerList;
+		while(_g < _g1.length) {
+			var layer = _g1[_g];
+			++_g;
+			if(!(!this._layerDisplay.exists(layer) || this._layerDisplay.get(layer))) continue;
+			var $it0 = this._layers.get(layer).iterator();
+			while( $it0.hasNext() ) {
+				var e = $it0.next();
+				if(e.visible) e.render();
+			}
+		}
+		if(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE) {
+			if(com.haxepunk.graphics.atlas.AtlasData.active != null) {
+				if(com.haxepunk.graphics.atlas.AtlasData.active != null) com.haxepunk.graphics.atlas.AtlasData.active.flush();
+				com.haxepunk.graphics.atlas.AtlasData.active = null;
+			}
+			null;
+		}
+	}
+	,mouseX: null
+	,get_mouseX: function() {
+		return Std["int"](com.haxepunk.HXP.screen.get_mouseX() + this.camera.x);
+	}
+	,mouseY: null
+	,get_mouseY: function() {
+		return Std["int"](com.haxepunk.HXP.screen.get_mouseY() + this.camera.y);
+	}
+	,sprite: null
+	,add: function(e) {
+		this._add[this._add.length] = e;
+		return e;
+	}
+	,remove: function(e) {
+		this._remove[this._remove.length] = e;
+		return e;
+	}
+	,removeAll: function() {
+		var $it0 = this._update.iterator();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			this._remove[this._remove.length] = e;
+		}
+	}
+	,addList: function(list) {
+		var $it0 = $iterator(list)();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			this.add(e);
+		}
+	}
+	,removeList: function(list) {
+		var $it0 = $iterator(list)();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			this.remove(e);
+		}
+	}
+	,addGraphic: function(graphic,layer,x,y) {
+		if(y == null) y = 0;
+		if(x == null) x = 0;
+		if(layer == null) layer = 0;
+		var e = new com.haxepunk.Entity(x,y,graphic);
+		e.set_layer(layer);
+		e.active = false;
+		return this.add(e);
+	}
+	,addMask: function(mask,type,x,y) {
+		if(y == null) y = 0;
+		if(x == null) x = 0;
+		var e = new com.haxepunk.Entity(x,y,null,mask);
+		if(type != "") e.set_type(type);
+		e.active = e.visible = false;
+		return this.add(e);
+	}
+	,create: function(classType,addToScene,constructorsArgs) {
+		if(addToScene == null) addToScene = true;
+		var className = Type.getClassName(classType);
+		var e = this._recycled.get(className);
+		if(e != null) {
+			this._recycled.set(className,e._recycleNext);
+			e._recycleNext = null;
+		} else if(constructorsArgs != null) e = Type.createInstance(classType,constructorsArgs); else e = Type.createInstance(classType,[]);
+		if(addToScene) return this.add(e); else return e;
+	}
+	,recycle: function(e) {
+		this._recycle[this._recycle.length] = e;
+		return this.remove(e);
+	}
+	,clearRecycled: function(classType) {
+		var className = Type.getClassName(classType);
+		var e = this._recycled.get(className);
+		var n;
+		while(e != null) {
+			n = e._recycleNext;
+			e._recycleNext = null;
+			e = n;
+		}
+		this._recycled.remove(className);
+	}
+	,clearRecycledAll: function() {
+		var e;
+		var $it0 = this._recycled.iterator();
+		while( $it0.hasNext() ) {
+			var e1 = $it0.next();
+			this.clearRecycled(Type.getClass(e1));
+		}
+	}
+	,bringToFront: function(e) {
+		if(e._scene != this) return false;
+		var list = this._layers.get(e._layer);
+		list.remove(e);
+		list.push(e);
+		return true;
+	}
+	,sendToBack: function(e) {
+		if(e._scene != this) return false;
+		var list = this._layers.get(e._layer);
+		list.remove(e);
+		list.add(e);
+		return true;
+	}
+	,bringForward: function(e) {
+		if(e._scene != this) return false;
+		return true;
+	}
+	,sendBackward: function(e) {
+		if(e._scene != this) return false;
+		return true;
+	}
+	,isAtFront: function(e) {
+		return e == this._layers.get(e._layer).first();
+	}
+	,isAtBack: function(e) {
+		return e == this._layers.get(e._layer).last();
+	}
+	,collideRect: function(type,rX,rY,rWidth,rHeight) {
+		if(this._types.exists(type)) {
+			var $it0 = this._types.get(type).iterator();
+			while( $it0.hasNext() ) {
+				var e = $it0.next();
+				if(e.collidable && e.collideRect(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x,e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y,rX,rY,rWidth,rHeight)) return e;
+			}
+		}
+		return null;
+	}
+	,collidePoint: function(type,pX,pY) {
+		var result = null;
+		if(this._types.exists(type)) {
+			var $it0 = this._types.get(type).iterator();
+			while( $it0.hasNext() ) {
+				var e = $it0.next();
+				if(e.collidable && e.collidePoint(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x,e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y,pX,pY)) {
+					if(result == null) result = e; else if(e._layer < result._layer) result = e;
+				}
+			}
+		}
+		return result;
+	}
+	,collideLine: function(type,fromX,fromY,toX,toY,precision,p) {
+		if(precision == null) precision = 1;
+		if(precision < 1) precision = 1;
+		if(Math.sqrt((toX - fromX) * (toX - fromX) + (toY - fromY) * (toY - fromY)) < precision) {
+			if(p != null) {
+				if(fromX == toX && fromY == toY) {
+					p.x = toX;
+					p.y = toY;
+					return this.collidePoint(type,toX,toY);
+				}
+				return this.collideLine(type,fromX,fromY,toX,toY,1,p);
+			} else return this.collidePoint(type,fromX,toY);
+		}
+		var xDelta = Std["int"](Math.abs(toX - fromX));
+		var yDelta = Std["int"](Math.abs(toY - fromY));
+		var xSign;
+		if(toX > fromX) xSign = precision; else xSign = -precision;
+		var ySign;
+		if(toY > fromY) ySign = precision; else ySign = -precision;
+		var x = fromX;
+		var y = fromY;
+		var e;
+		if(xDelta > yDelta) {
+			ySign *= yDelta / xDelta;
+			if(xSign > 0) while(x < toX) {
+				if((e = this.collidePoint(type,x,y)) != null) {
+					if(p == null) return e;
+					if(precision < 2) {
+						p.x = x - xSign;
+						p.y = y - ySign;
+						return e;
+					}
+					return this.collideLine(type,x - xSign | 0,y - ySign | 0,toX,toY,1,p);
+				}
+				x += xSign;
+				y += ySign;
+			} else while(x > toX) {
+				if((e = this.collidePoint(type,x,y)) != null) {
+					if(p == null) return e;
+					if(precision < 2) {
+						p.x = x - xSign;
+						p.y = y - ySign;
+						return e;
+					}
+					return this.collideLine(type,x - xSign | 0,y - ySign | 0,toX,toY,1,p);
+				}
+				x += xSign;
+				y += ySign;
+			}
+		} else {
+			xSign *= xDelta / yDelta;
+			if(ySign > 0) while(y < toY) {
+				if((e = this.collidePoint(type,x,y)) != null) {
+					if(p == null) return e;
+					if(precision < 2) {
+						p.x = x - xSign;
+						p.y = y - ySign;
+						return e;
+					}
+					return this.collideLine(type,x - xSign | 0,y - ySign | 0,toX,toY,1,p);
+				}
+				x += xSign;
+				y += ySign;
+			} else while(y > toY) {
+				if((e = this.collidePoint(type,x,y)) != null) {
+					if(p == null) return e;
+					if(precision < 2) {
+						p.x = x - xSign;
+						p.y = y - ySign;
+						return e;
+					}
+					return this.collideLine(type,x - xSign | 0,y - ySign | 0,toX,toY,1,p);
+				}
+				x += xSign;
+				y += ySign;
+			}
+		}
+		if(precision > 1) {
+			if(p == null) return this.collidePoint(type,toX,toY);
+			if(this.collidePoint(type,toX,toY) != null) return this.collideLine(type,x - xSign | 0,y - ySign | 0,toX,toY,1,p);
+		}
+		if(p != null) {
+			p.x = toX;
+			p.y = toY;
+		}
+		return null;
+	}
+	,collideRectInto: function(type,rX,rY,rWidth,rHeight,into) {
+		var n = into.length;
+		if(this._types.exists(type)) {
+			var $it0 = this._types.get(type).iterator();
+			while( $it0.hasNext() ) {
+				var e = $it0.next();
+				if(e.collidable && e.collideRect(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x,e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y,rX,rY,rWidth,rHeight)) into[n++] = e;
+			}
+		}
+	}
+	,collideCircleInto: function(type,circleX,circleY,radius,into) {
+		if(!this._types.exists(type)) return;
+		var n = into.length;
+		radius *= radius;
+		var $it0 = this._types.get(type).iterator();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			if(com.haxepunk.HXP.distanceSquared(circleX,circleY,e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x,e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) < radius) into[n++] = e;
+		}
+	}
+	,collidePointInto: function(type,pX,pY,into) {
+		if(!this._types.exists(type)) return;
+		var n = into.length;
+		var $it0 = this._types.get(type).iterator();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			if(e.collidable && e.collidePoint(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x,e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y,pX,pY)) into[n++] = e;
+		}
+	}
+	,nearestToRect: function(type,x,y,width,height) {
+		if(!this._types.exists(type)) return null;
+		var nearDist = 179 * Math.pow(10,306);
+		var near = null;
+		var dist;
+		var $it0 = this._types.get(type).iterator();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			dist = com.haxepunk.Scene.squareRects(x,y,width,height,(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x) - e.originX,(e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) - e.originY,e.width,e.height);
+			if(dist < nearDist) {
+				nearDist = dist;
+				near = e;
+			}
+		}
+		return near;
+	}
+	,nearestToEntity: function(type,e,useHitboxes) {
+		if(useHitboxes == null) useHitboxes = false;
+		if(!this._types.exists(type)) return null;
+		if(useHitboxes) return this.nearestToRect(type,(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x) - e.originX,(e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) - e.originY,e.width,e.height);
+		var nearDist = 179 * Math.pow(10,306);
+		var near = null;
+		var dist;
+		var x;
+		x = (e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x) - e.originX;
+		var y;
+		y = (e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) - e.originY;
+		var $it0 = this._types.get(type).iterator();
+		while( $it0.hasNext() ) {
+			var n = $it0.next();
+			dist = (x - (n.followCamera?n.x + com.haxepunk.HXP.camera.x:n.x)) * (x - (n.followCamera?n.x + com.haxepunk.HXP.camera.x:n.x)) + (y - (n.followCamera?n.y + com.haxepunk.HXP.camera.y:n.y)) * (y - (n.followCamera?n.y + com.haxepunk.HXP.camera.y:n.y));
+			if(dist < nearDist) {
+				nearDist = dist;
+				near = n;
+			}
+		}
+		return near;
+	}
+	,nearestToClass: function(type,e,classType,useHitboxes) {
+		if(useHitboxes == null) useHitboxes = false;
+		if(!this._types.exists(type)) return null;
+		if(useHitboxes) return this.nearestToRect(type,(e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x) - e.originX,(e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) - e.originY,e.width,e.height);
+		var nearDist = 179 * Math.pow(10,306);
+		var near = null;
+		var dist;
+		var x;
+		x = (e.followCamera?e.x + com.haxepunk.HXP.camera.x:e.x) - e.originX;
+		var y;
+		y = (e.followCamera?e.y + com.haxepunk.HXP.camera.y:e.y) - e.originY;
+		var $it0 = this._types.get(type).iterator();
+		while( $it0.hasNext() ) {
+			var n = $it0.next();
+			dist = (x - (n.followCamera?n.x + com.haxepunk.HXP.camera.x:n.x)) * (x - (n.followCamera?n.x + com.haxepunk.HXP.camera.x:n.x)) + (y - (n.followCamera?n.y + com.haxepunk.HXP.camera.y:n.y)) * (y - (n.followCamera?n.y + com.haxepunk.HXP.camera.y:n.y));
+			if(dist < nearDist && js.Boot.__instanceof(e,classType)) {
+				nearDist = dist;
+				near = n;
+			}
+		}
+		return near;
+	}
+	,nearestToPoint: function(type,x,y,useHitboxes) {
+		if(useHitboxes == null) useHitboxes = false;
+		if(!this._types.exists(type)) return null;
+		var nearDist = 179 * Math.pow(10,306);
+		var near = null;
+		var dist;
+		if(useHitboxes) {
+			var $it0 = this._types.get(type).iterator();
+			while( $it0.hasNext() ) {
+				var n = $it0.next();
+				dist = com.haxepunk.Scene.squarePointRect(x,y,(n.followCamera?n.x + com.haxepunk.HXP.camera.x:n.x) - n.originX,(n.followCamera?n.y + com.haxepunk.HXP.camera.y:n.y) - n.originY,n.width,n.height);
+				if(dist < nearDist) {
+					nearDist = dist;
+					near = n;
+				}
+			}
+		} else {
+			var $it1 = this._types.get(type).iterator();
+			while( $it1.hasNext() ) {
+				var n1 = $it1.next();
+				dist = (x - (n1.followCamera?n1.x + com.haxepunk.HXP.camera.x:n1.x)) * (x - (n1.followCamera?n1.x + com.haxepunk.HXP.camera.x:n1.x)) + (y - (n1.followCamera?n1.y + com.haxepunk.HXP.camera.y:n1.y)) * (y - (n1.followCamera?n1.y + com.haxepunk.HXP.camera.y:n1.y));
+				if(dist < nearDist) {
+					nearDist = dist;
+					near = n1;
+				}
+			}
+		}
+		return near;
+	}
+	,get_count: function() {
+		return this._update.length;
+	}
+	,typeCount: function(type) {
+		if(this._types.exists(type)) return this._types.get(type).length; else return 0;
+	}
+	,classCount: function(c) {
+		if(this._classCount.exists(c)) return this._classCount.get(c); else return 0;
+	}
+	,layerCount: function(layer) {
+		if(this._layers.exists(layer)) return this._layers.get(layer).length; else return 0;
+	}
+	,first: null
+	,get_first: function() {
+		return this._update.first();
+	}
+	,layers: null
+	,get_layers: function() {
+		return this._layerList.length;
+	}
+	,entitiesForType: function(type) {
+		if(this._types.exists(type)) return this._types.get(type); else return null;
+	}
+	,classFirst: function(c) {
+		var $it0 = this._update.iterator();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			if(js.Boot.__instanceof(e,c)) return e;
+		}
+		return null;
+	}
+	,layerFirst: function(layer) {
+		if(this._layers.exists(layer)) return this._layers.get(layer).first(); else return null;
+	}
+	,layerLast: function(layer) {
+		if(this._layers.exists(layer)) return this._layers.get(layer).last(); else return null;
+	}
+	,farthest: null
+	,get_farthest: function() {
+		if(this._layerList.length == 0) return null;
+		return this._layers.get(this._layerList[this._layerList.length - 1]).last();
+	}
+	,nearest: null
+	,get_nearest: function() {
+		if(this._layerList.length == 0) return null;
+		return this._layers.get(this._layerList[0]).first();
+	}
+	,layerFarthest: null
+	,get_layerFarthest: function() {
+		if(this._layerList.length == 0) return 0;
+		return this._layerList[this._layerList.length - 1];
+	}
+	,layerNearest: null
+	,get_layerNearest: function() {
+		if(this._layerList.length == 0) return 0;
+		return this._layerList[0];
+	}
+	,uniqueTypes: null
+	,get_uniqueTypes: function() {
+		var i = 0;
+		var $it0 = this._types.iterator();
+		while( $it0.hasNext() ) {
+			var type = $it0.next();
+			i++;
+		}
+		return i;
+	}
+	,getType: function(type,into) {
+		if(!this._types.exists(type)) return;
+		var n = into.length;
+		var $it0 = this._types.get(type).iterator();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			into[n++] = e;
+		}
+	}
+	,getClass: function(c,into) {
+		var n = into.length;
+		var $it0 = this._update.iterator();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			if(js.Boot.__instanceof(e,c)) into[n++] = e;
+		}
+	}
+	,getLayer: function(layer,into) {
+		var n = into.length;
+		var $it0 = this._layers.get(layer).iterator();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			into[n++] = e;
+		}
+	}
+	,getAll: function(into) {
+		var n = into.length;
+		var $it0 = this._update.iterator();
+		while( $it0.hasNext() ) {
+			var e = $it0.next();
+			into[n++] = e;
+		}
+	}
+	,getInstance: function(name) {
+		return this._entityNames.get(name);
+	}
+	,updateLists: function(shouldAdd) {
+		if(shouldAdd == null) shouldAdd = true;
+		var e;
+		if(this._remove.length > 0) {
+			var _g = 0;
+			var _g1 = this._remove;
+			while(_g < _g1.length) {
+				var e1 = _g1[_g];
+				++_g;
+				if(e1._scene == null) {
+					var idx = HxOverrides.indexOf(this._add,e1,0);
+					if(idx >= 0) this._add.splice(idx,1);
+					continue;
+				}
+				if(e1._scene != this) continue;
+				e1.removed();
+				e1._scene = null;
+				this.removeUpdate(e1);
+				this.removeRender(e1);
+				if(e1._type != "") this.removeType(e1);
+				if(e1._name != "") this._entityNames.remove(e1._name);
+				if(e1.autoClear && e1.get_hasTween()) e1.clearTweens();
+			}
+			this._remove.length = 0;
+		}
+		if(shouldAdd && this._add.length > 0) {
+			var _g2 = 0;
+			var _g11 = this._add;
+			while(_g2 < _g11.length) {
+				var e2 = _g11[_g2];
+				++_g2;
+				if(e2._scene != null) continue;
+				e2._scene = this;
+				this.addUpdate(e2);
+				this.addRender(e2);
+				if(e2._type != "") this.addType(e2);
+				if(e2._name != "") this._entityNames.set(e2._name,e2);
+				e2.added();
+			}
+			this._add.length = 0;
+		}
+		if(this._recycle.length > 0) {
+			var _g3 = 0;
+			var _g12 = this._recycle;
+			while(_g3 < _g12.length) {
+				var e3 = _g12[_g3];
+				++_g3;
+				if(e3._scene != null || e3._recycleNext != null) continue;
+				e3._recycleNext = this._recycled.get(e3._class);
+				this._recycled.set(e3._class,e3);
+			}
+			this._recycle.length = 0;
+		}
+	}
+	,addUpdate: function(e) {
+		this._update.add(e);
+		if(this._classCount.get(e._class) != 0) this._classCount.set(e._class,0);
+		var value = this._classCount.get(e._class) + 1;
+		this._classCount.set(e._class,value);
+	}
+	,removeUpdate: function(e) {
+		this._update.remove(e);
+		var value = this._classCount.get(e._class) - 1;
+		this._classCount.set(e._class,value);
+	}
+	,addRender: function(e) {
+		var list;
+		if(this._layers.exists(e._layer)) list = this._layers.get(e._layer); else {
+			list = new List();
+			this._layers.set(e._layer,list);
+			if(this._layerList.length == 0) this._layerList[0] = e._layer; else com.haxepunk.HXP.insertSortedKey(this._layerList,e._layer,$bind(this,this.layerSort));
+		}
+		list.add(e);
+	}
+	,removeRender: function(e) {
+		var list = this._layers.get(e._layer);
+		list.remove(e);
+		if(list.length == 0) {
+			HxOverrides.remove(this._layerList,e._layer);
+			this._layers.remove(e._layer);
+		}
+	}
+	,addType: function(e) {
+		var list;
+		if(this._types.exists(e._type)) list = this._types.get(e._type); else {
+			list = new List();
+			this._types.set(e._type,list);
+		}
+		list.push(e);
+	}
+	,removeType: function(e) {
+		if(!this._types.exists(e._type)) return;
+		var list = this._types.get(e._type);
+		list.remove(e);
+		if(list.length == 0) this._types.remove(e._type);
+	}
+	,registerName: function(e) {
+		this._entityNames.set(e._name,e);
+	}
+	,unregisterName: function(e) {
+		this._entityNames.remove(e._name);
+	}
+	,_add: null
+	,_remove: null
+	,_recycle: null
+	,_update: null
+	,_layerList: null
+	,_layerDisplay: null
+	,_layers: null
+	,_classCount: null
+	,_types: null
+	,_recycled: null
+	,_entityNames: null
+	,__class__: com.haxepunk.Scene
+	,__properties__: $extend(com.haxepunk.Tweener.prototype.__properties__,{get_uniqueTypes:"get_uniqueTypes",get_layerNearest:"get_layerNearest",get_layerFarthest:"get_layerFarthest",get_nearest:"get_nearest",get_farthest:"get_farthest",get_layers:"get_layers",get_first:"get_first",get_count:"get_count",get_mouseY:"get_mouseY",get_mouseX:"get_mouseX"})
+});
+var MainScene = function() {
+	this.patients = new List();
+	this.donors = new List();
+	com.haxepunk.Scene.call(this);
+};
+$hxClasses["MainScene"] = MainScene;
+MainScene.__name__ = ["MainScene"];
+MainScene.__super__ = com.haxepunk.Scene;
+MainScene.prototype = $extend(com.haxepunk.Scene.prototype,{
+	simulator: null
+	,patients: null
+	,donors: null
+	,clinic: null
+	,begin: function() {
+		this.simulator = new Simulator(this);
+		this.clinic = new com.haxepunk.Entity(450,200,new com.haxepunk.graphics.Image(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE?(function($this) {
+			var $r;
+			var e = com.haxepunk.ds.Either.Right(com.haxepunk.graphics.atlas.Atlas.loadImageAsRegion((function($this) {
+				var $r;
+				var data = com.haxepunk.graphics.atlas.AtlasData.getAtlasDataByName("graphics/clinic.png",true);
+				$r = data;
+				return $r;
+			}($this))));
+			$r = e;
+			return $r;
+		}(this)):(function($this) {
+			var $r;
+			var e1 = com.haxepunk.ds.Either.Left(com.haxepunk.HXP.getBitmap("graphics/clinic.png"));
+			$r = e1;
+			return $r;
+		}(this))));
+		this.add(this.clinic);
+	}
+	,spawn: function(t) {
+		switch(t) {
+		case Patient:
+			var patient = new Patient(this);
+			this.add(patient);
+			this.patients.add(patient);
+			break;
+		case Donor:
+			var donor = new Donor(this);
+			this.add(donor);
+			this.donors.add(donor);
+			break;
+		}
+	}
+	,spawner: function(age) {
+		if(Std.random(100) == 0) this.spawn(Patient); else if(Std.random(100) == 0) this.spawn(Donor);
+	}
+	,__class__: MainScene
+});
+var IMap = function() { };
+$hxClasses["IMap"] = IMap;
+IMap.__name__ = ["IMap"];
+Math.__name__ = ["Math"];
+var NMEPreloader = function() {
+	openfl.display.Sprite.call(this);
+	var backgroundColor = this.getBackgroundColor();
+	var r = backgroundColor >> 16 & 255;
+	var g = backgroundColor >> 8 & 255;
+	var b = backgroundColor & 255;
+	var perceivedLuminosity = 0.299 * r + 0.587 * g + 0.114 * b;
+	var color = 0;
+	if(perceivedLuminosity < 70) color = 16777215;
+	var x = 30;
+	var height = 9;
+	var y = this.getHeight() / 2 - height / 2;
+	var width = this.getWidth() - x * 2;
+	var padding = 3;
+	this.outline = new openfl.display.Sprite();
+	this.outline.get_graphics().lineStyle(1,color,0.15,true);
+	this.outline.get_graphics().drawRoundRect(0,0,width,height,padding * 2,padding * 2);
+	this.outline.set_x(x);
+	this.outline.set_y(y);
+	this.addChild(this.outline);
+	this.progress = new openfl.display.Sprite();
+	this.progress.get_graphics().beginFill(color,0.35);
+	this.progress.get_graphics().drawRect(0,0,width - padding * 2,height - padding * 2);
+	this.progress.set_x(x + padding);
+	this.progress.set_y(y + padding);
+	this.progress.set_scaleX(0);
+	this.addChild(this.progress);
+};
+$hxClasses["NMEPreloader"] = NMEPreloader;
+NMEPreloader.__name__ = ["NMEPreloader"];
+NMEPreloader.__super__ = openfl.display.Sprite;
+NMEPreloader.prototype = $extend(openfl.display.Sprite.prototype,{
+	outline: null
+	,progress: null
+	,getBackgroundColor: function() {
+		return 3355443;
+	}
+	,getHeight: function() {
+		var height = 480;
+		if(height > 0) return height; else return openfl.Lib.current.stage.stageHeight;
+	}
+	,getWidth: function() {
+		var width = 640;
+		if(width > 0) return width; else return openfl.Lib.current.stage.stageWidth;
+	}
+	,onInit: function() {
+	}
+	,onLoaded: function() {
+		this.dispatchEvent(new openfl.events.Event(openfl.events.Event.COMPLETE));
+	}
+	,onUpdate: function(bytesLoaded,bytesTotal) {
+		var percentLoaded = bytesLoaded / bytesTotal;
+		if(percentLoaded > 1) percentLoaded == 1;
+		this.progress.set_scaleX(percentLoaded);
+	}
+	,__class__: NMEPreloader
+});
+var Patient = function(main) {
+	Person.call(this,main);
+	haxe.Log.trace("spawned patient",{ fileName : "Patient.hx", lineNumber : 14, className : "Patient", methodName : "new"});
+	this.sprite.add("SICK_BEFORE",this.toGenderGFX([2]));
+	this.sprite.add("HEALTHY_AFTER",this.toGenderGFX([3]));
+	this.sprite.add("SICK_AFTER",this.toGenderGFX([4]));
+	this.sprite.add("DEAD",this.toGenderGFX([5]));
+	this.addGraphic(this.sprite);
+};
+$hxClasses["Patient"] = Patient;
+Patient.__name__ = ["Patient"];
+Patient.__super__ = Person;
+Patient.prototype = $extend(Person.prototype,{
+	sprite_loaded: function() {
+		this.sprite.play("SICK_BEFORE");
+	}
+	,__class__: Patient
+});
+var Gender = $hxClasses["Gender"] = { __ename__ : true, __constructs__ : ["MALE","FEMALE"] };
+Gender.MALE = ["MALE",0];
+Gender.MALE.toString = $estr;
+Gender.MALE.__enum__ = Gender;
+Gender.FEMALE = ["FEMALE",1];
+Gender.FEMALE.toString = $estr;
+Gender.FEMALE.__enum__ = Gender;
+var Simulator = function(main) {
+	this.main = main;
+	this.age = 0;
+	try {
+		this.simulation_speed = BloodTransfusionRules.simulation_speed;
+	} catch( e ) {
+		this.simulation_speed = 50.0;
+	}
+	this.change_simulation_speed(this.simulation_speed);
+};
+$hxClasses["Simulator"] = Simulator;
+Simulator.__name__ = ["Simulator"];
+Simulator.prototype = {
+	simulation_speed: null
+	,main: null
+	,ticker: null
+	,age: null
+	,change_simulation_speed: function(new_speed) {
+		if(this.ticker != null) this.ticker.stop();
+		if(new_speed > 100) {
+			haxe.Log.trace("Warning! capped speed " + new_speed + " down to max: 100.0",{ fileName : "Simulator.hx", lineNumber : 46, className : "Simulator", methodName : "change_simulation_speed"});
+			new_speed = 100.0;
+		} else if(new_speed < 1) {
+			haxe.Log.trace("Warning! capped speed " + new_speed + " up to min: 1.0",{ fileName : "Simulator.hx", lineNumber : 49, className : "Simulator", methodName : "change_simulation_speed"});
+			new_speed = 1.0;
+		}
+		this.simulation_speed = new_speed;
+		this.ticker = new haxe.Timer(10000 / this.simulation_speed | 0);
+		this.ticker.run = $bind(this,this.tick);
+	}
+	,tick: function() {
+		this.age++;
+		this.main.spawner(this.age);
+	}
+	,__class__: Simulator
+};
+var Std = function() { };
+$hxClasses["Std"] = Std;
+Std.__name__ = ["Std"];
+Std.string = function(s) {
+	return js.Boot.__string_rec(s,"");
+};
+Std["int"] = function(x) {
+	return x | 0;
+};
+Std.parseInt = function(x) {
+	var v = parseInt(x,10);
+	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) v = parseInt(x);
+	if(isNaN(v)) return null;
+	return v;
+};
+Std.parseFloat = function(x) {
+	return parseFloat(x);
+};
+Std.random = function(x) {
+	if(x <= 0) return 0; else return Math.floor(Math.random() * x);
+};
+var StringBuf = function() {
+	this.b = "";
+};
+$hxClasses["StringBuf"] = StringBuf;
+StringBuf.__name__ = ["StringBuf"];
+StringBuf.prototype = {
+	b: null
+	,add: function(x) {
+		this.b += Std.string(x);
+	}
+	,addSub: function(s,pos,len) {
+		if(len == null) this.b += HxOverrides.substr(s,pos,null); else this.b += HxOverrides.substr(s,pos,len);
+	}
+	,__class__: StringBuf
+};
+var StringTools = function() { };
+$hxClasses["StringTools"] = StringTools;
+StringTools.__name__ = ["StringTools"];
+StringTools.urlEncode = function(s) {
+	return encodeURIComponent(s);
+};
+StringTools.urlDecode = function(s) {
+	return decodeURIComponent(s.split("+").join(" "));
+};
+StringTools.startsWith = function(s,start) {
+	return s.length >= start.length && HxOverrides.substr(s,0,start.length) == start;
+};
+StringTools.replace = function(s,sub,by) {
+	return s.split(sub).join(by);
+};
+StringTools.hex = function(n,digits) {
+	var s = "";
+	var hexChars = "0123456789ABCDEF";
+	do {
+		s = hexChars.charAt(n & 15) + s;
+		n >>>= 4;
+	} while(n > 0);
+	if(digits != null) while(s.length < digits) s = "0" + s;
+	return s;
+};
+StringTools.fastCodeAt = function(s,index) {
+	return s.charCodeAt(index);
+};
+var XmlType = $hxClasses["XmlType"] = { __ename__ : true, __constructs__ : [] };
+var Xml = function() {
+};
+$hxClasses["Xml"] = Xml;
+Xml.__name__ = ["Xml"];
+Xml.Element = null;
+Xml.PCData = null;
+Xml.CData = null;
+Xml.Comment = null;
+Xml.DocType = null;
+Xml.ProcessingInstruction = null;
+Xml.Document = null;
+Xml.parse = function(str) {
+	return haxe.xml.Parser.parse(str);
+};
+Xml.createElement = function(name) {
+	var r = new Xml();
+	r.nodeType = Xml.Element;
+	r._children = new Array();
+	r._attributes = new haxe.ds.StringMap();
+	r.set_nodeName(name);
+	return r;
+};
+Xml.createPCData = function(data) {
+	var r = new Xml();
+	r.nodeType = Xml.PCData;
+	r.set_nodeValue(data);
+	return r;
+};
+Xml.createCData = function(data) {
+	var r = new Xml();
+	r.nodeType = Xml.CData;
+	r.set_nodeValue(data);
+	return r;
+};
+Xml.createComment = function(data) {
+	var r = new Xml();
+	r.nodeType = Xml.Comment;
+	r.set_nodeValue(data);
+	return r;
+};
+Xml.createDocType = function(data) {
+	var r = new Xml();
+	r.nodeType = Xml.DocType;
+	r.set_nodeValue(data);
+	return r;
+};
+Xml.createProcessingInstruction = function(data) {
+	var r = new Xml();
+	r.nodeType = Xml.ProcessingInstruction;
+	r.set_nodeValue(data);
+	return r;
+};
+Xml.createDocument = function() {
+	var r = new Xml();
+	r.nodeType = Xml.Document;
+	r._children = new Array();
+	return r;
+};
+Xml.prototype = {
+	nodeType: null
+	,_nodeName: null
+	,_nodeValue: null
+	,_attributes: null
+	,_children: null
+	,_parent: null
+	,get_nodeName: function() {
+		if(this.nodeType != Xml.Element) throw "bad nodeType";
+		return this._nodeName;
+	}
+	,set_nodeName: function(n) {
+		if(this.nodeType != Xml.Element) throw "bad nodeType";
+		return this._nodeName = n;
+	}
+	,set_nodeValue: function(v) {
+		if(this.nodeType == Xml.Element || this.nodeType == Xml.Document) throw "bad nodeType";
+		return this._nodeValue = v;
+	}
+	,get: function(att) {
+		if(this.nodeType != Xml.Element) throw "bad nodeType";
+		return this._attributes.get(att);
+	}
+	,set: function(att,value) {
+		if(this.nodeType != Xml.Element) throw "bad nodeType";
+		this._attributes.set(att,value);
+	}
+	,exists: function(att) {
+		if(this.nodeType != Xml.Element) throw "bad nodeType";
+		return this._attributes.exists(att);
+	}
+	,elements: function() {
+		if(this._children == null) throw "bad nodetype";
+		return { cur : 0, x : this._children, hasNext : function() {
+			var k = this.cur;
+			var l = this.x.length;
+			while(k < l) {
+				if(this.x[k].nodeType == Xml.Element) break;
+				k += 1;
+			}
+			this.cur = k;
+			return k < l;
+		}, next : function() {
+			var k1 = this.cur;
+			var l1 = this.x.length;
+			while(k1 < l1) {
+				var n = this.x[k1];
+				k1 += 1;
+				if(n.nodeType == Xml.Element) {
+					this.cur = k1;
+					return n;
+				}
+			}
+			return null;
+		}};
+	}
+	,firstElement: function() {
+		if(this._children == null) throw "bad nodetype";
+		var cur = 0;
+		var l = this._children.length;
+		while(cur < l) {
+			var n = this._children[cur];
+			if(n.nodeType == Xml.Element) return n;
+			cur++;
+		}
+		return null;
+	}
+	,addChild: function(x) {
+		if(this._children == null) throw "bad nodetype";
+		if(x._parent != null) HxOverrides.remove(x._parent._children,x);
+		x._parent = this;
+		this._children.push(x);
+	}
+	,__class__: Xml
+	,__properties__: {set_nodeValue:"set_nodeValue",set_nodeName:"set_nodeName",get_nodeName:"get_nodeName"}
+};
+com.haxepunk._Entity = {};
+com.haxepunk._Entity.SolidType_Impl_ = function() { };
+$hxClasses["com.haxepunk._Entity.SolidType_Impl_"] = com.haxepunk._Entity.SolidType_Impl_;
+com.haxepunk._Entity.SolidType_Impl_.__name__ = ["com","haxepunk","_Entity","SolidType_Impl_"];
+com.haxepunk._Entity.SolidType_Impl_.__properties__ = {get_type:"get_type"}
+com.haxepunk._Entity.SolidType_Impl_._new = function(e) {
+	return e;
+};
+com.haxepunk._Entity.SolidType_Impl_.get_type = function(this1) {
+	return this1;
+};
+com.haxepunk._Entity.SolidType_Impl_.fromLeft = function(v) {
+	var e = com.haxepunk.ds.Either.Left(v);
+	return e;
+};
+com.haxepunk._Entity.SolidType_Impl_.fromRight = function(v) {
+	var e = com.haxepunk.ds.Either.Right(v);
+	return e;
+};
 com.haxepunk._Graphic = {};
 com.haxepunk._Graphic.TileType_Impl_ = function() { };
 $hxClasses["com.haxepunk._Graphic.TileType_Impl_"] = com.haxepunk._Graphic.TileType_Impl_;
@@ -6319,6 +6393,38 @@ com.haxepunk.ds.Either = $hxClasses["com.haxepunk.ds.Either"] = { __ename__ : tr
 com.haxepunk.ds.Either.Left = function(v) { var $x = ["Left",0,v]; $x.__enum__ = com.haxepunk.ds.Either; $x.toString = $estr; return $x; };
 com.haxepunk.ds.Either.Right = function(v) { var $x = ["Right",1,v]; $x.__enum__ = com.haxepunk.ds.Either; $x.toString = $estr; return $x; };
 com.haxepunk.graphics = {};
+com.haxepunk.graphics.Animation = function(name,frames,frameRate,loop,parent) {
+	if(loop == null) loop = true;
+	if(frameRate == null) frameRate = 0;
+	this.name = name;
+	this.frames = frames;
+	if(frameRate == 0) this.frameRate = com.haxepunk.HXP.assignedFrameRate; else this.frameRate = frameRate;
+	this.loop = loop;
+	this.frameCount = frames.length;
+	this.set_parent(parent);
+};
+$hxClasses["com.haxepunk.graphics.Animation"] = com.haxepunk.graphics.Animation;
+com.haxepunk.graphics.Animation.__name__ = ["com","haxepunk","graphics","Animation"];
+com.haxepunk.graphics.Animation.prototype = {
+	play: function(reset,reverse) {
+		if(reverse == null) reverse = false;
+		if(reset == null) reset = false;
+		if(this.name == null) this._parent.playAnimation(this,reset,reverse); else this._parent.play(this.name,reset,reverse);
+	}
+	,parent: null
+	,set_parent: function(value) {
+		this._parent = value;
+		return this._parent;
+	}
+	,name: null
+	,frames: null
+	,frameRate: null
+	,frameCount: null
+	,loop: null
+	,_parent: null
+	,__class__: com.haxepunk.graphics.Animation
+	,__properties__: {set_parent:"set_parent"}
+};
 com.haxepunk.graphics.Graphiclist = function(graphic) {
 	this._graphics = new Array();
 	this._temp = new Array();
@@ -6864,6 +6970,263 @@ com.haxepunk.graphics.Image.prototype = $extend(com.haxepunk.Graphic.prototype,{
 	,_scale: null
 	,__class__: com.haxepunk.graphics.Image
 	,__properties__: $extend(com.haxepunk.Graphic.prototype.__properties__,{get_clipRect:"get_clipRect",set_scaledHeight:"set_scaledHeight",get_scaledHeight:"get_scaledHeight",set_scaledWidth:"set_scaledWidth",get_scaledWidth:"get_scaledWidth",get_height:"get_height",get_width:"get_width",set_flipped:"set_flipped",get_flipped:"get_flipped",set_color:"set_color",get_color:"get_color",set_alpha:"set_alpha",get_alpha:"get_alpha",set_scale:"set_scale",get_scale:"get_scale"})
+});
+com.haxepunk.graphics.Spritemap = function(source,frameWidth,frameHeight,cbFunc) {
+	if(frameHeight == null) frameHeight = 0;
+	if(frameWidth == null) frameWidth = 0;
+	this.complete = true;
+	this.rate = 1;
+	this._anims = new haxe.ds.StringMap();
+	this._timer = this._frame = 0;
+	this._rect = new openfl.geom.Rectangle(0,0,frameWidth,frameHeight);
+	{
+		var _g = source;
+		switch(_g[1]) {
+		case 0:
+			var bd = _g[2];
+			com.haxepunk.graphics.Image.call(this,com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE?(function($this) {
+				var $r;
+				var e = com.haxepunk.ds.Either.Right(com.haxepunk.graphics.atlas.Atlas.loadImageAsRegion((function($this) {
+					var $r;
+					var data = new com.haxepunk.graphics.atlas.AtlasData(bd);
+					$r = data;
+					return $r;
+				}($this))));
+				$r = e;
+				return $r;
+			}(this)):(function($this) {
+				var $r;
+				var e1 = com.haxepunk.ds.Either.Left(bd);
+				$r = e1;
+				return $r;
+			}(this)),this._rect);
+			break;
+		case 1:
+			var atlas = _g[2];
+			this._atlas = atlas;
+			this._atlas.prepare(frameWidth,frameHeight);
+			com.haxepunk.graphics.Image.call(this,(function($this) {
+				var $r;
+				var region = atlas.getRegion($this._frame);
+				$r = (function($this) {
+					var $r;
+					var e2 = com.haxepunk.ds.Either.Right(region);
+					$r = e2;
+					return $r;
+				}($this));
+				return $r;
+			}(this)),this._rect);
+			break;
+		}
+	}
+	if(this.blit) {
+		this._width = this._source.width;
+		this._height = this._source.height;
+	} else {
+		this._width = Std["int"](this._atlas.get_width());
+		this._height = Std["int"](this._atlas.get_height());
+	}
+	if(frameWidth == 0) this._rect.width = this._width;
+	if(frameHeight == 0) this._rect.height = this._height;
+	if(this._width % this._rect.width != 0 || this._height % this._rect.height != 0) throw "Source image width and height should be multiples of the frame width and height.";
+	this._columns = Math.ceil(this._width / this._rect.width);
+	this._rows = Math.ceil(this._height / this._rect.height);
+	this._frameCount = this._columns * this._rows;
+	this.callbackFunc = cbFunc;
+	this.updateBuffer();
+	this.active = true;
+};
+$hxClasses["com.haxepunk.graphics.Spritemap"] = com.haxepunk.graphics.Spritemap;
+com.haxepunk.graphics.Spritemap.__name__ = ["com","haxepunk","graphics","Spritemap"];
+com.haxepunk.graphics.Spritemap.__super__ = com.haxepunk.graphics.Image;
+com.haxepunk.graphics.Spritemap.prototype = $extend(com.haxepunk.graphics.Image.prototype,{
+	complete: null
+	,callbackFunc: null
+	,rate: null
+	,updateBuffer: function(clearBefore) {
+		if(clearBefore == null) clearBefore = false;
+		if(this.blit) {
+			if(this._width > 0 && this._height > 0) {
+				this._rect.x = this._rect.width * this._frame;
+				this._rect.y = (this._rect.x / this._width | 0) * this._rect.height;
+				this._rect.x = this._rect.x % this._width;
+				if(this._flipped) this._rect.x = this._width - this._rect.width - this._rect.x;
+			}
+			com.haxepunk.graphics.Image.prototype.updateBuffer.call(this,clearBefore);
+		} else this._region = this._atlas.getRegion(this._frame);
+	}
+	,update: function() {
+		if(this._anim != null && !this.complete) {
+			this._timer += (com.haxepunk.HXP.fixed?this._anim.frameRate / com.haxepunk.HXP.assignedFrameRate:this._anim.frameRate * com.haxepunk.HXP.elapsed) * this.rate;
+			if(this._timer >= 1) {
+				while(this._timer >= 1) {
+					this._timer--;
+					if(this.reverse) this._index += -1; else this._index += 1;
+					if(this.reverse && this._index == -1 || !this.reverse && this._index == this._anim.frameCount) {
+						if(this._anim.loop) {
+							if(this.reverse) this._index = this._anim.frameCount - 1; else this._index = 0;
+							if(this.callbackFunc != null) this.callbackFunc();
+						} else {
+							if(this.reverse) this._index = 0; else this._index = this._anim.frameCount - 1;
+							this.complete = true;
+							if(this.callbackFunc != null) this.callbackFunc();
+							break;
+						}
+					}
+				}
+				if(this._anim != null) this._frame = this._anim.frames[this._index] | 0;
+				this.updateBuffer();
+			}
+		}
+	}
+	,add: function(name,frames,frameRate,loop) {
+		if(loop == null) loop = true;
+		if(frameRate == null) frameRate = 0;
+		if(this._anims.get(name) != null) throw "Cannot have multiple animations with the same name";
+		var _g1 = 0;
+		var _g = frames.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			frames[i] %= this._frameCount;
+			if(frames[i] < 0) frames[i] += this._frameCount;
+		}
+		var anim = new com.haxepunk.graphics.Animation(name,frames,frameRate,loop);
+		this._anims.set(name,anim);
+		anim.set_parent(this);
+		return anim;
+	}
+	,play: function(name,reset,reverse) {
+		if(reverse == null) reverse = false;
+		if(reset == null) reset = false;
+		if(name == null) name = "";
+		if(!reset && this._anim != null && this._anim.name == name) return this._anim;
+		if(!this._anims.exists(name)) {
+			this.stop(reset);
+			return null;
+		}
+		this._anim = this._anims.get(name);
+		this.reverse = reverse;
+		this.restart();
+		return this._anim;
+	}
+	,playFrames: function(frames,frameRate,loop,reset,reverse) {
+		if(reverse == null) reverse = false;
+		if(reset == null) reset = false;
+		if(loop == null) loop = true;
+		if(frameRate == null) frameRate = 0;
+		if(frames == null || frames.length == 0) {
+			this.stop(reset);
+			return null;
+		}
+		if(reset == false && this._anim != null && this._anim.frames == frames) return this._anim;
+		return this.playAnimation(new com.haxepunk.graphics.Animation(null,frames,frameRate,loop),reset,reverse);
+	}
+	,playAnimation: function(anim,reset,reverse) {
+		if(reverse == null) reverse = false;
+		if(reset == null) reset = false;
+		if(anim == null) throw "No animation supplied";
+		if(reset == false && this._anim == anim) return anim;
+		this._anim = anim;
+		this.reverse = reverse;
+		this.restart();
+		return anim;
+	}
+	,restart: function() {
+		this._timer = this.reverse?this._index = this._anim.frames.length - 1:this._index = 0;
+		this._frame = this._anim.frames[this._index];
+		this.complete = false;
+		this.updateBuffer();
+	}
+	,stop: function(reset) {
+		if(reset == null) reset = false;
+		this._anim = null;
+		if(reset) this._frame = this.reverse?this._index = this._anim.frames.length - 1:this._index = 0;
+		this.complete = true;
+		this.updateBuffer();
+	}
+	,getFrame: function(column,row) {
+		if(row == null) row = 0;
+		if(column == null) column = 0;
+		return row % this._rows * this._columns + column % this._columns;
+	}
+	,setFrame: function(column,row) {
+		if(row == null) row = 0;
+		if(column == null) column = 0;
+		this._anim = null;
+		var frame = row % this._rows * this._columns + column % this._columns;
+		if(this._frame == frame) return;
+		this._frame = frame;
+		this.updateBuffer();
+	}
+	,randFrame: function() {
+		this.set_frame((function($this) {
+			var $r;
+			com.haxepunk.HXP._seed = com.haxepunk.HXP._seed * 16807.0 % 2147483647 | 0;
+			$r = com.haxepunk.HXP._seed / 2147483647 * $this._frameCount | 0;
+			return $r;
+		}(this)));
+	}
+	,setAnimFrame: function(name,index) {
+		var frames = this._anims.get(name).frames;
+		index = index % frames.length;
+		if(index < 0) index += frames.length;
+		this.set_frame(frames[index]);
+	}
+	,get_frame: function() {
+		return this._frame;
+	}
+	,set_frame: function(value) {
+		this._anim = null;
+		value %= this._frameCount;
+		if(value < 0) value = this._frameCount + value;
+		if(this._frame == value) return this._frame;
+		this._frame = value;
+		this.updateBuffer();
+		return this._frame;
+	}
+	,get_index: function() {
+		if(this._anim != null) return this._index; else return 0;
+	}
+	,set_index: function(value) {
+		if(this._anim == null) return 0;
+		value %= this._anim.frameCount;
+		if(this._index == value) return this._index;
+		this._index = value;
+		this._frame = this._anim.frames[this._index];
+		this.updateBuffer();
+		return this._index;
+	}
+	,reverse: null
+	,frameCount: null
+	,get_frameCount: function() {
+		return this._frameCount;
+	}
+	,columns: null
+	,get_columns: function() {
+		return this._columns;
+	}
+	,rows: null
+	,get_rows: function() {
+		return this._rows;
+	}
+	,currentAnim: null
+	,get_currentAnim: function() {
+		if(this._anim != null) return this._anim.name; else return "";
+	}
+	,_rect: null
+	,_width: null
+	,_height: null
+	,_columns: null
+	,_rows: null
+	,_frameCount: null
+	,_anims: null
+	,_anim: null
+	,_index: null
+	,_frame: null
+	,_timer: null
+	,_atlas: null
+	,__class__: com.haxepunk.graphics.Spritemap
+	,__properties__: $extend(com.haxepunk.graphics.Image.prototype.__properties__,{get_currentAnim:"get_currentAnim",get_rows:"get_rows",get_columns:"get_columns",get_frameCount:"get_frameCount",set_index:"set_index",get_index:"get_index",set_frame:"set_frame",get_frame:"get_frame"})
 });
 com.haxepunk.graphics._Text = {};
 com.haxepunk.graphics._Text.StyleType_Impl_ = function() { };
@@ -16980,6 +17343,16 @@ var Bool = $hxClasses.Bool = Boolean;
 Bool.__ename__ = ["Bool"];
 var Class = $hxClasses.Class = { __name__ : ["Class"]};
 var Enum = { };
+if(Array.prototype.map == null) Array.prototype.map = function(f) {
+	var a = [];
+	var _g1 = 0;
+	var _g = this.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		a[i] = f(this[i]);
+	}
+	return a;
+};
 Xml.Element = "element";
 Xml.PCData = "pcdata";
 Xml.CData = "cdata";
@@ -16998,10 +17371,6 @@ ApplicationMain.total = 0;
 openfl.display.DisplayObject.__instanceCount = 0;
 openfl.display.DisplayObject.__worldRenderDirty = 0;
 openfl.display.DisplayObject.__worldTransformDirty = 0;
-MainScene.SPAWN_PATIENT_RATE = 100;
-MainScene.SPAWN_DONOR_RATE = 100;
-Simulator.MAX_SIMULATION_SPEED = 10000;
-Simulator.DEFAULT_SIMULATION_SPEED = 50.0;
 openfl.geom.Matrix.__identity = new openfl.geom.Matrix();
 com.haxepunk.HXP.VERSION = "2.5.3";
 com.haxepunk.HXP.INT_MIN_VALUE = -2147483648;
@@ -17051,6 +17420,27 @@ com.haxepunk.HXP.rect = new openfl.geom.Rectangle();
 com.haxepunk.HXP.matrix = new openfl.geom.Matrix();
 com.haxepunk.HXP.sprite = new openfl.display.Sprite();
 com.haxepunk.Entity._EMPTY = new com.haxepunk.Entity();
+Person.GFX_OFFSET = 6;
+Person.GFX_PATH = "graphics/persons_72x72.png";
+Donor.IDLE = "IDLE";
+Donor.YAY = "YAY";
+Donor.GFX_IDLE = 0;
+Donor.GFX_YAY = 1;
+MainScene.SPAWN_PATIENT_RATE = 100;
+MainScene.SPAWN_DONOR_RATE = 100;
+MainScene.CLINIC_X = 450;
+MainScene.CLINIC_Y = 200;
+MainScene.CLINIC_PATH = "graphics/clinic.png";
+Patient.SICK_BEFORE = "SICK_BEFORE";
+Patient.HEALTHY_AFTER = "HEALTHY_AFTER";
+Patient.SICK_AFTER = "SICK_AFTER";
+Patient.DEAD = "DEAD";
+Patient.GFX_SICK_BEFORE = 2;
+Patient.GFX_HEALTHY_AFTER = 3;
+Patient.GFX_SICK_AFTER = 4;
+Patient.GFX_DEAD = 5;
+Simulator.MAX_SIMULATION_SPEED = 10000;
+Simulator.DEFAULT_SIMULATION_SPEED = 50.0;
 com.haxepunk.debug.Console.BIG_WIDTH_THRESHOLD = 420;
 com.haxepunk.graphics.Image._flips = new haxe.ds.ObjectMap();
 com.haxepunk.graphics.Text.tag_re = new EReg("<([^>]+)>([^(?:</)]+)</[^>]+>","g");

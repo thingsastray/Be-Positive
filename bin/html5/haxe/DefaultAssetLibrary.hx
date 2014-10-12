@@ -68,6 +68,10 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("font/04B_03__.ttf", AssetType.FONT);
 		className.set ("font/04B_03__.ttf.png", __ASSET__font_04b_03___ttf_png);
 		type.set ("font/04B_03__.ttf.png", AssetType.IMAGE);
+		className.set ("graphics/clinic.png", __ASSET__graphics_clinic_png);
+		type.set ("graphics/clinic.png", AssetType.IMAGE);
+		className.set ("graphics/persons_72x72.png", __ASSET__graphics_persons_72x72_png);
+		type.set ("graphics/persons_72x72.png", AssetType.IMAGE);
 		className.set ("font/04B_03__.ttf", __ASSET__font_5);
 		type.set ("font/04B_03__.ttf", AssetType.FONT);
 		
@@ -106,6 +110,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 		className.set (id, __ASSET__font_04b_03___ttf);
 		type.set (id, AssetType.FONT);
 		id = "font/04B_03__.ttf.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "graphics/clinic.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "graphics/persons_72x72.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
 		id = "font/04B_03__.ttf";
@@ -151,6 +161,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		className.set ("font/04B_03__.ttf.png", __ASSET__font_04b_03___ttf_png);
 		type.set ("font/04B_03__.ttf.png", AssetType.IMAGE);
+		
+		className.set ("graphics/clinic.png", __ASSET__graphics_clinic_png);
+		type.set ("graphics/clinic.png", AssetType.IMAGE);
+		
+		className.set ("graphics/persons_72x72.png", __ASSET__graphics_persons_72x72_png);
+		type.set ("graphics/persons_72x72.png", AssetType.IMAGE);
 		
 		className.set ("font/04B_03__.ttf", __ASSET__font_5);
 		type.set ("font/04B_03__.ttf", AssetType.FONT);
@@ -782,6 +798,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:keep class __ASSET__graphics_preloader_haxepunk_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep class __ASSET__font_04b_03___ttf extends null { }
 @:keep class __ASSET__font_04b_03___ttf_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep class __ASSET__graphics_clinic_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep class __ASSET__graphics_persons_72x72_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep class __ASSET__font_5 extends null { }
 
 
@@ -797,6 +815,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 @:keep class __ASSET__font_04b_03___ttf extends flash.text.Font { #if (!openfl_html5_dom) public function new () { super (); fontName = "font/04B_03__.ttf"; } #end }
+
+
 
 @:keep class __ASSET__font_5 extends flash.text.Font { #if (!openfl_html5_dom) public function new () { super (); fontName = "font/04B_03__.ttf"; } #end }
 
@@ -815,6 +835,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 @:bitmap("/usr/lib/haxe/lib/HaxePunk/2,5,3/assets/graphics/preloader/haxepunk.png") class __ASSET__graphics_preloader_haxepunk_png extends flash.display.BitmapData {}
 @:font("/usr/lib/haxe/lib/HaxePunk/2,5,3/assets/font/04B_03__.ttf") class __ASSET__font_04b_03___ttf extends flash.text.Font {}
 @:bitmap("/usr/lib/haxe/lib/HaxePunk/2,5,3/assets/font/04B_03__.ttf.png") class __ASSET__font_04b_03___ttf_png extends flash.display.BitmapData {}
+@:bitmap("assets/graphics/clinic.png") class __ASSET__graphics_clinic_png extends flash.display.BitmapData {}
+@:bitmap("assets/graphics/persons_72x72.png") class __ASSET__graphics_persons_72x72_png extends flash.display.BitmapData {}
 @:font("assets/font/04B_03__.ttf") class __ASSET__font_5 extends flash.text.Font {}
 
 
