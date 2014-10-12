@@ -22,7 +22,8 @@ class MainScene extends Scene
   private var simulator:Simulator;
   private var patients:List<Patient>;
   private var donors:List<Donor>;
-  private var clinic:Clinic;
+  
+  public var clinic:Clinic;
 
   public function new()
   {

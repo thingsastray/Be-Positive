@@ -31,4 +31,20 @@ class Patient extends Person
   {
     sprite.play(SICK_BEFORE);
   }
+
+  private override function arrive():Void
+  {
+    // if clinic, go in clinic
+    if( destination.x == Clinic.DOOR_X && destination.y == Clinic.DOOR_Y ){
+      trace("ARRIVED TO CLINIC");
+    }
+
+    // else start resolving health status 
+
+
+
+    destination = null;
+  }
+
+
 }

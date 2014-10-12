@@ -3781,9 +3781,14 @@ Person.prototype = $extend(com.haxepunk.Entity.prototype,{
 	,destination: null
 	,move_speed: null
 	,update: function() {
-		this.moveTowards(this.destination.x,this.destination.y,this.move_speed,null,null);
+		if(this.destination != null) {
+			if(this.distanceToPoint(this.destination.x,this.destination.y,null) < 1) this.arrive(); else this.moveTowards(this.destination.x,this.destination.y,this.move_speed,null,null);
+		}
 	}
 	,sprite_loaded: function() {
+	}
+	,arrive: function() {
+		this.destination = null;
 	}
 	,toGenderGFX: function(frames) {
 		if(this.gender == Gender.FEMALE) return frames.map(function(frame) {
@@ -4753,6 +4758,11 @@ Patient.__super__ = Person;
 Patient.prototype = $extend(Person.prototype,{
 	sprite_loaded: function() {
 		this.sprite.play("SICK_BEFORE");
+	}
+	,arrive: function() {
+		haxe.Log.trace(this.destination,{ fileName : "Patient.hx", lineNumber : 37, className : "Patient", methodName : "arrive", customParams : [{ x : 470, y : 230},this.destination == com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230})]});
+		if(this.destination.x == 470 && this.destination.y == 230) haxe.Log.trace("ARRIVED TO CLINIC",{ fileName : "Patient.hx", lineNumber : 40, className : "Patient", methodName : "arrive"});
+		this.destination = null;
 	}
 	,__class__: Patient
 });

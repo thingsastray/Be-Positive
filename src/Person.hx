@@ -33,10 +33,18 @@ class Person extends Entity
   
   public override function update():Void
   {
-    moveTowards(destination.x, destination.y, move_speed);
+    if(destination != null){
+
+      if(this.distanceToPoint( destination.x, destination.y ) < 1){
+        arrive();
+      }else moveTowards(destination.x, destination.y, move_speed);
+
+    }
+
   }
 
   private dynamic function sprite_loaded():Void { }
+  private dynamic function arrive():Void { destination = null; }
 
   private inline function toGenderGFX(frames:Array<Int>):Array<Int>
   {
