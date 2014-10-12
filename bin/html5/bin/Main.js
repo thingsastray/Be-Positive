@@ -3799,9 +3799,9 @@ Person.prototype = $extend(com.haxepunk.Entity.prototype,{
 });
 var Donor = function(main) {
 	Person.call(this,main);
-	haxe.Log.trace("spawned donor",{ fileName : "Donor.hx", lineNumber : 11, className : "Donor", methodName : "new"});
 	this.sprite.add("IDLE",this.toGenderGFX([0]));
 	this.sprite.add("YAY",this.toGenderGFX([1]));
+	this.sprite.play("IDLE");
 	this.addGraphic(this.sprite);
 	this.destination = com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230});
 };
@@ -3809,8 +3809,20 @@ $hxClasses["Donor"] = Donor;
 Donor.__name__ = ["Donor"];
 Donor.__super__ = Person;
 Donor.prototype = $extend(Person.prototype,{
-	sprite_loaded: function() {
-		this.sprite.play("IDLE");
+	arrive: function() {
+		if(this.destination.x == 470 && this.destination.y == 230) {
+			this.visible = false;
+			haxe.Timer.delay($bind(this,this.donation_complete),10000);
+		} else {
+			this.main.remove(this);
+			this.main.donors.remove(this);
+		}
+		this.destination = null;
+	}
+	,donation_complete: function() {
+		this.visible = true;
+		var obj = { x : 640, y : Std.random(480)};
+		this.destination = com.haxepunk._HXP.Position_Impl_._new(obj);
 	}
 	,__class__: Donor
 });
@@ -4744,11 +4756,11 @@ NMEPreloader.prototype = $extend(openfl.display.Sprite.prototype,{
 });
 var Patient = function(main) {
 	Person.call(this,main);
-	haxe.Log.trace("spawned patient",{ fileName : "Patient.hx", lineNumber : 16, className : "Patient", methodName : "new"});
 	this.sprite.add("SICK_BEFORE",this.toGenderGFX([2]));
 	this.sprite.add("HEALTHY_AFTER",this.toGenderGFX([3]));
 	this.sprite.add("SICK_AFTER",this.toGenderGFX([4]));
 	this.sprite.add("DEAD",this.toGenderGFX([5]));
+	this.sprite.play("SICK_BEFORE");
 	this.addGraphic(this.sprite);
 	this.destination = com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230});
 };
@@ -4756,13 +4768,21 @@ $hxClasses["Patient"] = Patient;
 Patient.__name__ = ["Patient"];
 Patient.__super__ = Person;
 Patient.prototype = $extend(Person.prototype,{
-	sprite_loaded: function() {
-		this.sprite.play("SICK_BEFORE");
-	}
+	recently_got_blood: null
 	,arrive: function() {
-		haxe.Log.trace(this.destination,{ fileName : "Patient.hx", lineNumber : 37, className : "Patient", methodName : "arrive", customParams : [{ x : 470, y : 230},this.destination == com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230})]});
-		if(this.destination.x == 470 && this.destination.y == 230) haxe.Log.trace("ARRIVED TO CLINIC",{ fileName : "Patient.hx", lineNumber : 40, className : "Patient", methodName : "arrive"});
+		if(this.destination.x == 470 && this.destination.y == 230) {
+			this.visible = false;
+			haxe.Timer.delay($bind(this,this.transfusion_complete),6000);
+		} else if(this.recently_got_blood) {
+		} else {
+		}
 		this.destination = null;
+	}
+	,transfusion_complete: function() {
+		this.visible = true;
+		this.recently_got_blood = false;
+		var obj = { x : Std.random(640) * .75, y : Std.random(480) * .75};
+		this.destination = com.haxepunk._HXP.Position_Impl_._new(obj);
 	}
 	,__class__: Patient
 });
@@ -17459,8 +17479,11 @@ Donor.IDLE = "IDLE";
 Donor.YAY = "YAY";
 Donor.GFX_IDLE = 0;
 Donor.GFX_YAY = 1;
+Donor.DONATION_TIME = 10000;
 MainScene.SPAWN_PATIENT_RATE = 100;
 MainScene.SPAWN_DONOR_RATE = 100;
+MainScene.SCREEN_WIDTH = 640;
+MainScene.SCREEN_HEIGHT = 480;
 Patient.SICK_BEFORE = "SICK_BEFORE";
 Patient.HEALTHY_AFTER = "HEALTHY_AFTER";
 Patient.SICK_AFTER = "SICK_AFTER";
@@ -17469,6 +17492,7 @@ Patient.GFX_SICK_BEFORE = 2;
 Patient.GFX_HEALTHY_AFTER = 3;
 Patient.GFX_SICK_AFTER = 4;
 Patient.GFX_DEAD = 5;
+Patient.TRANSFUSION_TIME = 6000;
 Simulator.MAX_SIMULATION_SPEED = 10000;
 Simulator.DEFAULT_SIMULATION_SPEED = 50.0;
 com.haxepunk.debug.Console.BIG_WIDTH_THRESHOLD = 420;
