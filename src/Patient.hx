@@ -1,3 +1,5 @@
+import com.haxepunk.Entity;
+import com.haxepunk.HXP;
 class Patient extends Person
 {
   public static inline var SICK_BEFORE:String     = "SICK_BEFORE";
@@ -19,6 +21,10 @@ class Patient extends Person
     sprite.add(DEAD, toGenderGFX([GFX_DEAD]) );
     
     addGraphic(sprite);
+
+
+    // when born, go to the clinic
+    destination = { x : Clinic.DOOR_X, y : Clinic.DOOR_Y };
   }
 
   private override function sprite_loaded():Void

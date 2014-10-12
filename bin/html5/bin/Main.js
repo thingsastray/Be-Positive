@@ -1402,285 +1402,6 @@ DocumentClass.__super__ = Main;
 DocumentClass.prototype = $extend(Main.prototype,{
 	__class__: DocumentClass
 });
-openfl.AssetLibrary = function() {
-};
-$hxClasses["openfl.AssetLibrary"] = openfl.AssetLibrary;
-openfl.AssetLibrary.__name__ = ["openfl","AssetLibrary"];
-openfl.AssetLibrary.prototype = {
-	eventCallback: null
-	,exists: function(id,type) {
-		return false;
-	}
-	,getBitmapData: function(id) {
-		return null;
-	}
-	,getBytes: function(id) {
-		return null;
-	}
-	,getFont: function(id) {
-		return null;
-	}
-	,getMovieClip: function(id) {
-		return null;
-	}
-	,getMusic: function(id) {
-		return this.getSound(id);
-	}
-	,getPath: function(id) {
-		return null;
-	}
-	,getSound: function(id) {
-		return null;
-	}
-	,getText: function(id) {
-		var bytes = this.getBytes(id);
-		if(bytes == null) return null; else return bytes.readUTFBytes(bytes.length);
-	}
-	,isLocal: function(id,type) {
-		return true;
-	}
-	,list: function(type) {
-		return null;
-	}
-	,load: function(handler) {
-		handler(this);
-	}
-	,loadBitmapData: function(id,handler) {
-		handler(this.getBitmapData(id));
-	}
-	,loadBytes: function(id,handler) {
-		handler(this.getBytes(id));
-	}
-	,loadFont: function(id,handler) {
-		handler(this.getFont(id));
-	}
-	,loadMovieClip: function(id,handler) {
-		handler(this.getMovieClip(id));
-	}
-	,loadMusic: function(id,handler) {
-		handler(this.getMusic(id));
-	}
-	,loadSound: function(id,handler) {
-		handler(this.getSound(id));
-	}
-	,loadText: function(id,handler) {
-		var callback = function(bytes) {
-			if(bytes == null) handler(null); else handler(bytes.readUTFBytes(bytes.length));
-		};
-		this.loadBytes(id,callback);
-	}
-	,__class__: openfl.AssetLibrary
-};
-var DefaultAssetLibrary = function() {
-	this.type = new haxe.ds.StringMap();
-	this.path = new haxe.ds.StringMap();
-	this.className = new haxe.ds.StringMap();
-	openfl.AssetLibrary.call(this);
-	var id;
-	id = "graphics/debug/console_debug.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "graphics/debug/console_hidden.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "graphics/debug/console_logo.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "graphics/debug/console_output.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "graphics/debug/console_pause.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "graphics/debug/console_play.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "graphics/debug/console_step.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "graphics/debug/console_visible.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "graphics/preloader/haxepunk.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "font/04B_03__.ttf";
-	this.className.set(id,__ASSET__font_04b_03___ttf);
-	this.type.set(id,openfl.AssetType.FONT);
-	id = "font/04B_03__.ttf.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "graphics/clinic.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "graphics/persons_72x72.png";
-	this.path.set(id,id);
-	this.type.set(id,openfl.AssetType.IMAGE);
-	id = "font/04B_03__.ttf";
-	this.className.set(id,__ASSET__font_5);
-	this.type.set(id,openfl.AssetType.FONT);
-};
-$hxClasses["DefaultAssetLibrary"] = DefaultAssetLibrary;
-DefaultAssetLibrary.__name__ = ["DefaultAssetLibrary"];
-DefaultAssetLibrary.__super__ = openfl.AssetLibrary;
-DefaultAssetLibrary.prototype = $extend(openfl.AssetLibrary.prototype,{
-	className: null
-	,path: null
-	,type: null
-	,lastModified: null
-	,timer: null
-	,exists: function(id,type) {
-		var assetType = this.type.get(id);
-		if(assetType != null) {
-			if(assetType == type || (type == openfl.AssetType.SOUND || type == openfl.AssetType.MUSIC) && (assetType == openfl.AssetType.MUSIC || assetType == openfl.AssetType.SOUND)) return true;
-			if(type == openfl.AssetType.BINARY || type == null) return true;
-		}
-		return false;
-	}
-	,getBitmapData: function(id) {
-		return openfl.display.BitmapData.fromImage((function($this) {
-			var $r;
-			var key = $this.path.get(id);
-			$r = ApplicationMain.images.get(key);
-			return $r;
-		}(this)));
-	}
-	,getBytes: function(id) {
-		var bytes = null;
-		var data = ((function($this) {
-			var $r;
-			var key = $this.path.get(id);
-			$r = ApplicationMain.urlLoaders.get(key);
-			return $r;
-		}(this))).data;
-		if(typeof(data) == "string") {
-			bytes = new openfl.utils.ByteArray();
-			bytes.writeUTFBytes(data);
-		} else if(js.Boot.__instanceof(data,openfl.utils.ByteArray)) bytes = data; else bytes = null;
-		if(bytes != null) {
-			bytes.position = 0;
-			return bytes;
-		} else return null;
-	}
-	,getFont: function(id) {
-		return js.Boot.__cast(Type.createInstance(this.className.get(id),[]) , openfl.text.Font);
-	}
-	,getMusic: function(id) {
-		var sound = new openfl.media.Sound();
-		sound.__buffer = true;
-		sound.load(new openfl.net.URLRequest(this.path.get(id)));
-		return sound;
-	}
-	,getPath: function(id) {
-		return this.path.get(id);
-	}
-	,getSound: function(id) {
-		return new openfl.media.Sound(new openfl.net.URLRequest(this.path.get(id)));
-	}
-	,getText: function(id) {
-		var bytes = null;
-		var data = ((function($this) {
-			var $r;
-			var key = $this.path.get(id);
-			$r = ApplicationMain.urlLoaders.get(key);
-			return $r;
-		}(this))).data;
-		if(typeof(data) == "string") return data; else if(js.Boot.__instanceof(data,openfl.utils.ByteArray)) bytes = data; else bytes = null;
-		if(bytes != null) {
-			bytes.position = 0;
-			return bytes.readUTFBytes(bytes.length);
-		} else return null;
-	}
-	,isLocal: function(id,type) {
-		return true;
-	}
-	,list: function(type) {
-		var items = [];
-		var $it0 = this.type.keys();
-		while( $it0.hasNext() ) {
-			var id = $it0.next();
-			if(type == null || this.exists(id,type)) items.push(id);
-		}
-		return items;
-	}
-	,loadBitmapData: function(id,handler) {
-		if(this.path.exists(id)) {
-			var loader = new openfl.display.Loader();
-			loader.contentLoaderInfo.addEventListener(openfl.events.Event.COMPLETE,function(event) {
-				handler((js.Boot.__cast(event.currentTarget.content , openfl.display.Bitmap)).bitmapData);
-			});
-			loader.load(new openfl.net.URLRequest(this.path.get(id)));
-		} else handler(this.getBitmapData(id));
-	}
-	,loadBytes: function(id,handler) {
-		if(this.path.exists(id)) {
-			var loader = new openfl.net.URLLoader();
-			loader.addEventListener(openfl.events.Event.COMPLETE,function(event) {
-				var bytes = new openfl.utils.ByteArray();
-				bytes.writeUTFBytes(event.currentTarget.data);
-				bytes.position = 0;
-				handler(bytes);
-			});
-			loader.load(new openfl.net.URLRequest(this.path.get(id)));
-		} else handler(this.getBytes(id));
-	}
-	,loadFont: function(id,handler) {
-		handler(this.getFont(id));
-	}
-	,loadMusic: function(id,handler) {
-		handler(this.getMusic(id));
-	}
-	,loadSound: function(id,handler) {
-		handler(this.getSound(id));
-	}
-	,loadText: function(id,handler) {
-		if(this.path.exists(id)) {
-			var loader = new openfl.net.URLLoader();
-			loader.addEventListener(openfl.events.Event.COMPLETE,function(event) {
-				handler(event.currentTarget.data);
-			});
-			loader.load(new openfl.net.URLRequest(this.path.get(id)));
-		} else handler(this.getText(id));
-	}
-	,__class__: DefaultAssetLibrary
-});
-openfl.text = {};
-openfl.text.Font = function() {
-};
-$hxClasses["openfl.text.Font"] = openfl.text.Font;
-openfl.text.Font.__name__ = ["openfl","text","Font"];
-openfl.text.Font.enumerateFonts = function(enumerateDeviceFonts) {
-	if(enumerateDeviceFonts == null) enumerateDeviceFonts = false;
-	return [];
-};
-openfl.text.Font.registerFont = function(font) {
-};
-openfl.text.Font.prototype = {
-	fontName: null
-	,fontStyle: null
-	,fontType: null
-	,__class__: openfl.text.Font
-};
-var __ASSET__font_04b_03___ttf = function() {
-	openfl.text.Font.call(this);
-	this.fontName = "font/04B_03__.ttf";
-};
-$hxClasses["__ASSET__font_04b_03___ttf"] = __ASSET__font_04b_03___ttf;
-__ASSET__font_04b_03___ttf.__name__ = ["__ASSET__font_04b_03___ttf"];
-__ASSET__font_04b_03___ttf.__super__ = openfl.text.Font;
-__ASSET__font_04b_03___ttf.prototype = $extend(openfl.text.Font.prototype,{
-	__class__: __ASSET__font_04b_03___ttf
-});
-var __ASSET__font_5 = function() {
-	openfl.text.Font.call(this);
-	this.fontName = "font/04B_03__.ttf";
-};
-$hxClasses["__ASSET__font_5"] = __ASSET__font_5;
-__ASSET__font_5.__name__ = ["__ASSET__font_5"];
-__ASSET__font_5.__super__ = openfl.text.Font;
-__ASSET__font_5.prototype = $extend(openfl.text.Font.prototype,{
-	__class__: __ASSET__font_5
-});
 com.haxepunk.Tweener = function() {
 	this.active = true;
 	this.autoClear = false;
@@ -3725,9 +3446,313 @@ com.haxepunk.Entity.prototype = $extend(com.haxepunk.Tweener.prototype,{
 	,__class__: com.haxepunk.Entity
 	,__properties__: $extend(com.haxepunk.Tweener.prototype.__properties__,{set_name:"set_name",get_name:"get_name",set_graphic:"set_graphic",get_graphic:"get_graphic",set_mask:"set_mask",get_mask:"get_mask",set_type:"set_type",get_type:"get_type",set_layer:"set_layer",get_layer:"get_layer",get_bottom:"get_bottom",get_top:"get_top",get_right:"get_right",get_left:"get_left",get_centerY:"get_centerY",get_centerX:"get_centerX",get_halfHeight:"get_halfHeight",get_halfWidth:"get_halfWidth",get_scene:"get_scene",get_world:"get_world",get_onCamera:"get_onCamera",set_y:"set_y",get_y:"get_y",set_x:"set_x",get_x:"get_x"})
 });
+var Clinic = function() {
+	com.haxepunk.Entity.call(this,450,200,new com.haxepunk.graphics.Image(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE?(function($this) {
+		var $r;
+		var e = com.haxepunk.ds.Either.Right(com.haxepunk.graphics.atlas.Atlas.loadImageAsRegion((function($this) {
+			var $r;
+			var data = com.haxepunk.graphics.atlas.AtlasData.getAtlasDataByName("graphics/clinic.png",true);
+			$r = data;
+			return $r;
+		}($this))));
+		$r = e;
+		return $r;
+	}(this)):(function($this) {
+		var $r;
+		var e1 = com.haxepunk.ds.Either.Left(com.haxepunk.HXP.getBitmap("graphics/clinic.png"));
+		$r = e1;
+		return $r;
+	}(this))));
+};
+$hxClasses["Clinic"] = Clinic;
+Clinic.__name__ = ["Clinic"];
+Clinic.__super__ = com.haxepunk.Entity;
+Clinic.prototype = $extend(com.haxepunk.Entity.prototype,{
+	__class__: Clinic
+});
+openfl.AssetLibrary = function() {
+};
+$hxClasses["openfl.AssetLibrary"] = openfl.AssetLibrary;
+openfl.AssetLibrary.__name__ = ["openfl","AssetLibrary"];
+openfl.AssetLibrary.prototype = {
+	eventCallback: null
+	,exists: function(id,type) {
+		return false;
+	}
+	,getBitmapData: function(id) {
+		return null;
+	}
+	,getBytes: function(id) {
+		return null;
+	}
+	,getFont: function(id) {
+		return null;
+	}
+	,getMovieClip: function(id) {
+		return null;
+	}
+	,getMusic: function(id) {
+		return this.getSound(id);
+	}
+	,getPath: function(id) {
+		return null;
+	}
+	,getSound: function(id) {
+		return null;
+	}
+	,getText: function(id) {
+		var bytes = this.getBytes(id);
+		if(bytes == null) return null; else return bytes.readUTFBytes(bytes.length);
+	}
+	,isLocal: function(id,type) {
+		return true;
+	}
+	,list: function(type) {
+		return null;
+	}
+	,load: function(handler) {
+		handler(this);
+	}
+	,loadBitmapData: function(id,handler) {
+		handler(this.getBitmapData(id));
+	}
+	,loadBytes: function(id,handler) {
+		handler(this.getBytes(id));
+	}
+	,loadFont: function(id,handler) {
+		handler(this.getFont(id));
+	}
+	,loadMovieClip: function(id,handler) {
+		handler(this.getMovieClip(id));
+	}
+	,loadMusic: function(id,handler) {
+		handler(this.getMusic(id));
+	}
+	,loadSound: function(id,handler) {
+		handler(this.getSound(id));
+	}
+	,loadText: function(id,handler) {
+		var callback = function(bytes) {
+			if(bytes == null) handler(null); else handler(bytes.readUTFBytes(bytes.length));
+		};
+		this.loadBytes(id,callback);
+	}
+	,__class__: openfl.AssetLibrary
+};
+var DefaultAssetLibrary = function() {
+	this.type = new haxe.ds.StringMap();
+	this.path = new haxe.ds.StringMap();
+	this.className = new haxe.ds.StringMap();
+	openfl.AssetLibrary.call(this);
+	var id;
+	id = "graphics/debug/console_debug.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/debug/console_hidden.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/debug/console_logo.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/debug/console_output.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/debug/console_pause.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/debug/console_play.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/debug/console_step.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/debug/console_visible.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/preloader/haxepunk.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "font/04B_03__.ttf";
+	this.className.set(id,__ASSET__font_04b_03___ttf);
+	this.type.set(id,openfl.AssetType.FONT);
+	id = "font/04B_03__.ttf.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/clinic.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "graphics/persons_72x72.png";
+	this.path.set(id,id);
+	this.type.set(id,openfl.AssetType.IMAGE);
+	id = "font/04B_03__.ttf";
+	this.className.set(id,__ASSET__font_5);
+	this.type.set(id,openfl.AssetType.FONT);
+};
+$hxClasses["DefaultAssetLibrary"] = DefaultAssetLibrary;
+DefaultAssetLibrary.__name__ = ["DefaultAssetLibrary"];
+DefaultAssetLibrary.__super__ = openfl.AssetLibrary;
+DefaultAssetLibrary.prototype = $extend(openfl.AssetLibrary.prototype,{
+	className: null
+	,path: null
+	,type: null
+	,lastModified: null
+	,timer: null
+	,exists: function(id,type) {
+		var assetType = this.type.get(id);
+		if(assetType != null) {
+			if(assetType == type || (type == openfl.AssetType.SOUND || type == openfl.AssetType.MUSIC) && (assetType == openfl.AssetType.MUSIC || assetType == openfl.AssetType.SOUND)) return true;
+			if(type == openfl.AssetType.BINARY || type == null) return true;
+		}
+		return false;
+	}
+	,getBitmapData: function(id) {
+		return openfl.display.BitmapData.fromImage((function($this) {
+			var $r;
+			var key = $this.path.get(id);
+			$r = ApplicationMain.images.get(key);
+			return $r;
+		}(this)));
+	}
+	,getBytes: function(id) {
+		var bytes = null;
+		var data = ((function($this) {
+			var $r;
+			var key = $this.path.get(id);
+			$r = ApplicationMain.urlLoaders.get(key);
+			return $r;
+		}(this))).data;
+		if(typeof(data) == "string") {
+			bytes = new openfl.utils.ByteArray();
+			bytes.writeUTFBytes(data);
+		} else if(js.Boot.__instanceof(data,openfl.utils.ByteArray)) bytes = data; else bytes = null;
+		if(bytes != null) {
+			bytes.position = 0;
+			return bytes;
+		} else return null;
+	}
+	,getFont: function(id) {
+		return js.Boot.__cast(Type.createInstance(this.className.get(id),[]) , openfl.text.Font);
+	}
+	,getMusic: function(id) {
+		var sound = new openfl.media.Sound();
+		sound.__buffer = true;
+		sound.load(new openfl.net.URLRequest(this.path.get(id)));
+		return sound;
+	}
+	,getPath: function(id) {
+		return this.path.get(id);
+	}
+	,getSound: function(id) {
+		return new openfl.media.Sound(new openfl.net.URLRequest(this.path.get(id)));
+	}
+	,getText: function(id) {
+		var bytes = null;
+		var data = ((function($this) {
+			var $r;
+			var key = $this.path.get(id);
+			$r = ApplicationMain.urlLoaders.get(key);
+			return $r;
+		}(this))).data;
+		if(typeof(data) == "string") return data; else if(js.Boot.__instanceof(data,openfl.utils.ByteArray)) bytes = data; else bytes = null;
+		if(bytes != null) {
+			bytes.position = 0;
+			return bytes.readUTFBytes(bytes.length);
+		} else return null;
+	}
+	,isLocal: function(id,type) {
+		return true;
+	}
+	,list: function(type) {
+		var items = [];
+		var $it0 = this.type.keys();
+		while( $it0.hasNext() ) {
+			var id = $it0.next();
+			if(type == null || this.exists(id,type)) items.push(id);
+		}
+		return items;
+	}
+	,loadBitmapData: function(id,handler) {
+		if(this.path.exists(id)) {
+			var loader = new openfl.display.Loader();
+			loader.contentLoaderInfo.addEventListener(openfl.events.Event.COMPLETE,function(event) {
+				handler((js.Boot.__cast(event.currentTarget.content , openfl.display.Bitmap)).bitmapData);
+			});
+			loader.load(new openfl.net.URLRequest(this.path.get(id)));
+		} else handler(this.getBitmapData(id));
+	}
+	,loadBytes: function(id,handler) {
+		if(this.path.exists(id)) {
+			var loader = new openfl.net.URLLoader();
+			loader.addEventListener(openfl.events.Event.COMPLETE,function(event) {
+				var bytes = new openfl.utils.ByteArray();
+				bytes.writeUTFBytes(event.currentTarget.data);
+				bytes.position = 0;
+				handler(bytes);
+			});
+			loader.load(new openfl.net.URLRequest(this.path.get(id)));
+		} else handler(this.getBytes(id));
+	}
+	,loadFont: function(id,handler) {
+		handler(this.getFont(id));
+	}
+	,loadMusic: function(id,handler) {
+		handler(this.getMusic(id));
+	}
+	,loadSound: function(id,handler) {
+		handler(this.getSound(id));
+	}
+	,loadText: function(id,handler) {
+		if(this.path.exists(id)) {
+			var loader = new openfl.net.URLLoader();
+			loader.addEventListener(openfl.events.Event.COMPLETE,function(event) {
+				handler(event.currentTarget.data);
+			});
+			loader.load(new openfl.net.URLRequest(this.path.get(id)));
+		} else handler(this.getText(id));
+	}
+	,__class__: DefaultAssetLibrary
+});
+openfl.text = {};
+openfl.text.Font = function() {
+};
+$hxClasses["openfl.text.Font"] = openfl.text.Font;
+openfl.text.Font.__name__ = ["openfl","text","Font"];
+openfl.text.Font.enumerateFonts = function(enumerateDeviceFonts) {
+	if(enumerateDeviceFonts == null) enumerateDeviceFonts = false;
+	return [];
+};
+openfl.text.Font.registerFont = function(font) {
+};
+openfl.text.Font.prototype = {
+	fontName: null
+	,fontStyle: null
+	,fontType: null
+	,__class__: openfl.text.Font
+};
+var __ASSET__font_04b_03___ttf = function() {
+	openfl.text.Font.call(this);
+	this.fontName = "font/04B_03__.ttf";
+};
+$hxClasses["__ASSET__font_04b_03___ttf"] = __ASSET__font_04b_03___ttf;
+__ASSET__font_04b_03___ttf.__name__ = ["__ASSET__font_04b_03___ttf"];
+__ASSET__font_04b_03___ttf.__super__ = openfl.text.Font;
+__ASSET__font_04b_03___ttf.prototype = $extend(openfl.text.Font.prototype,{
+	__class__: __ASSET__font_04b_03___ttf
+});
+var __ASSET__font_5 = function() {
+	openfl.text.Font.call(this);
+	this.fontName = "font/04B_03__.ttf";
+};
+$hxClasses["__ASSET__font_5"] = __ASSET__font_5;
+__ASSET__font_5.__name__ = ["__ASSET__font_5"];
+__ASSET__font_5.__super__ = openfl.text.Font;
+__ASSET__font_5.prototype = $extend(openfl.text.Font.prototype,{
+	__class__: __ASSET__font_5
+});
 var Person = function(main) {
 	this.main = main;
 	if(Std.random(2) == 0) this.gender = Gender.MALE; else this.gender = Gender.FEMALE;
+	this.move_speed = 3.9;
 	this.sprite = new com.haxepunk.graphics.Spritemap(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE?(function($this) {
 		var $r;
 		var e = com.haxepunk.ds.Either.Right(new com.haxepunk.graphics.atlas.TileAtlas((function($this) {
@@ -3753,6 +3778,11 @@ Person.prototype = $extend(com.haxepunk.Entity.prototype,{
 	main: null
 	,sprite: null
 	,gender: null
+	,destination: null
+	,move_speed: null
+	,update: function() {
+		this.moveTowards(this.destination.x,this.destination.y,this.move_speed,null,null);
+	}
 	,sprite_loaded: function() {
 	}
 	,toGenderGFX: function(frames) {
@@ -3764,10 +3794,11 @@ Person.prototype = $extend(com.haxepunk.Entity.prototype,{
 });
 var Donor = function(main) {
 	Person.call(this,main);
-	haxe.Log.trace("spawned donor",{ fileName : "Donor.hx", lineNumber : 9, className : "Donor", methodName : "new"});
+	haxe.Log.trace("spawned donor",{ fileName : "Donor.hx", lineNumber : 11, className : "Donor", methodName : "new"});
 	this.sprite.add("IDLE",this.toGenderGFX([0]));
 	this.sprite.add("YAY",this.toGenderGFX([1]));
 	this.addGraphic(this.sprite);
+	this.destination = com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230});
 };
 $hxClasses["Donor"] = Donor;
 Donor.__name__ = ["Donor"];
@@ -4623,22 +4654,7 @@ MainScene.prototype = $extend(com.haxepunk.Scene.prototype,{
 	,clinic: null
 	,begin: function() {
 		this.simulator = new Simulator(this);
-		this.clinic = new com.haxepunk.Entity(450,200,new com.haxepunk.graphics.Image(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE?(function($this) {
-			var $r;
-			var e = com.haxepunk.ds.Either.Right(com.haxepunk.graphics.atlas.Atlas.loadImageAsRegion((function($this) {
-				var $r;
-				var data = com.haxepunk.graphics.atlas.AtlasData.getAtlasDataByName("graphics/clinic.png",true);
-				$r = data;
-				return $r;
-			}($this))));
-			$r = e;
-			return $r;
-		}(this)):(function($this) {
-			var $r;
-			var e1 = com.haxepunk.ds.Either.Left(com.haxepunk.HXP.getBitmap("graphics/clinic.png"));
-			$r = e1;
-			return $r;
-		}(this))));
+		this.clinic = new Clinic();
 		this.add(this.clinic);
 	}
 	,spawn: function(t) {
@@ -4723,12 +4739,13 @@ NMEPreloader.prototype = $extend(openfl.display.Sprite.prototype,{
 });
 var Patient = function(main) {
 	Person.call(this,main);
-	haxe.Log.trace("spawned patient",{ fileName : "Patient.hx", lineNumber : 14, className : "Patient", methodName : "new"});
+	haxe.Log.trace("spawned patient",{ fileName : "Patient.hx", lineNumber : 16, className : "Patient", methodName : "new"});
 	this.sprite.add("SICK_BEFORE",this.toGenderGFX([2]));
 	this.sprite.add("HEALTHY_AFTER",this.toGenderGFX([3]));
 	this.sprite.add("SICK_AFTER",this.toGenderGFX([4]));
 	this.sprite.add("DEAD",this.toGenderGFX([5]));
 	this.addGraphic(this.sprite);
+	this.destination = com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230});
 };
 $hxClasses["Patient"] = Patient;
 Patient.__name__ = ["Patient"];
@@ -17420,17 +17437,20 @@ com.haxepunk.HXP.rect = new openfl.geom.Rectangle();
 com.haxepunk.HXP.matrix = new openfl.geom.Matrix();
 com.haxepunk.HXP.sprite = new openfl.display.Sprite();
 com.haxepunk.Entity._EMPTY = new com.haxepunk.Entity();
+Clinic.X = 450;
+Clinic.Y = 200;
+Clinic.DOOR_X = 470;
+Clinic.DOOR_Y = 230;
+Clinic.GFX_PATH = "graphics/clinic.png";
 Person.GFX_OFFSET = 6;
 Person.GFX_PATH = "graphics/persons_72x72.png";
+Person.DEFAULT_MOVESPEED = 3.9;
 Donor.IDLE = "IDLE";
 Donor.YAY = "YAY";
 Donor.GFX_IDLE = 0;
 Donor.GFX_YAY = 1;
 MainScene.SPAWN_PATIENT_RATE = 100;
 MainScene.SPAWN_DONOR_RATE = 100;
-MainScene.CLINIC_X = 450;
-MainScene.CLINIC_Y = 200;
-MainScene.CLINIC_PATH = "graphics/clinic.png";
 Patient.SICK_BEFORE = "SICK_BEFORE";
 Patient.HEALTHY_AFTER = "HEALTHY_AFTER";
 Patient.SICK_AFTER = "SICK_AFTER";

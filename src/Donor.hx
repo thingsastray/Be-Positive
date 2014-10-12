@@ -1,3 +1,5 @@
+import com.haxepunk.Entity;
+import com.haxepunk.HXP;
 class Donor extends Person
 {
   public static inline var IDLE:String  = "IDLE";
@@ -12,6 +14,8 @@ class Donor extends Person
     sprite.add(YAY, toGenderGFX([GFX_YAY]) );
 
     addGraphic(sprite);
+
+    destination = { x : Clinic.DOOR_X, y : Clinic.DOOR_Y };
   }
 
   private override function sprite_loaded():Void

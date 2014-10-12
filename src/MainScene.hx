@@ -19,14 +19,10 @@ class MainScene extends Scene
   */
   public static inline var SPAWN_DONOR_RATE:Int = 100;
 
-  private static inline var CLINIC_X:Int = 450;
-  private static inline var CLINIC_Y:Int = 200;
-  private static inline var CLINIC_PATH:String = "graphics/clinic.png";
-
   private var simulator:Simulator;
   private var patients:List<Patient>;
   private var donors:List<Donor>;
-  private var clinic:Entity;
+  private var clinic:Clinic;
 
   public function new()
   {
@@ -42,7 +38,7 @@ class MainScene extends Scene
     // start spawner
     simulator = new Simulator(this);
 
-    clinic = new Entity( CLINIC_X, CLINIC_Y, new com.haxepunk.graphics.Image(CLINIC_PATH) );
+    clinic = new Clinic();
     add(clinic);
 
 	}
