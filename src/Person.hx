@@ -9,6 +9,11 @@ enum Gender
   FEMALE;
 }
 
+typedef PersonJSO = {
+  gender : String,
+  blood_type : String
+}
+
 class Person extends Entity
 {
   public static inline var GFX_OFFSET:Int = 6; // how many frames away female equivalent sprites are
@@ -68,6 +73,21 @@ class Person extends Entity
 
   private dynamic function sprite_loaded():Void { }
   private dynamic function arrive():Void { destination = null; }
+
+  // haxe.Json.stringify() throws Uncaught TypeError: Converting circular structure to JSON
+  public inline function as_jso():PersonJSO
+  {
+    // var o = {};
+    // for(field in Reflect.fields(this)){ // too much!
+    // for(field in ["gender","blood_type"])
+    //   Reflect.setField(o, field, Std.string(Reflect.field(this, field)));
+    // }
+    // return o;
+    return {
+      gender : Std.string(this.gender),
+      blood_type : Std.string(this.blood_type)
+    };
+  }
 
   private inline function toGenderGFX(frames:Array<Int>):Array<Int>
   {

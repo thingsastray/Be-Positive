@@ -3867,6 +3867,7 @@ Clinic.prototype = $extend(com.haxepunk.Entity.prototype,{
 		} else return false;
 	}
 	,patient_transfusion: function(patient) {
+		BloodTransfusionRules.receive_patient({ gender : Std.string(patient.gender), blood_type : Std.string(patient.blood_type)});
 	}
 	,donor_transfusion: function(donor) {
 		this.increase_blood_inventory(donor.blood_type);
@@ -4211,6 +4212,9 @@ Person.prototype = $extend(com.haxepunk.Entity.prototype,{
 	}
 	,arrive: function() {
 		this.destination = null;
+	}
+	,as_jso: function() {
+		return { gender : Std.string(this.gender), blood_type : Std.string(this.blood_type)};
 	}
 	,toGenderGFX: function(frames) {
 		if(this.gender == Gender.FEMALE) return frames.map(function(frame) {
@@ -5206,6 +5210,7 @@ Patient.prototype = $extend(Person.prototype,{
 	,transfusion_complete: function() {
 		this.visible = true;
 		this.recently_got_blood = true;
+		BloodTransfusionRules.receive_patient({ gender : Std.string(this.gender), blood_type : Std.string(this.blood_type)});
 		var obj = { x : Std.random(640) * .75, y : Std.random(480) * .75};
 		this.destination = com.haxepunk._HXP.Position_Impl_._new(obj);
 	}

@@ -126,6 +126,7 @@ class Clinic extends Entity
   public inline function patient_transfusion(patient:Patient):Void
   {
     // handle rules
+    BloodTransfusionRules.receive_patient( patient.as_jso() );
     // give blood
     // update bank count
   }
