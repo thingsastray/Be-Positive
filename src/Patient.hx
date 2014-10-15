@@ -75,7 +75,10 @@ class Patient extends Person
   private inline function transfusion_complete():Void
   {
     this.visible = true;
-    this.recently_got_blood = false;
+    this.recently_got_blood = true;
+
+    // notify clinic
+    this.main.clinic.patient_transfusion(this);
 
     // go to random spot outside
     this.destination = {

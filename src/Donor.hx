@@ -56,6 +56,9 @@ class Donor extends Person
   private inline function donation_complete():Void
   {
     this.visible = true;
+
+    // notify clinic
+    this.main.clinic.donor_transfusion(this);
     
     destination = { x : MainScene.SCREEN_WIDTH, y : Std.random(MainScene.SCREEN_HEIGHT) };
 

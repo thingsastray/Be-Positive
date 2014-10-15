@@ -19,12 +19,12 @@ class Person extends Entity
   private static inline var BLOOD_BADGE_OFFSET_Y:Int = -9;
 
   public var main:MainScene;
+  public var blood_type:BloodType;
 
   private var sprite:Spritemap;
   private var gender:Gender;
   private var destination:Position; // heading towards
   private var move_speed:Float;
-  private var blood_type:BloodType;
   private var blood_badge_text:Text;
   private var blood_badge:Entity;
 

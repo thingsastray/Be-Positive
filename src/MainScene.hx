@@ -42,7 +42,7 @@ class MainScene extends Scene
     // start spawner
     simulator = new Simulator(this);
 
-    clinic = new Clinic();
+    clinic = new Clinic(this);
     add(clinic);
 
 	}

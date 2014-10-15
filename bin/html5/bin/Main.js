@@ -1428,6 +1428,29 @@ BloodType.O_NEG = ["O_NEG",7];
 BloodType.O_NEG.toString = $estr;
 BloodType.O_NEG.__enum__ = BloodType;
 BloodType.__empty_constructs__ = [BloodType.AB_POS,BloodType.AB_NEG,BloodType.A_POS,BloodType.A_NEG,BloodType.B_POS,BloodType.B_NEG,BloodType.O_POS,BloodType.O_NEG];
+var BloodTypeTools = function() { };
+$hxClasses["BloodTypeTools"] = BloodTypeTools;
+BloodTypeTools.__name__ = ["BloodTypeTools"];
+BloodTypeTools.toLabel = function(blood_type) {
+	switch(blood_type[1]) {
+	case 0:
+		return "ab+";
+	case 1:
+		return "ab-";
+	case 2:
+		return "a+";
+	case 3:
+		return "a-";
+	case 4:
+		return "b+";
+	case 5:
+		return "b-";
+	case 6:
+		return "o+";
+	case 7:
+		return "o-";
+	}
+};
 com.haxepunk.Tweener = function() {
 	this.active = true;
 	this.autoClear = false;
@@ -3475,7 +3498,8 @@ com.haxepunk.Entity.prototype = $extend(com.haxepunk.Tweener.prototype,{
 	,__class__: com.haxepunk.Entity
 	,__properties__: $extend(com.haxepunk.Tweener.prototype.__properties__,{set_name:"set_name",get_name:"get_name",set_graphic:"set_graphic",get_graphic:"get_graphic",set_mask:"set_mask",get_mask:"get_mask",set_type:"set_type",get_type:"get_type",set_layer:"set_layer",get_layer:"get_layer",get_bottom:"get_bottom",get_top:"get_top",get_right:"get_right",get_left:"get_left",get_centerY:"get_centerY",get_centerX:"get_centerX",get_halfHeight:"get_halfHeight",get_halfWidth:"get_halfWidth",get_scene:"get_scene",get_world:"get_world",get_onCamera:"get_onCamera",set_y:"set_y",get_y:"get_y",set_x:"set_x",get_x:"get_x"})
 });
-var Clinic = function() {
+var Clinic = function(main) {
+	this.main = main;
 	this.bank = { AB_POS : 5, AB_NEG : 5, A_POS : 5, A_NEG : 5, B_POS : 5, B_NEG : 5, O_POS : 5, O_NEG : 5};
 	com.haxepunk.Entity.call(this,450,200,new com.haxepunk.graphics.Image(com.haxepunk.HXP.renderMode == com.haxepunk.RenderMode.HARDWARE?(function($this) {
 		var $r;
@@ -3493,12 +3517,360 @@ var Clinic = function() {
 		$r = e1;
 		return $r;
 	}(this))));
+	var label_text_options = { size : 16};
+	this.ab_pos_label_text = new com.haxepunk.graphics.Text("" + (function($this) {
+		var $r;
+		switch(BloodType.AB_POS[1]) {
+		case 0:
+			$r = "ab+";
+			break;
+		case 1:
+			$r = "ab-";
+			break;
+		case 2:
+			$r = "a+";
+			break;
+		case 3:
+			$r = "a-";
+			break;
+		case 4:
+			$r = "b+";
+			break;
+		case 5:
+			$r = "b-";
+			break;
+		case 6:
+			$r = "o+";
+			break;
+		case 7:
+			$r = "o-";
+			break;
+		}
+		return $r;
+	}(this)) + " " + this.bank.AB_POS,0,0,null,null,label_text_options);
+	this.ab_neg_label_text = new com.haxepunk.graphics.Text("" + (function($this) {
+		var $r;
+		switch(BloodType.AB_NEG[1]) {
+		case 0:
+			$r = "ab+";
+			break;
+		case 1:
+			$r = "ab-";
+			break;
+		case 2:
+			$r = "a+";
+			break;
+		case 3:
+			$r = "a-";
+			break;
+		case 4:
+			$r = "b+";
+			break;
+		case 5:
+			$r = "b-";
+			break;
+		case 6:
+			$r = "o+";
+			break;
+		case 7:
+			$r = "o-";
+			break;
+		}
+		return $r;
+	}(this)) + " " + this.bank.AB_NEG,0,0,null,null,label_text_options);
+	this.a_pos_label_text = new com.haxepunk.graphics.Text("" + (function($this) {
+		var $r;
+		switch(BloodType.A_POS[1]) {
+		case 0:
+			$r = "ab+";
+			break;
+		case 1:
+			$r = "ab-";
+			break;
+		case 2:
+			$r = "a+";
+			break;
+		case 3:
+			$r = "a-";
+			break;
+		case 4:
+			$r = "b+";
+			break;
+		case 5:
+			$r = "b-";
+			break;
+		case 6:
+			$r = "o+";
+			break;
+		case 7:
+			$r = "o-";
+			break;
+		}
+		return $r;
+	}(this)) + " " + this.bank.A_POS,0,0,null,null,label_text_options);
+	this.a_neg_label_text = new com.haxepunk.graphics.Text("" + (function($this) {
+		var $r;
+		switch(BloodType.A_NEG[1]) {
+		case 0:
+			$r = "ab+";
+			break;
+		case 1:
+			$r = "ab-";
+			break;
+		case 2:
+			$r = "a+";
+			break;
+		case 3:
+			$r = "a-";
+			break;
+		case 4:
+			$r = "b+";
+			break;
+		case 5:
+			$r = "b-";
+			break;
+		case 6:
+			$r = "o+";
+			break;
+		case 7:
+			$r = "o-";
+			break;
+		}
+		return $r;
+	}(this)) + " " + this.bank.A_NEG,0,0,null,null,label_text_options);
+	this.b_pos_label_text = new com.haxepunk.graphics.Text("" + (function($this) {
+		var $r;
+		switch(BloodType.B_POS[1]) {
+		case 0:
+			$r = "ab+";
+			break;
+		case 1:
+			$r = "ab-";
+			break;
+		case 2:
+			$r = "a+";
+			break;
+		case 3:
+			$r = "a-";
+			break;
+		case 4:
+			$r = "b+";
+			break;
+		case 5:
+			$r = "b-";
+			break;
+		case 6:
+			$r = "o+";
+			break;
+		case 7:
+			$r = "o-";
+			break;
+		}
+		return $r;
+	}(this)) + " " + this.bank.B_POS,0,0,null,null,label_text_options);
+	this.b_neg_label_text = new com.haxepunk.graphics.Text("" + (function($this) {
+		var $r;
+		switch(BloodType.B_NEG[1]) {
+		case 0:
+			$r = "ab+";
+			break;
+		case 1:
+			$r = "ab-";
+			break;
+		case 2:
+			$r = "a+";
+			break;
+		case 3:
+			$r = "a-";
+			break;
+		case 4:
+			$r = "b+";
+			break;
+		case 5:
+			$r = "b-";
+			break;
+		case 6:
+			$r = "o+";
+			break;
+		case 7:
+			$r = "o-";
+			break;
+		}
+		return $r;
+	}(this)) + " " + this.bank.B_NEG,0,0,null,null,label_text_options);
+	this.o_pos_label_text = new com.haxepunk.graphics.Text("" + (function($this) {
+		var $r;
+		switch(BloodType.O_POS[1]) {
+		case 0:
+			$r = "ab+";
+			break;
+		case 1:
+			$r = "ab-";
+			break;
+		case 2:
+			$r = "a+";
+			break;
+		case 3:
+			$r = "a-";
+			break;
+		case 4:
+			$r = "b+";
+			break;
+		case 5:
+			$r = "b-";
+			break;
+		case 6:
+			$r = "o+";
+			break;
+		case 7:
+			$r = "o-";
+			break;
+		}
+		return $r;
+	}(this)) + " " + this.bank.O_POS,0,0,null,null,label_text_options);
+	this.o_neg_label_text = new com.haxepunk.graphics.Text("" + (function($this) {
+		var $r;
+		switch(BloodType.O_NEG[1]) {
+		case 0:
+			$r = "ab+";
+			break;
+		case 1:
+			$r = "ab-";
+			break;
+		case 2:
+			$r = "a+";
+			break;
+		case 3:
+			$r = "a-";
+			break;
+		case 4:
+			$r = "b+";
+			break;
+		case 5:
+			$r = "b-";
+			break;
+		case 6:
+			$r = "o+";
+			break;
+		case 7:
+			$r = "o-";
+			break;
+		}
+		return $r;
+	}(this)) + " " + this.bank.O_NEG,0,0,null,null,label_text_options);
+	this.ab_pos_label = new com.haxepunk.Entity(520,330,this.ab_pos_label_text);
+	this.ab_neg_label = new com.haxepunk.Entity(520,345,this.ab_neg_label_text);
+	this.a_pos_label = new com.haxepunk.Entity(520,360,this.a_pos_label_text);
+	this.a_neg_label = new com.haxepunk.Entity(520,375,this.a_neg_label_text);
+	this.b_pos_label = new com.haxepunk.Entity(520,390,this.b_pos_label_text);
+	this.b_neg_label = new com.haxepunk.Entity(520,405,this.b_neg_label_text);
+	this.o_pos_label = new com.haxepunk.Entity(520,420,this.o_pos_label_text);
+	this.o_neg_label = new com.haxepunk.Entity(520,435,this.o_neg_label_text);
+	main.add(this.ab_pos_label);
+	main.add(this.ab_neg_label);
+	main.add(this.a_pos_label);
+	main.add(this.a_neg_label);
+	main.add(this.b_pos_label);
+	main.add(this.b_neg_label);
+	main.add(this.o_pos_label);
+	main.add(this.o_neg_label);
 };
 $hxClasses["Clinic"] = Clinic;
 Clinic.__name__ = ["Clinic"];
 Clinic.__super__ = com.haxepunk.Entity;
 Clinic.prototype = $extend(com.haxepunk.Entity.prototype,{
-	bank: null
+	main: null
+	,bank: null
+	,ab_pos_label: null
+	,ab_neg_label: null
+	,a_pos_label: null
+	,a_neg_label: null
+	,b_pos_label: null
+	,b_neg_label: null
+	,o_pos_label: null
+	,o_neg_label: null
+	,ab_pos_label_text: null
+	,ab_neg_label_text: null
+	,a_pos_label_text: null
+	,a_neg_label_text: null
+	,b_pos_label_text: null
+	,b_neg_label_text: null
+	,o_pos_label_text: null
+	,o_neg_label_text: null
+	,set_bank_inventory_count: function(blood_type,count) {
+		Reflect.setField(this.bank,Std.string(blood_type),count);
+		var text_graphic;
+		switch(blood_type[1]) {
+		case 0:
+			text_graphic = this.ab_pos_label_text;
+			break;
+		case 1:
+			text_graphic = this.ab_neg_label_text;
+			break;
+		case 2:
+			text_graphic = this.a_pos_label_text;
+			break;
+		case 3:
+			text_graphic = this.a_neg_label_text;
+			break;
+		case 4:
+			text_graphic = this.b_pos_label_text;
+			break;
+		case 5:
+			text_graphic = this.b_neg_label_text;
+			break;
+		case 6:
+			text_graphic = this.o_pos_label_text;
+			break;
+		case 7:
+			text_graphic = this.o_neg_label_text;
+			break;
+		}
+		text_graphic.set_text("" + (function($this) {
+			var $r;
+			switch(blood_type[1]) {
+			case 0:
+				$r = "ab+";
+				break;
+			case 1:
+				$r = "ab-";
+				break;
+			case 2:
+				$r = "a+";
+				break;
+			case 3:
+				$r = "a-";
+				break;
+			case 4:
+				$r = "b+";
+				break;
+			case 5:
+				$r = "b-";
+				break;
+			case 6:
+				$r = "o+";
+				break;
+			case 7:
+				$r = "o-";
+				break;
+			}
+			return $r;
+		}(this)) + " " + Std.string(Reflect.field(this.bank,Std.string(blood_type))));
+	}
+	,increase_blood_inventory: function(blood_type) {
+		this.set_bank_inventory_count(blood_type,Reflect.field(this.bank,Std.string(blood_type)) + 1);
+	}
+	,decrease_blood_inventory: function(blood_type) {
+		if(Reflect.field(this.bank,Std.string(blood_type)) > 0) {
+			this.set_bank_inventory_count(blood_type,Reflect.field(this.bank,Std.string(blood_type)) - 1);
+			return true;
+		} else return false;
+	}
+	,patient_transfusion: function(patient) {
+	}
+	,donor_transfusion: function(donor) {
+		this.increase_blood_inventory(donor.blood_type);
+	}
 	,__class__: Clinic
 });
 openfl.AssetLibrary = function() {
@@ -3817,11 +4189,11 @@ Person.badge_text = function(bt) {
 Person.__super__ = com.haxepunk.Entity;
 Person.prototype = $extend(com.haxepunk.Entity.prototype,{
 	main: null
+	,blood_type: null
 	,sprite: null
 	,gender: null
 	,destination: null
 	,move_speed: null
-	,blood_type: null
 	,blood_badge_text: null
 	,blood_badge: null
 	,update: function() {
@@ -3872,6 +4244,7 @@ Donor.prototype = $extend(Person.prototype,{
 	}
 	,donation_complete: function() {
 		this.visible = true;
+		this.main.clinic.increase_blood_inventory(this.blood_type);
 		var obj = { x : 640, y : Std.random(480)};
 		this.destination = com.haxepunk._HXP.Position_Impl_._new(obj);
 	}
@@ -4722,7 +5095,7 @@ MainScene.prototype = $extend(com.haxepunk.Scene.prototype,{
 	,clinic: null
 	,begin: function() {
 		this.simulator = new Simulator(this);
-		this.clinic = new Clinic();
+		this.clinic = new Clinic(this);
 		this.add(this.clinic);
 	}
 	,spawn: function(t) {
@@ -4832,7 +5205,7 @@ Patient.prototype = $extend(Person.prototype,{
 	}
 	,transfusion_complete: function() {
 		this.visible = true;
-		this.recently_got_blood = false;
+		this.recently_got_blood = true;
 		var obj = { x : Std.random(640) * .75, y : Std.random(480) * .75};
 		this.destination = com.haxepunk._HXP.Position_Impl_._new(obj);
 	}
