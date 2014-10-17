@@ -107,15 +107,20 @@ class Clinic extends Entity
     text_graphic.text = '${blood_type.toLabel()} ' + Reflect.field(bank,Std.string(blood_type));
   }
 
+  private inline function get_blood_count(blood_type:BloodType):Int
+  {
+    return (Reflect.field(bank, Std.string(blood_type)) : Int);
+  }
+
   private inline function increase_blood_inventory(blood_type:BloodType):Void
   {
-    set_bank_inventory_count( blood_type, (Reflect.field(bank, Std.string(blood_type)):Int)+1 );
+    set_bank_inventory_count( blood_type, get_blood_count(blood_type)+1 );
   }
 
   private inline function decrease_blood_inventory(blood_type:BloodType):Bool
   {
-    if(Reflect.field(bank, Std.string(blood_type)) > 0){
-      set_bank_inventory_count( blood_type, (Reflect.field(bank, Std.string(blood_type)):Int)-1 );
+    if(get_blood_count(blood_type) > 0){
+      set_bank_inventory_count( blood_type, get_blood_count(blood_type)-1 );
       return true;
     }else return false;
   }
@@ -126,9 +131,35 @@ class Clinic extends Entity
   public inline function patient_transfusion(patient:Patient):Void
   {
     // handle rules
-    BloodTransfusionRules.receive_patient( patient.as_jso() );
+    var blood_to_inject_str:String = BloodTransfusionRules.receive_patient( patient.as_jso() );
     // give blood
     // update bank count
+    if(blood_to_inject_str != "false"){
+
+      var blood_to_inject:BloodType = Reflect.field(BloodType, blood_to_inject_str);
+
+      // check if there is stock of that blood
+      if( get_blood_count(blood_to_inject) > 0 ){
+
+        if( decrease_blood_inventory( blood_to_inject ) ){
+
+          patient.receive_blood( blood_to_inject );
+
+        }else{
+          // this should never happen
+          // don't give any blood
+          trace('[[[ERROR]]] blood was about to go below 0.');
+        }
+
+      }else{
+        // don't give any blood
+        trace('[[[WARNING]]] your rules allowed clinic to give ${blood_to_inject_str} without the clinic having sufficient stock. The patient was not given any blood.');
+      }
+
+    }else{
+      // don't give any new blood
+
+    }
   }
 
   public inline function donor_transfusion(donor:Donor):Void

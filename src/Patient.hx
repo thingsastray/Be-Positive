@@ -1,5 +1,6 @@
 import com.haxepunk.Entity;
 import com.haxepunk.HXP;
+import BloodType;
 class Patient extends Person
 {
   public static inline var SICK_BEFORE:String      = "SICK_BEFORE";
@@ -11,8 +12,12 @@ class Patient extends Person
   public static inline var GFX_SICK_AFTER:Int      = 4;
   public static inline var GFX_DEAD:Int            = 5;
   public static inline var TRANSFUSION_TIME:Int    = 6000; // ms
+  private static inline var RANDOM_WAIT_TO_REVISIT_CLINIC_MS:Int = 10000;
+  private static inline var RANDOM_WAIT_TO_RESOLVE_BLOOD:Int = 5000;
+  private static inline var REALLY_SICK_MOVESPEED:Float = 0.7;
 
   private var recently_got_blood:Bool; // if true, JUST left hospital
+  private var blood_received:BloodType;
 
   public function new(main:MainScene){
     super(main);
@@ -50,20 +55,31 @@ class Patient extends Person
     // go outside, hang out, then resolve blood
     else if(recently_got_blood)
     {
-
-
+      haxe.Timer.delay(resolve_blood_transfusion, Std.random(RANDOM_WAIT_TO_RESOLVE_BLOOD));
 
     }
 
-    // 
+    // landed somewhere after resolving blood
     else{
 
+      if(this.sprite.currentAnim == HEALTHY_AFTER){
+        // clean up
+        this.main.despawn(this);
+      }else{ // SICK_AFTER
+        // drop dead
+        this.sprite.play(DEAD);
+      }
 
 
     }
 
 
     destination = null;
+  }
+
+  public function receive_blood(new_blood:BloodType):Void
+  {
+    blood_received = new_blood;
   }
 
   /*
@@ -85,6 +101,44 @@ class Patient extends Person
       x : Std.random(MainScene.SCREEN_WIDTH) * .75,
       y : Std.random(MainScene.SCREEN_HEIGHT) * .75
     };
+  }
+
+  /*
+    triggers immediately when arriving to random destination
+    on the 'field' when leaving the clinic
+    the patient may or may not have a new blood in them
+   */
+  private inline function resolve_blood_transfusion():Void
+  {
+    if(this.blood_received != null){
+
+      // if the new blood violates the rule, kill the patient
+      if( BloodTypeTools.blood_map[this.blood_type][this.blood_received] ){
+        // ok, make happy, run off map, and remove entity
+        sprite.play(HEALTHY_AFTER);
+        this.destination = {
+          x : -100,
+          y : Std.random(MainScene.SCREEN_HEIGHT) * 1.35
+        };
+      }else{
+        // bad blood, get sicker, move a bit really slowly, then die
+        sprite.play(SICK_AFTER);
+        this.move_speed = REALLY_SICK_MOVESPEED;
+        this.destination = {
+          x : Std.random(MainScene.SCREEN_WIDTH) * .95,
+          y : Std.random(MainScene.SCREEN_HEIGHT) * .95
+        };
+      }
+
+    }else{ // did not get blood, go back in to clinic
+      haxe.Timer.delay(function():Void
+      {
+        destination = { x : Clinic.DOOR_X, y : Clinic.DOOR_Y };
+      }, Std.random(RANDOM_WAIT_TO_REVISIT_CLINIC_MS));
+    }
+
+    recently_got_blood = false;
+
   }
 
 

@@ -72,4 +72,16 @@ class MainScene extends Scene
     }
   }
 
+  public inline function despawn(person:Person):Void
+  {
+    switch (Type.getClass(person)) {
+      case Patient:
+        remove( cast(person,Patient) );
+        patients.remove( cast(person,Patient) );
+      case Donor:
+        remove( cast(person,Donor) );
+        donors.remove( cast(person,Donor) );
+    }
+  }
+
 }

@@ -41,8 +41,7 @@ class Donor extends Person
     else
     {
 
-      main.remove(this);
-      main.donors.remove(this);
+      this.main.despawn(this);
 
     }
 

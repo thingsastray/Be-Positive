@@ -28,4 +28,105 @@ class BloodTypeTools
       case BloodType.O_NEG:   "o-";
     }
   }
+
+  /*
+    [1,1,1,1,1,1,1,1]
+    [1,0,1,0,1,0,1,0]
+    [1,1,0,0,1,1,0,0]
+    [1,0,0,0,1,0,0,0]
+    [1,1,1,1,0,0,0,0]
+    [1,0,1,0,0,0,0,0]
+    [1,1,0,0,0,0,0,0]
+    [1,0,0,0,0,0,0,0]
+   */
+  public static var blood_map(get_blood_map, null):Map<BloodType,Map<BloodType,Bool>>;
+  private static var map:Map<BloodType,Map<BloodType,Bool>>;
+  private static inline function get_blood_map():Map<BloodType,Map<BloodType,Bool>>
+  {
+    if(map == null){
+      map = new Map<BloodType,Map<BloodType,Bool>>();
+
+      map[BloodType.AB_POS] = new Map<BloodType,Bool>();
+      map[BloodType.AB_NEG] = new Map<BloodType,Bool>();
+      map[BloodType.A_POS]  = new Map<BloodType,Bool>();
+      map[BloodType.A_NEG]  = new Map<BloodType,Bool>();
+      map[BloodType.B_POS]  = new Map<BloodType,Bool>();
+      map[BloodType.B_NEG]  = new Map<BloodType,Bool>();
+      map[BloodType.O_POS]  = new Map<BloodType,Bool>();
+      map[BloodType.O_NEG]  = new Map<BloodType,Bool>();
+
+      map[BloodType.AB_POS][BloodType.AB_POS] = true;
+      map[BloodType.AB_POS][BloodType.AB_NEG] = true;
+      map[BloodType.AB_POS][BloodType.A_POS]  = true;
+      map[BloodType.AB_POS][BloodType.A_NEG]  = true;
+      map[BloodType.AB_POS][BloodType.B_POS]  = true;
+      map[BloodType.AB_POS][BloodType.B_NEG]  = true;
+      map[BloodType.AB_POS][BloodType.O_POS]  = true;
+      map[BloodType.AB_POS][BloodType.O_NEG]  = true;
+
+      map[BloodType.AB_NEG][BloodType.AB_POS] = true;
+      map[BloodType.AB_NEG][BloodType.AB_NEG] = false;
+      map[BloodType.AB_NEG][BloodType.A_POS]  = true;
+      map[BloodType.AB_NEG][BloodType.A_NEG]  = false;
+      map[BloodType.AB_NEG][BloodType.B_POS]  = true;
+      map[BloodType.AB_NEG][BloodType.B_NEG]  = false;
+      map[BloodType.AB_NEG][BloodType.O_POS]  = true;
+      map[BloodType.AB_NEG][BloodType.O_NEG]  = false;
+
+      map[BloodType.A_POS][BloodType.AB_POS] = true;
+      map[BloodType.A_POS][BloodType.AB_NEG] = true;
+      map[BloodType.A_POS][BloodType.A_POS]  = false;
+      map[BloodType.A_POS][BloodType.A_NEG]  = false;
+      map[BloodType.A_POS][BloodType.B_POS]  = true;
+      map[BloodType.A_POS][BloodType.B_NEG]  = true;
+      map[BloodType.A_POS][BloodType.O_POS]  = false;
+      map[BloodType.A_POS][BloodType.O_NEG]  = false;
+
+      map[BloodType.A_NEG][BloodType.AB_POS] = true;
+      map[BloodType.A_NEG][BloodType.AB_NEG] = false;
+      map[BloodType.A_NEG][BloodType.A_POS]  = false;
+      map[BloodType.A_NEG][BloodType.A_NEG]  = false;
+      map[BloodType.A_NEG][BloodType.B_POS]  = true;
+      map[BloodType.A_NEG][BloodType.B_NEG]  = false;
+      map[BloodType.A_NEG][BloodType.O_POS]  = false;
+      map[BloodType.A_NEG][BloodType.O_NEG]  = false;
+
+      map[BloodType.B_POS][BloodType.AB_POS] = true;
+      map[BloodType.B_POS][BloodType.AB_NEG] = true;
+      map[BloodType.B_POS][BloodType.A_POS]  = true;
+      map[BloodType.B_POS][BloodType.A_NEG]  = true;
+      map[BloodType.B_POS][BloodType.B_POS]  = false;
+      map[BloodType.B_POS][BloodType.B_NEG]  = false;
+      map[BloodType.B_POS][BloodType.O_POS]  = false;
+      map[BloodType.B_POS][BloodType.O_NEG]  = false;
+
+      map[BloodType.B_NEG][BloodType.AB_POS] = true;
+      map[BloodType.B_NEG][BloodType.AB_NEG] = false;
+      map[BloodType.B_NEG][BloodType.A_POS]  = true;
+      map[BloodType.B_NEG][BloodType.A_NEG]  = false;
+      map[BloodType.B_NEG][BloodType.B_POS]  = false;
+      map[BloodType.B_NEG][BloodType.B_NEG]  = false;
+      map[BloodType.B_NEG][BloodType.O_POS]  = false;
+      map[BloodType.B_NEG][BloodType.O_NEG]  = false;
+
+      map[BloodType.O_POS][BloodType.AB_POS] = true;
+      map[BloodType.O_POS][BloodType.AB_NEG] = true;
+      map[BloodType.O_POS][BloodType.A_POS]  = false;
+      map[BloodType.O_POS][BloodType.A_NEG]  = false;
+      map[BloodType.O_POS][BloodType.B_POS]  = false;
+      map[BloodType.O_POS][BloodType.B_NEG]  = false;
+      map[BloodType.O_POS][BloodType.O_POS]  = false;
+      map[BloodType.O_POS][BloodType.O_NEG]  = false;
+
+      map[BloodType.O_NEG][BloodType.AB_POS] = true;
+      map[BloodType.O_NEG][BloodType.AB_NEG] = false;
+      map[BloodType.O_NEG][BloodType.A_POS]  = false;
+      map[BloodType.O_NEG][BloodType.A_NEG]  = false;
+      map[BloodType.O_NEG][BloodType.B_POS]  = false;
+      map[BloodType.O_NEG][BloodType.B_NEG]  = false;
+      map[BloodType.O_NEG][BloodType.O_POS]  = false;
+      map[BloodType.O_NEG][BloodType.O_NEG]  = false;
+    }
+    return map;
+  }
 }

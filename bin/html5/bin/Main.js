@@ -1431,6 +1431,7 @@ BloodType.__empty_constructs__ = [BloodType.AB_POS,BloodType.AB_NEG,BloodType.A_
 var BloodTypeTools = function() { };
 $hxClasses["BloodTypeTools"] = BloodTypeTools;
 BloodTypeTools.__name__ = ["BloodTypeTools"];
+BloodTypeTools.__properties__ = {get_blood_map:"get_blood_map"}
 BloodTypeTools.toLabel = function(blood_type) {
 	switch(blood_type[1]) {
 	case 0:
@@ -1450,6 +1451,230 @@ BloodTypeTools.toLabel = function(blood_type) {
 	case 7:
 		return "o-";
 	}
+};
+BloodTypeTools.blood_map = null;
+BloodTypeTools.map = null;
+BloodTypeTools.get_blood_map = function() {
+	if(BloodTypeTools.map == null) {
+		BloodTypeTools.map = new haxe.ds.EnumValueMap();
+		var v = new haxe.ds.EnumValueMap();
+		BloodTypeTools.map.set(BloodType.AB_POS,v);
+		v;
+		var v1 = new haxe.ds.EnumValueMap();
+		BloodTypeTools.map.set(BloodType.AB_NEG,v1);
+		v1;
+		var v2 = new haxe.ds.EnumValueMap();
+		BloodTypeTools.map.set(BloodType.A_POS,v2);
+		v2;
+		var v3 = new haxe.ds.EnumValueMap();
+		BloodTypeTools.map.set(BloodType.A_NEG,v3);
+		v3;
+		var v4 = new haxe.ds.EnumValueMap();
+		BloodTypeTools.map.set(BloodType.B_POS,v4);
+		v4;
+		var v5 = new haxe.ds.EnumValueMap();
+		BloodTypeTools.map.set(BloodType.B_NEG,v5);
+		v5;
+		var v6 = new haxe.ds.EnumValueMap();
+		BloodTypeTools.map.set(BloodType.O_POS,v6);
+		v6;
+		var v7 = new haxe.ds.EnumValueMap();
+		BloodTypeTools.map.set(BloodType.O_NEG,v7);
+		v7;
+		var this1 = BloodTypeTools.map.get(BloodType.AB_POS);
+		this1.set(BloodType.AB_POS,true);
+		true;
+		var this2 = BloodTypeTools.map.get(BloodType.AB_POS);
+		this2.set(BloodType.AB_NEG,true);
+		true;
+		var this3 = BloodTypeTools.map.get(BloodType.AB_POS);
+		this3.set(BloodType.A_POS,true);
+		true;
+		var this4 = BloodTypeTools.map.get(BloodType.AB_POS);
+		this4.set(BloodType.A_NEG,true);
+		true;
+		var this5 = BloodTypeTools.map.get(BloodType.AB_POS);
+		this5.set(BloodType.B_POS,true);
+		true;
+		var this6 = BloodTypeTools.map.get(BloodType.AB_POS);
+		this6.set(BloodType.B_NEG,true);
+		true;
+		var this7 = BloodTypeTools.map.get(BloodType.AB_POS);
+		this7.set(BloodType.O_POS,true);
+		true;
+		var this8 = BloodTypeTools.map.get(BloodType.AB_POS);
+		this8.set(BloodType.O_NEG,true);
+		true;
+		var this9 = BloodTypeTools.map.get(BloodType.AB_NEG);
+		this9.set(BloodType.AB_POS,true);
+		true;
+		var this10 = BloodTypeTools.map.get(BloodType.AB_NEG);
+		this10.set(BloodType.AB_NEG,false);
+		false;
+		var this11 = BloodTypeTools.map.get(BloodType.AB_NEG);
+		this11.set(BloodType.A_POS,true);
+		true;
+		var this12 = BloodTypeTools.map.get(BloodType.AB_NEG);
+		this12.set(BloodType.A_NEG,false);
+		false;
+		var this13 = BloodTypeTools.map.get(BloodType.AB_NEG);
+		this13.set(BloodType.B_POS,true);
+		true;
+		var this14 = BloodTypeTools.map.get(BloodType.AB_NEG);
+		this14.set(BloodType.B_NEG,false);
+		false;
+		var this15 = BloodTypeTools.map.get(BloodType.AB_NEG);
+		this15.set(BloodType.O_POS,true);
+		true;
+		var this16 = BloodTypeTools.map.get(BloodType.AB_NEG);
+		this16.set(BloodType.O_NEG,false);
+		false;
+		var this17 = BloodTypeTools.map.get(BloodType.A_POS);
+		this17.set(BloodType.AB_POS,true);
+		true;
+		var this18 = BloodTypeTools.map.get(BloodType.A_POS);
+		this18.set(BloodType.AB_NEG,true);
+		true;
+		var this19 = BloodTypeTools.map.get(BloodType.A_POS);
+		this19.set(BloodType.A_POS,false);
+		false;
+		var this20 = BloodTypeTools.map.get(BloodType.A_POS);
+		this20.set(BloodType.A_NEG,false);
+		false;
+		var this21 = BloodTypeTools.map.get(BloodType.A_POS);
+		this21.set(BloodType.B_POS,true);
+		true;
+		var this22 = BloodTypeTools.map.get(BloodType.A_POS);
+		this22.set(BloodType.B_NEG,true);
+		true;
+		var this23 = BloodTypeTools.map.get(BloodType.A_POS);
+		this23.set(BloodType.O_POS,false);
+		false;
+		var this24 = BloodTypeTools.map.get(BloodType.A_POS);
+		this24.set(BloodType.O_NEG,false);
+		false;
+		var this25 = BloodTypeTools.map.get(BloodType.A_NEG);
+		this25.set(BloodType.AB_POS,true);
+		true;
+		var this26 = BloodTypeTools.map.get(BloodType.A_NEG);
+		this26.set(BloodType.AB_NEG,false);
+		false;
+		var this27 = BloodTypeTools.map.get(BloodType.A_NEG);
+		this27.set(BloodType.A_POS,false);
+		false;
+		var this28 = BloodTypeTools.map.get(BloodType.A_NEG);
+		this28.set(BloodType.A_NEG,false);
+		false;
+		var this29 = BloodTypeTools.map.get(BloodType.A_NEG);
+		this29.set(BloodType.B_POS,true);
+		true;
+		var this30 = BloodTypeTools.map.get(BloodType.A_NEG);
+		this30.set(BloodType.B_NEG,false);
+		false;
+		var this31 = BloodTypeTools.map.get(BloodType.A_NEG);
+		this31.set(BloodType.O_POS,false);
+		false;
+		var this32 = BloodTypeTools.map.get(BloodType.A_NEG);
+		this32.set(BloodType.O_NEG,false);
+		false;
+		var this33 = BloodTypeTools.map.get(BloodType.B_POS);
+		this33.set(BloodType.AB_POS,true);
+		true;
+		var this34 = BloodTypeTools.map.get(BloodType.B_POS);
+		this34.set(BloodType.AB_NEG,true);
+		true;
+		var this35 = BloodTypeTools.map.get(BloodType.B_POS);
+		this35.set(BloodType.A_POS,true);
+		true;
+		var this36 = BloodTypeTools.map.get(BloodType.B_POS);
+		this36.set(BloodType.A_NEG,true);
+		true;
+		var this37 = BloodTypeTools.map.get(BloodType.B_POS);
+		this37.set(BloodType.B_POS,false);
+		false;
+		var this38 = BloodTypeTools.map.get(BloodType.B_POS);
+		this38.set(BloodType.B_NEG,false);
+		false;
+		var this39 = BloodTypeTools.map.get(BloodType.B_POS);
+		this39.set(BloodType.O_POS,false);
+		false;
+		var this40 = BloodTypeTools.map.get(BloodType.B_POS);
+		this40.set(BloodType.O_NEG,false);
+		false;
+		var this41 = BloodTypeTools.map.get(BloodType.B_NEG);
+		this41.set(BloodType.AB_POS,true);
+		true;
+		var this42 = BloodTypeTools.map.get(BloodType.B_NEG);
+		this42.set(BloodType.AB_NEG,false);
+		false;
+		var this43 = BloodTypeTools.map.get(BloodType.B_NEG);
+		this43.set(BloodType.A_POS,true);
+		true;
+		var this44 = BloodTypeTools.map.get(BloodType.B_NEG);
+		this44.set(BloodType.A_NEG,false);
+		false;
+		var this45 = BloodTypeTools.map.get(BloodType.B_NEG);
+		this45.set(BloodType.B_POS,false);
+		false;
+		var this46 = BloodTypeTools.map.get(BloodType.B_NEG);
+		this46.set(BloodType.B_NEG,false);
+		false;
+		var this47 = BloodTypeTools.map.get(BloodType.B_NEG);
+		this47.set(BloodType.O_POS,false);
+		false;
+		var this48 = BloodTypeTools.map.get(BloodType.B_NEG);
+		this48.set(BloodType.O_NEG,false);
+		false;
+		var this49 = BloodTypeTools.map.get(BloodType.O_POS);
+		this49.set(BloodType.AB_POS,true);
+		true;
+		var this50 = BloodTypeTools.map.get(BloodType.O_POS);
+		this50.set(BloodType.AB_NEG,true);
+		true;
+		var this51 = BloodTypeTools.map.get(BloodType.O_POS);
+		this51.set(BloodType.A_POS,false);
+		false;
+		var this52 = BloodTypeTools.map.get(BloodType.O_POS);
+		this52.set(BloodType.A_NEG,false);
+		false;
+		var this53 = BloodTypeTools.map.get(BloodType.O_POS);
+		this53.set(BloodType.B_POS,false);
+		false;
+		var this54 = BloodTypeTools.map.get(BloodType.O_POS);
+		this54.set(BloodType.B_NEG,false);
+		false;
+		var this55 = BloodTypeTools.map.get(BloodType.O_POS);
+		this55.set(BloodType.O_POS,false);
+		false;
+		var this56 = BloodTypeTools.map.get(BloodType.O_POS);
+		this56.set(BloodType.O_NEG,false);
+		false;
+		var this57 = BloodTypeTools.map.get(BloodType.O_NEG);
+		this57.set(BloodType.AB_POS,true);
+		true;
+		var this58 = BloodTypeTools.map.get(BloodType.O_NEG);
+		this58.set(BloodType.AB_NEG,false);
+		false;
+		var this59 = BloodTypeTools.map.get(BloodType.O_NEG);
+		this59.set(BloodType.A_POS,false);
+		false;
+		var this60 = BloodTypeTools.map.get(BloodType.O_NEG);
+		this60.set(BloodType.A_NEG,false);
+		false;
+		var this61 = BloodTypeTools.map.get(BloodType.O_NEG);
+		this61.set(BloodType.B_POS,false);
+		false;
+		var this62 = BloodTypeTools.map.get(BloodType.O_NEG);
+		this62.set(BloodType.B_NEG,false);
+		false;
+		var this63 = BloodTypeTools.map.get(BloodType.O_NEG);
+		this63.set(BloodType.O_POS,false);
+		false;
+		var this64 = BloodTypeTools.map.get(BloodType.O_NEG);
+		this64.set(BloodType.O_NEG,false);
+		false;
+	}
+	return BloodTypeTools.map;
 };
 com.haxepunk.Tweener = function() {
 	this.active = true;
@@ -2058,10 +2283,16 @@ Reflect.fields = function(o) {
 Reflect.isFunction = function(f) {
 	return typeof(f) == "function" && !(f.__name__ || f.__ename__);
 };
+Reflect.compare = function(a,b) {
+	if(a == b) return 0; else if(a > b) return 1; else return -1;
+};
 Reflect.isObject = function(v) {
 	if(v == null) return false;
 	var t = typeof(v);
 	return t == "string" || t == "object" && v.__enum__ == null || t == "function" && (v.__name__ || v.__ename__) != null;
+};
+Reflect.isEnumValue = function(v) {
+	return v != null && v.__enum__ != null;
 };
 Reflect.deleteField = function(o,field) {
 	if(!Object.prototype.hasOwnProperty.call(o,field)) return false;
@@ -3857,6 +4088,9 @@ Clinic.prototype = $extend(com.haxepunk.Entity.prototype,{
 			return $r;
 		}(this)) + " " + Std.string(Reflect.field(this.bank,Std.string(blood_type))));
 	}
+	,get_blood_count: function(blood_type) {
+		return Reflect.field(this.bank,Std.string(blood_type));
+	}
 	,increase_blood_inventory: function(blood_type) {
 		this.set_bank_inventory_count(blood_type,Reflect.field(this.bank,Std.string(blood_type)) + 1);
 	}
@@ -3867,7 +4101,19 @@ Clinic.prototype = $extend(com.haxepunk.Entity.prototype,{
 		} else return false;
 	}
 	,patient_transfusion: function(patient) {
-		BloodTransfusionRules.receive_patient({ gender : Std.string(patient.gender), blood_type : Std.string(patient.blood_type)});
+		var blood_to_inject_str = BloodTransfusionRules.receive_patient({ gender : Std.string(patient.gender), blood_type : Std.string(patient.blood_type)});
+		if(blood_to_inject_str != "false") {
+			var blood_to_inject = Reflect.field(BloodType,blood_to_inject_str);
+			if(Reflect.field(this.bank,Std.string(blood_to_inject)) > 0) {
+				if(Reflect.field(this.bank,Std.string(blood_to_inject)) > 0?(function($this) {
+					var $r;
+					$this.set_bank_inventory_count(blood_to_inject,Reflect.field($this.bank,Std.string(blood_to_inject)) - 1);
+					$r = true;
+					return $r;
+				}(this)):false) patient.receive_blood(blood_to_inject); else haxe.Log.trace("[[[ERROR]]] blood was about to go below 0.",{ fileName : "Clinic.hx", lineNumber : 151, className : "Clinic", methodName : "patient_transfusion"});
+			} else haxe.Log.trace("[[[WARNING]]] your rules allowed clinic to give " + blood_to_inject_str + " without the clinic having sufficient stock. The patient was not given any blood.",{ fileName : "Clinic.hx", lineNumber : 156, className : "Clinic", methodName : "patient_transfusion"});
+		} else {
+		}
 	}
 	,donor_transfusion: function(donor) {
 		this.increase_blood_inventory(donor.blood_type);
@@ -4240,10 +4486,7 @@ Donor.prototype = $extend(Person.prototype,{
 		if(this.destination.x == 470 && this.destination.y == 230) {
 			this.visible = false;
 			haxe.Timer.delay($bind(this,this.donation_complete),10000);
-		} else {
-			this.main.remove(this);
-			this.main.donors.remove(this);
-		}
+		} else this.main.despawn(this);
 		this.destination = null;
 	}
 	,donation_complete: function() {
@@ -5119,11 +5362,29 @@ MainScene.prototype = $extend(com.haxepunk.Scene.prototype,{
 	,spawner: function(age) {
 		if(Std.random(100) == 0) this.spawn(Patient); else if(Std.random(100) == 0) this.spawn(Donor);
 	}
+	,despawn: function(person) {
+		var _g = Type.getClass(person);
+		switch(_g) {
+		case Patient:
+			this.remove(js.Boot.__cast(person , Patient));
+			this.patients.remove(js.Boot.__cast(person , Patient));
+			break;
+		case Donor:
+			this.remove(js.Boot.__cast(person , Donor));
+			this.donors.remove(js.Boot.__cast(person , Donor));
+			break;
+		}
+	}
 	,__class__: MainScene
 });
 var IMap = function() { };
 $hxClasses["IMap"] = IMap;
 IMap.__name__ = ["IMap"];
+IMap.prototype = {
+	get: null
+	,set: null
+	,__class__: IMap
+};
 Math.__name__ = ["Math"];
 var NMEPreloader = function() {
 	openfl.display.Sprite.call(this);
@@ -5198,21 +5459,50 @@ Patient.__name__ = ["Patient"];
 Patient.__super__ = Person;
 Patient.prototype = $extend(Person.prototype,{
 	recently_got_blood: null
+	,blood_received: null
 	,arrive: function() {
 		if(this.destination.x == 470 && this.destination.y == 230) {
 			this.visible = false;
 			haxe.Timer.delay($bind(this,this.transfusion_complete),6000);
-		} else if(this.recently_got_blood) {
-		} else {
-		}
+		} else if(this.recently_got_blood) haxe.Timer.delay($bind(this,this.resolve_blood_transfusion),Std.random(5000)); else if(this.sprite.get_currentAnim() == "HEALTHY_AFTER") this.main.despawn(this); else this.sprite.play("DEAD");
 		this.destination = null;
+	}
+	,receive_blood: function(new_blood) {
+		this.blood_received = new_blood;
 	}
 	,transfusion_complete: function() {
 		this.visible = true;
 		this.recently_got_blood = true;
-		BloodTransfusionRules.receive_patient({ gender : Std.string(this.gender), blood_type : Std.string(this.blood_type)});
+		this.main.clinic.patient_transfusion(this);
 		var obj = { x : Std.random(640) * .75, y : Std.random(480) * .75};
 		this.destination = com.haxepunk._HXP.Position_Impl_._new(obj);
+	}
+	,resolve_blood_transfusion: function() {
+		var _g = this;
+		if(this.blood_received != null) {
+			if((function($this) {
+				var $r;
+				var this1;
+				{
+					var this2 = BloodTypeTools.get_blood_map();
+					this1 = this2.get($this.blood_type);
+				}
+				$r = this1.get($this.blood_received);
+				return $r;
+			}(this))) {
+				this.sprite.play("HEALTHY_AFTER");
+				var obj = { x : -100, y : Std.random(480) * 1.35};
+				this.destination = com.haxepunk._HXP.Position_Impl_._new(obj);
+			} else {
+				this.sprite.play("SICK_AFTER");
+				this.move_speed = 0.7;
+				var obj1 = { x : Std.random(640) * .95, y : Std.random(480) * .95};
+				this.destination = com.haxepunk._HXP.Position_Impl_._new(obj1);
+			}
+		} else haxe.Timer.delay(function() {
+			_g.destination = com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230});
+		},Std.random(10000));
+		this.recently_got_blood = false;
 	}
 	,__class__: Patient
 });
@@ -11495,6 +11785,142 @@ haxe.crypto.BaseCode.prototype = {
 	,__class__: haxe.crypto.BaseCode
 };
 haxe.ds = {};
+haxe.ds.BalancedTree = function() {
+};
+$hxClasses["haxe.ds.BalancedTree"] = haxe.ds.BalancedTree;
+haxe.ds.BalancedTree.__name__ = ["haxe","ds","BalancedTree"];
+haxe.ds.BalancedTree.prototype = {
+	root: null
+	,set: function(key,value) {
+		this.root = this.setLoop(key,value,this.root);
+	}
+	,get: function(key) {
+		var node = this.root;
+		while(node != null) {
+			var c = this.compare(key,node.key);
+			if(c == 0) return node.value;
+			if(c < 0) node = node.left; else node = node.right;
+		}
+		return null;
+	}
+	,setLoop: function(k,v,node) {
+		if(node == null) return new haxe.ds.TreeNode(null,k,v,null);
+		var c = this.compare(k,node.key);
+		if(c == 0) return new haxe.ds.TreeNode(node.left,k,v,node.right,node == null?0:node._height); else if(c < 0) {
+			var nl = this.setLoop(k,v,node.left);
+			return this.balance(nl,node.key,node.value,node.right);
+		} else {
+			var nr = this.setLoop(k,v,node.right);
+			return this.balance(node.left,node.key,node.value,nr);
+		}
+	}
+	,balance: function(l,k,v,r) {
+		var hl;
+		if(l == null) hl = 0; else hl = l._height;
+		var hr;
+		if(r == null) hr = 0; else hr = r._height;
+		if(hl > hr + 2) {
+			if((function($this) {
+				var $r;
+				var _this = l.left;
+				$r = _this == null?0:_this._height;
+				return $r;
+			}(this)) >= (function($this) {
+				var $r;
+				var _this1 = l.right;
+				$r = _this1 == null?0:_this1._height;
+				return $r;
+			}(this))) return new haxe.ds.TreeNode(l.left,l.key,l.value,new haxe.ds.TreeNode(l.right,k,v,r)); else return new haxe.ds.TreeNode(new haxe.ds.TreeNode(l.left,l.key,l.value,l.right.left),l.right.key,l.right.value,new haxe.ds.TreeNode(l.right.right,k,v,r));
+		} else if(hr > hl + 2) {
+			if((function($this) {
+				var $r;
+				var _this2 = r.right;
+				$r = _this2 == null?0:_this2._height;
+				return $r;
+			}(this)) > (function($this) {
+				var $r;
+				var _this3 = r.left;
+				$r = _this3 == null?0:_this3._height;
+				return $r;
+			}(this))) return new haxe.ds.TreeNode(new haxe.ds.TreeNode(l,k,v,r.left),r.key,r.value,r.right); else return new haxe.ds.TreeNode(new haxe.ds.TreeNode(l,k,v,r.left.left),r.left.key,r.left.value,new haxe.ds.TreeNode(r.left.right,r.key,r.value,r.right));
+		} else return new haxe.ds.TreeNode(l,k,v,r,(hl > hr?hl:hr) + 1);
+	}
+	,compare: function(k1,k2) {
+		return Reflect.compare(k1,k2);
+	}
+	,__class__: haxe.ds.BalancedTree
+};
+haxe.ds.TreeNode = function(l,k,v,r,h) {
+	if(h == null) h = -1;
+	this.left = l;
+	this.key = k;
+	this.value = v;
+	this.right = r;
+	if(h == -1) this._height = ((function($this) {
+		var $r;
+		var _this = $this.left;
+		$r = _this == null?0:_this._height;
+		return $r;
+	}(this)) > (function($this) {
+		var $r;
+		var _this1 = $this.right;
+		$r = _this1 == null?0:_this1._height;
+		return $r;
+	}(this))?(function($this) {
+		var $r;
+		var _this2 = $this.left;
+		$r = _this2 == null?0:_this2._height;
+		return $r;
+	}(this)):(function($this) {
+		var $r;
+		var _this3 = $this.right;
+		$r = _this3 == null?0:_this3._height;
+		return $r;
+	}(this))) + 1; else this._height = h;
+};
+$hxClasses["haxe.ds.TreeNode"] = haxe.ds.TreeNode;
+haxe.ds.TreeNode.__name__ = ["haxe","ds","TreeNode"];
+haxe.ds.TreeNode.prototype = {
+	left: null
+	,right: null
+	,key: null
+	,value: null
+	,_height: null
+	,__class__: haxe.ds.TreeNode
+};
+haxe.ds.EnumValueMap = function() {
+	haxe.ds.BalancedTree.call(this);
+};
+$hxClasses["haxe.ds.EnumValueMap"] = haxe.ds.EnumValueMap;
+haxe.ds.EnumValueMap.__name__ = ["haxe","ds","EnumValueMap"];
+haxe.ds.EnumValueMap.__interfaces__ = [IMap];
+haxe.ds.EnumValueMap.__super__ = haxe.ds.BalancedTree;
+haxe.ds.EnumValueMap.prototype = $extend(haxe.ds.BalancedTree.prototype,{
+	compare: function(k1,k2) {
+		var d = k1[1] - k2[1];
+		if(d != 0) return d;
+		var p1 = k1.slice(2);
+		var p2 = k2.slice(2);
+		if(p1.length == 0 && p2.length == 0) return 0;
+		return this.compareArgs(p1,p2);
+	}
+	,compareArgs: function(a1,a2) {
+		var ld = a1.length - a2.length;
+		if(ld != 0) return ld;
+		var _g1 = 0;
+		var _g = a1.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var d = this.compareArg(a1[i],a2[i]);
+			if(d != 0) return d;
+		}
+		return 0;
+	}
+	,compareArg: function(v1,v2) {
+		if(Reflect.isEnumValue(v1) && Reflect.isEnumValue(v2)) return this.compare(v1,v2); else if((v1 instanceof Array) && v1.__enum__ == null && ((v2 instanceof Array) && v2.__enum__ == null)) return this.compareArgs(v1,v2); else return Reflect.compare(v1,v2);
+	}
+	,__class__: haxe.ds.EnumValueMap
+});
 haxe.ds.IntMap = function() {
 	this.h = { };
 };
@@ -11547,6 +11973,9 @@ haxe.ds.ObjectMap.prototype = {
 		var id = key.__id__ || (key.__id__ = ++haxe.ds.ObjectMap.count);
 		this.h[id] = value;
 		this.h.__keys__[id] = key;
+	}
+	,get: function(key) {
+		return this.h[key.__id__];
 	}
 	,__class__: haxe.ds.ObjectMap
 };
@@ -17959,6 +18388,9 @@ Patient.GFX_HEALTHY_AFTER = 3;
 Patient.GFX_SICK_AFTER = 4;
 Patient.GFX_DEAD = 5;
 Patient.TRANSFUSION_TIME = 6000;
+Patient.RANDOM_WAIT_TO_REVISIT_CLINIC_MS = 10000;
+Patient.RANDOM_WAIT_TO_RESOLVE_BLOOD = 5000;
+Patient.REALLY_SICK_MOVESPEED = 0.7;
 Simulator.MAX_SIMULATION_SPEED = 10000;
 Simulator.DEFAULT_SIMULATION_SPEED = 50.0;
 com.haxepunk.debug.Console.BIG_WIDTH_THRESHOLD = 420;
