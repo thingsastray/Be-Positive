@@ -55,6 +55,7 @@ class Donor extends Person
   private inline function donation_complete():Void
   {
     this.visible = true;
+    this.sprite.play(YAY);
 
     // notify clinic
     this.main.clinic.donor_transfusion(this);

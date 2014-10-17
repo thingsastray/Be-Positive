@@ -4491,6 +4491,7 @@ Donor.prototype = $extend(Person.prototype,{
 	}
 	,donation_complete: function() {
 		this.visible = true;
+		this.sprite.play("YAY");
 		this.main.clinic.increase_blood_inventory(this.blood_type);
 		var obj = { x : 640, y : Std.random(480)};
 		this.destination = com.haxepunk._HXP.Position_Impl_._new(obj);
@@ -5472,6 +5473,7 @@ Patient.prototype = $extend(Person.prototype,{
 	}
 	,transfusion_complete: function() {
 		this.visible = true;
+		this.sprite.play("SICK_AFTER");
 		this.recently_got_blood = true;
 		this.main.clinic.patient_transfusion(this);
 		var obj = { x : Std.random(640) * .75, y : Std.random(480) * .75};
@@ -5494,9 +5496,8 @@ Patient.prototype = $extend(Person.prototype,{
 				var obj = { x : -100, y : Std.random(480) * 1.35};
 				this.destination = com.haxepunk._HXP.Position_Impl_._new(obj);
 			} else {
-				this.sprite.play("SICK_AFTER");
 				this.move_speed = 0.7;
-				var obj1 = { x : Std.random(640) * .95, y : Std.random(480) * .95};
+				var obj1 = { x : Std.random(640) * .95, y : Std.random(480) * .86};
 				this.destination = com.haxepunk._HXP.Position_Impl_._new(obj1);
 			}
 		} else haxe.Timer.delay(function() {

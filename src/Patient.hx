@@ -91,6 +91,7 @@ class Patient extends Person
   private inline function transfusion_complete():Void
   {
     this.visible = true;
+    this.sprite.play(SICK_AFTER);
     this.recently_got_blood = true;
 
     // notify clinic
@@ -122,11 +123,10 @@ class Patient extends Person
         };
       }else{
         // bad blood, get sicker, move a bit really slowly, then die
-        sprite.play(SICK_AFTER);
         this.move_speed = REALLY_SICK_MOVESPEED;
         this.destination = {
           x : Std.random(MainScene.SCREEN_WIDTH) * .95,
-          y : Std.random(MainScene.SCREEN_HEIGHT) * .95
+          y : Std.random(MainScene.SCREEN_HEIGHT) * .86
         };
       }
 
