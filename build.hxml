@@ -1,0 +1,6 @@
+# haxe build file for task/Gulpfile.hx
+-cp task
+-main Gulpfile
+-lib nodejs
+-js gulpfile.js
+-cmd cp gulpfile.js release/
