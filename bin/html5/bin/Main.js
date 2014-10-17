@@ -4445,8 +4445,8 @@ Person.prototype = $extend(com.haxepunk.Entity.prototype,{
 	,blood_badge: null
 	,update: function() {
 		this.blood_badge.visible = this.visible;
-		this.blood_badge.x = (this.followCamera?this.x + com.haxepunk.HXP.camera.x:this.x) + 28;
-		this.blood_badge.y = (this.followCamera?this.y + com.haxepunk.HXP.camera.y:this.y) + -9;
+		this.blood_badge.x = (this.followCamera?this.x + com.haxepunk.HXP.camera.x:this.x) + 26;
+		this.blood_badge.y = (this.followCamera?this.y + com.haxepunk.HXP.camera.y:this.y) + -11;
 		if(this.destination != null) {
 			if(this.distanceToPoint(this.destination.x,this.destination.y,null) < 1) this.arrive(); else this.moveTowards(this.destination.x,this.destination.y,this.move_speed,null,null);
 		}
@@ -4475,7 +4475,7 @@ var Donor = function(main) {
 	this.sprite.add("YAY",this.toGenderGFX([1]));
 	this.sprite.play("IDLE");
 	this.addGraphic(this.sprite);
-	this.blood_badge_text.setTextProperty("color",16711680);
+	this.blood_badge_text.setTextProperty("color",13788455);
 	this.destination = com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230});
 };
 $hxClasses["Donor"] = Donor;
@@ -5422,7 +5422,7 @@ NMEPreloader.prototype = $extend(openfl.display.Sprite.prototype,{
 	outline: null
 	,progress: null
 	,getBackgroundColor: function() {
-		return 3355443;
+		return 226446;
 	}
 	,getHeight: function() {
 		var height = 480;
@@ -5452,7 +5452,7 @@ var Patient = function(main) {
 	this.sprite.add("DEAD",this.toGenderGFX([5]));
 	this.sprite.play("SICK_BEFORE");
 	this.addGraphic(this.sprite);
-	this.blood_badge_text.setTextProperty("color",255);
+	this.blood_badge_text.setTextProperty("color",6868465);
 	this.destination = com.haxepunk._HXP.Position_Impl_._new({ x : 470, y : 230});
 };
 $hxClasses["Patient"] = Patient;
@@ -5470,6 +5470,8 @@ Patient.prototype = $extend(Person.prototype,{
 	}
 	,receive_blood: function(new_blood) {
 		this.blood_received = new_blood;
+		this.blood_badge_text.set_text(Person.badge_text(this.blood_type) + " < " + Person.badge_text(this.blood_received));
+		this.blood_badge_text.x = -26;
 	}
 	,transfusion_complete: function() {
 		this.visible = true;
@@ -18369,8 +18371,8 @@ Clinic.GFX_PATH = "graphics/clinic.png";
 Person.GFX_OFFSET = 6;
 Person.GFX_PATH = "graphics/persons_72x72.png";
 Person.DEFAULT_MOVESPEED = 3.9;
-Person.BLOOD_BADGE_OFFSET_X = 28;
-Person.BLOOD_BADGE_OFFSET_Y = -9;
+Person.BLOOD_BADGE_OFFSET_X = 26;
+Person.BLOOD_BADGE_OFFSET_Y = -11;
 Donor.IDLE = "IDLE";
 Donor.YAY = "YAY";
 Donor.GFX_IDLE = 0;

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	<meta title="Be-Positive" package="com.example.app" version="1.0.0" company="" />
+	<meta title="Be-Positive" package="com.devleague.BePositive" version="1.0.0" company="DevLeague" />
 
  	<app file="Main" main="Main" path="bin" />
 
-	<window fps="60" background="0x333333" />
+	<window fps="60" background="0x03748E" />
 	<window width="640" height="480" resizable="true" unless="mobile" />
 	<window fullscreen="true" if="mobile" />
 	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp" />

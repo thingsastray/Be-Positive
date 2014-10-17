@@ -17,7 +17,7 @@ class Donor extends Person
 
     addGraphic(sprite);
 
-    this.blood_badge_text.setTextProperty("color", 0xFF0000);
+    this.blood_badge_text.setTextProperty("color", 0xD26527);
 
     destination = { x : Clinic.DOOR_X, y : Clinic.DOOR_Y };
   }

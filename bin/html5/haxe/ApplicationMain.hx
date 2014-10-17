@@ -236,7 +236,7 @@ import openfl.Lib;
 	public static function main () {
 		
 		#if munit
-		embed (null, 640, 480, "333333");
+		embed (null, 640, 480, "03748E");
 		#end
 		
 	}

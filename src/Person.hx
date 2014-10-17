@@ -20,8 +20,8 @@ class Person extends Entity
   public static inline var GFX_PATH:String = "graphics/persons_72x72.png";
   public static inline var DEFAULT_MOVESPEED:Float = 3.9; // 1.1 - 3.9
 
-  private static inline var BLOOD_BADGE_OFFSET_X:Int = 28;
-  private static inline var BLOOD_BADGE_OFFSET_Y:Int = -9;
+  private static inline var BLOOD_BADGE_OFFSET_X:Int = 26;
+  private static inline var BLOOD_BADGE_OFFSET_Y:Int = -11;
 
   public var main:MainScene;
   public var blood_type:BloodType;

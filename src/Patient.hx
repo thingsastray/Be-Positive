@@ -30,7 +30,7 @@ class Patient extends Person
 
     addGraphic(sprite);
 
-    this.blood_badge_text.setTextProperty("color", 0x0000FF);
+    this.blood_badge_text.setTextProperty("color", 0x68CDF1);
 
 
     // when born, go to the clinic
@@ -80,6 +80,10 @@ class Patient extends Person
   public function receive_blood(new_blood:BloodType):Void
   {
     blood_received = new_blood;
+
+    // update the label
+    this.blood_badge_text.text = Person.badge_text(this.blood_type) + " < " + Person.badge_text(this.blood_received);
+    this.blood_badge_text.x = -26;
   }
 
   /*
