@@ -131,7 +131,7 @@ class Clinic extends Entity
   public inline function patient_transfusion(patient:Patient):Void
   {
     // handle rules
-    var blood_to_inject_str:String = BloodTransfusionRules.receive_patient( patient.as_jso() );
+    var blood_to_inject_str:String = BloodTransfusionRules.receive_patient( Reflect.copy(bank), patient.as_jso() );
     // give blood
     // update bank count
     if(blood_to_inject_str != "false"){

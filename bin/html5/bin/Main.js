@@ -2299,6 +2299,17 @@ Reflect.deleteField = function(o,field) {
 	delete(o[field]);
 	return true;
 };
+Reflect.copy = function(o) {
+	var o2 = { };
+	var _g = 0;
+	var _g1 = Reflect.fields(o);
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		Reflect.setField(o2,f,Reflect.field(o,f));
+	}
+	return o2;
+};
 Reflect.makeVarArgs = function(f) {
 	return function() {
 		var a = Array.prototype.slice.call(arguments);
@@ -4101,7 +4112,7 @@ Clinic.prototype = $extend(com.haxepunk.Entity.prototype,{
 		} else return false;
 	}
 	,patient_transfusion: function(patient) {
-		var blood_to_inject_str = BloodTransfusionRules.receive_patient({ gender : Std.string(patient.gender), blood_type : Std.string(patient.blood_type)});
+		var blood_to_inject_str = BloodTransfusionRules.receive_patient(Reflect.copy(this.bank),{ gender : Std.string(patient.gender), blood_type : Std.string(patient.blood_type)});
 		if(blood_to_inject_str != "false") {
 			var blood_to_inject = Reflect.field(BloodType,blood_to_inject_str);
 			if(Reflect.field(this.bank,Std.string(blood_to_inject)) > 0) {
