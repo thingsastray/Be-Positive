@@ -11,7 +11,7 @@
     <movie version="3" />
     <movie minorVersion="0" />
     <movie platform="NME" />
-    <movie background="333333" />
+    <movie background="03748E" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>

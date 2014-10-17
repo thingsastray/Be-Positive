@@ -1381,12 +1381,6 @@ Main.main = function() {
 Main.__super__ = com.haxepunk.Engine;
 Main.prototype = $extend(com.haxepunk.Engine.prototype,{
 	init: function() {
-		((function($this) {
-			var $r;
-			if(com.haxepunk.HXP._console == null) com.haxepunk.HXP._console = new com.haxepunk.debug.Console();
-			$r = com.haxepunk.HXP._console;
-			return $r;
-		}(this))).enable();
 		com.haxepunk.HXP.set_scene(new MainScene());
 	}
 	,__class__: Main
