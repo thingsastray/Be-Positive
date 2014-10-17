@@ -102,7 +102,7 @@ Gulpfile.main = function() {
 Gulpfile.release_task = function(cb) {
 	Gulpfile.gulp.src("" + "./bin/html5" + "/bin/lib/*").pipe(Gulpfile.gulp.dest("" + "./release" + "/js/lib/"));
 	Gulpfile.gulp.src("" + "./bin/html5" + "/Be-Positive.js").pipe(Gulpfile.gulp.dest("" + "./release" + "/js/"));
-	Gulpfile.gulp.src(["" + "./bin/html5" + "/index.html","" + "./bin/html5" + "/bin/{font,graphics}/*"]).pipe(Gulpfile.gulp.dest("" + "./release" + "/"));
+	Gulpfile.gulp.src(["" + "./bin/html5" + "/index.html","" + "./bin/html5" + "/bin/{font,graphics}/**/*"]).pipe(Gulpfile.gulp.dest("" + "./release" + "/"));
 	Gulpfile.gulp.src("" + "./bin/html5" + "/bin/Main.js").pipe(Gulpfile.uglify({ mangle : false})).pipe(Gulpfile.gulp.dest("" + "./release" + "/js/lib/"));
 };
 Gulpfile.connect_task = function(cb) {

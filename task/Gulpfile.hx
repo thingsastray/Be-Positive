@@ -51,7 +51,7 @@ class Gulpfile
       .pipe(gulp.dest('${RELEASE_BUILD_TASK}/js/lib/'));
     gulp.src('${WEBROOT}/Be-Positive.js')
       .pipe(gulp.dest('${RELEASE_BUILD_TASK}/js/'));
-    gulp.src(['${WEBROOT}/index.html','${WEBROOT}/bin/{font,graphics}/*'])
+    gulp.src(['${WEBROOT}/index.html','${WEBROOT}/bin/{font,graphics}/**/*'])
       .pipe(gulp.dest('${RELEASE_BUILD_TASK}/'));
 
     gulp.src('${WEBROOT}/bin/Main.js')
