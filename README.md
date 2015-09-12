@@ -1,8 +1,6 @@
 Be-Positive
 ===========
 
-Fork and clone
-
 simulation using the rules for valid blood tranfusions
 
 *Uses HaxePunk for webgl rendering*
