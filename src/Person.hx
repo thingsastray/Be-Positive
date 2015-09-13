@@ -25,9 +25,9 @@ class Person extends Entity
 
   public var main:MainScene;
   public var blood_type:BloodType;
+  public var gender:Gender;
 
   private var sprite:Spritemap;
-  private var gender:Gender;
   private var destination:Position; // heading towards
   private var move_speed:Float;
   private var blood_badge_text:Text;
@@ -37,7 +37,7 @@ class Person extends Entity
     this.main = main;
     this.gender = (Std.random(2) == 0)? Gender.MALE : Gender.FEMALE ;
     this.move_speed = DEFAULT_MOVESPEED;
-    this.blood_type = Type.allEnums(BloodType)[ Std.random(Type.allEnums(BloodType).length) ];
+    this.blood_type = Type.allEnums(BloodType)[ Std.random(Type.allEnums(BloodType).length-1) ]; // -1 to prevent NULL
     this.sprite = new Spritemap(GFX_PATH, 72, 72, sprite_loaded);
 
     this.blood_badge_text = new Text(badge_text(this.blood_type), 0, 0, null, null, {
@@ -47,9 +47,9 @@ class Person extends Entity
     this.main.add(blood_badge);
 
     super( -80, Std.random(480));
-    
+
   }
-  
+
   public override function update():Void
   {
     this.blood_badge.visible = this.visible;

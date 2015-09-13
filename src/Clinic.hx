@@ -16,10 +16,10 @@ typedef Bank = {
 
 class Clinic extends Entity
 {
-  public static inline var X:Int = 450;
-  public static inline var Y:Int = 200;
-  public static inline var DOOR_X:Int = 470;
-  public static inline var DOOR_Y:Int = 230;
+  public static inline var X:Float = 450;
+  public static inline var Y:Float = 200;
+  public static inline var DOOR_X:Float = 470.0;
+  public static inline var DOOR_Y:Float = 230.0;
   private static inline var DEFAULT_INITIAL_STOCK:Int = 5;
 
   private var main:MainScene;
@@ -103,6 +103,7 @@ class Clinic extends Entity
       case BloodType.B_NEG:   b_neg_label_text;
       case BloodType.O_POS:   o_pos_label_text;
       case BloodType.O_NEG:   o_neg_label_text;
+      case BloodType.NULL:    null;
     };
     text_graphic.text = '${blood_type.toLabel()} ' + Reflect.field(bank,Std.string(blood_type));
   }
@@ -158,7 +159,7 @@ class Clinic extends Entity
 
     }else{
       // don't give any new blood
-
+      trace('[[[WARNING]]] denied giving a patient a blood transfusion. The patient will get sick if ${ patient.gender == Person.Gender.MALE ? 'he' : 'she' } is not treated. (do not deny too many times).');
     }
   }
 
@@ -167,7 +168,7 @@ class Clinic extends Entity
     // increase bank count
     increase_blood_inventory(donor.blood_type);
   }
-  
+
 
 
 }

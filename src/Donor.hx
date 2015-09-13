@@ -59,8 +59,8 @@ class Donor extends Person
 
     // notify clinic
     this.main.clinic.donor_transfusion(this);
-    
-    destination = { x : MainScene.SCREEN_WIDTH, y : Std.random(MainScene.SCREEN_HEIGHT) };
+
+    destination = { x : MainScene.SCREEN_WIDTH, y : Math.random() * MainScene.SCREEN_HEIGHT };
 
   }
 }

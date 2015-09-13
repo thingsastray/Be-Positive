@@ -19,13 +19,13 @@ class MainScene extends Scene
   */
   public static inline var SPAWN_DONOR_RATE:Int = 100;
 
-  public static inline var SCREEN_WIDTH:Int = 640;
-  public static inline var SCREEN_HEIGHT:Int = 480;
+  public static inline var SCREEN_WIDTH:Float = 640.0;
+  public static inline var SCREEN_HEIGHT:Float = 480.0;
 
   private var simulator:Simulator;
   private var patients:List<Patient>;
   public var donors:List<Donor>;
-  
+
   public var clinic:Clinic;
 
   public function new()

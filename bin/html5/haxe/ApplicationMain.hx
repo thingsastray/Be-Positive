@@ -1,232 +1,145 @@
-package;
+#if !macro
 
 
-import openfl.Assets;
+@:access(lime.Assets)
 
 
-#if (!macro && !display)
-
-
-import haxe.io.Path;
-import js.html.HtmlElement;
-import js.html.Image;
-import openfl.display.Loader;
-import openfl.events.Event;
-import openfl.events.IOErrorEvent;
-import openfl.media.Sound;
-import openfl.net.URLLoader;
-import openfl.net.URLRequest;
-import openfl.Lib;
-
-
-@:access(openfl.Lib) class ApplicationMain {
+class ApplicationMain {
 	
 	
-	public static var images (default, null) = new Map <String, Image> ();
-	public static var urlLoaders = new Map <String, URLLoader> ();
-	
-	private static var assetsLoaded = 0;
-	private static var preloader:com.haxepunk.Preloader;
-	private static var total = 0;
+	public static var config:lime.app.Config;
+	public static var preloader:openfl.display.Preloader;
 	
 	
-	@:keep @:expose("openfl.embed")
-	public static function embed (elementName:String, width:Null<Int> = null, height:Null<Int> = null, background:String = null) {
+	public static function create ():Void {
 		
-		var element:HtmlElement = null;
+		var app = new lime.app.Application ();
+		app.create (config);
+		openfl.Lib.application = app;
 		
-		if (elementName != null) {
-			
-			element = cast js.Browser.document.getElementById (elementName);
-			
-		}
+		#if !flash
+		var stage = new openfl.display.Stage (app.window.width, app.window.height, config.background);
+		stage.addChild (openfl.Lib.current);
+		app.addModule (stage);
+		#end
 		
-		var color = null;
+		var display = new NMEPreloader ();
 		
-		if (background != null) {
+		preloader = new openfl.display.Preloader (display);
+		preloader.onComplete = init;
+		preloader.create (config);
+		
+		#if (js && html5)
+		var urls = [];
+		var types = [];
+		
+		
+		urls.push ("graphics/debug/console_debug.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("graphics/debug/console_hidden.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("graphics/debug/console_logo.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("graphics/debug/console_output.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("graphics/debug/console_pause.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("graphics/debug/console_play.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("graphics/debug/console_step.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("graphics/debug/console_visible.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("graphics/preloader/haxepunk.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("04b03");
+		types.push (lime.Assets.AssetType.FONT);
+		
+		
+		urls.push ("font/04B_03__.ttf.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("graphics/clinic.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("graphics/persons_72x72.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("04b03");
+		types.push (lime.Assets.AssetType.FONT);
+		
+		
+		
+		if (config.assetsPrefix != null) {
 			
-			background = StringTools.replace (background, "#", "");
-			
-			if (background.indexOf ("0x") > -1) {
+			for (i in 0...urls.length) {
 				
-				color = Std.parseInt (background);
-				
-			} else {
-				
-				color = Std.parseInt ("0x" + background);
+				if (types[i] != lime.Assets.AssetType.FONT) {
+					
+					urls[i] = config.assetsPrefix + urls[i];
+					
+				}
 				
 			}
 			
 		}
 		
-		flash.Lib.create (element, width, height, color);
+		preloader.load (urls, types);
+		#end
 		
-		preloader = new com.haxepunk.Preloader ();
-		Lib.current.addChild (preloader);
-		preloader.onInit ();
+		var result = app.exec ();
 		
-		var sounds = [];
-		var id;
+		#if (sys && !nodejs && !emscripten)
+		Sys.exit (result);
+		#end
 		
+	}
+	
+	
+	public static function init ():Void {
 		
-		var image = new Image ();
-		id = "graphics/debug/console_debug.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/debug/console_debug.png", loader);
-		total ++;
+		var loaded = 0;
+		var total = 0;
+		var library_onLoad = function (__) {
+			
+			loaded++;
+			
+			if (loaded == total) {
+				
+				start ();
+				
+			}
+			
+		}
 		
-		
-		
-		var image = new Image ();
-		id = "graphics/debug/console_hidden.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/debug/console_hidden.png", loader);
-		total ++;
-		
-		
-		
-		var image = new Image ();
-		id = "graphics/debug/console_logo.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/debug/console_logo.png", loader);
-		total ++;
-		
-		
-		
-		var image = new Image ();
-		id = "graphics/debug/console_output.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/debug/console_output.png", loader);
-		total ++;
-		
-		
-		
-		var image = new Image ();
-		id = "graphics/debug/console_pause.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/debug/console_pause.png", loader);
-		total ++;
-		
-		
-		
-		var image = new Image ();
-		id = "graphics/debug/console_play.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/debug/console_play.png", loader);
-		total ++;
-		
-		
-		
-		var image = new Image ();
-		id = "graphics/debug/console_step.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/debug/console_step.png", loader);
-		total ++;
-		
-		
-		
-		var image = new Image ();
-		id = "graphics/debug/console_visible.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/debug/console_visible.png", loader);
-		total ++;
-		
-		
-		
-		var image = new Image ();
-		id = "graphics/preloader/haxepunk.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/preloader/haxepunk.png", loader);
-		total ++;
-		
-		
-		
-		
-		
-		var image = new Image ();
-		id = "font/04B_03__.ttf.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("font/04B_03__.ttf.png", loader);
-		total ++;
-		
-		
-		
-		var image = new Image ();
-		id = "graphics/clinic.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/clinic.png", loader);
-		total ++;
-		
-		
-		
-		var image = new Image ();
-		id = "graphics/persons_72x72.png";
-		images.set (id, image);
-		image.onload = image_onLoad;
-		image.src = id;
-		//var loader:Loader = new Loader();
-		//loaders.set("graphics/persons_72x72.png", loader);
-		total ++;
-		
-		
+		preloader = null;
 		
 		
 		
 		if (total == 0) {
 			
 			start ();
-			
-		} else {
-			
-			for (path in urlLoaders.keys ()) {
-				
-				var urlLoader = urlLoaders.get (path);
-				urlLoader.addEventListener ("complete", loader_onComplete);
-				urlLoader.load (new URLRequest (path));
-				
-			}
-			
-			for (soundName in sounds) {
-				
-				var sound = new Sound ();
-				sound.addEventListener (Event.COMPLETE, sound_onComplete);
-				sound.addEventListener (IOErrorEvent.IO_ERROR, sound_onIOError);
-				sound.load (new URLRequest (soundName + ".ogg"));
-				
-			}
 			
 		}
 		
@@ -235,60 +148,46 @@ import openfl.Lib;
 	
 	public static function main () {
 		
-		#if munit
-		embed (null, 640, 480, "03748E");
+		config = {
+			
+			antialiasing: Std.int (0),
+			background: Std.int (226446),
+			borderless: false,
+			company: "DevLeague",
+			depthBuffer: false,
+			file: "Main",
+			fps: Std.int (60),
+			fullscreen: false,
+			hardware: true,
+			height: Std.int (480),
+			orientation: "",
+			packageName: "com.devleague.BePositive",
+			resizable: true,
+			stencilBuffer: true,
+			title: "Be-Positive",
+			version: "1.0.0",
+			vsync: false,
+			width: Std.int (640),
+			
+		}
+		
+		#if (js && html5)
+		#if (munit || utest)
+		openfl.Lib.embed (null, 640, 480, "03748E");
+		#end
+		#else
+		create ();
 		#end
 		
 	}
 	
 	
-	private static function start ():Void {
-		
-		preloader.addEventListener (Event.COMPLETE, preloader_onComplete);
-		preloader.onLoaded ();
-		
-	}
-	
-	
-	private static function image_onLoad (_):Void {
-		
-		assetsLoaded++;
-		
-		preloader.onUpdate (assetsLoaded, total);
-		
-		if (assetsLoaded == total) {
-			
-			start ();
-			
-		}
-		
-	}
-	
-	
-	private static function loader_onComplete (event:Event):Void {
-		
-		assetsLoaded++;
-		
-		preloader.onUpdate (assetsLoaded, total);
-		
-		if (assetsLoaded == total) {
-			
-			start ();
-			
-		}
-		
-	}
-	
-	
-	private static function preloader_onComplete (event:Event):Void {
-		
-		preloader.removeEventListener (Event.COMPLETE, preloader_onComplete);
-		Lib.current.removeChild (preloader);
-		preloader = null;
+	public static function start ():Void {
 		
 		var hasMain = false;
+		var entryPoint = Type.resolveClass ("Main");
 		
-		for (methodName in Type.getClassFields (Main)) {
+		for (methodName in Type.getClassFields (entryPoint)) {
 			
 			if (methodName == "main") {
 				
@@ -299,60 +198,39 @@ import openfl.Lib;
 			
 		}
 		
+		lime.Assets.initialize ();
+		
 		if (hasMain) {
 			
-			Reflect.callMethod (Main, Reflect.field (Main, "main"), []);
+			Reflect.callMethod (entryPoint, Reflect.field (entryPoint, "main"), []);
 			
 		} else {
 			
-			var instance:DocumentClass = Type.createInstance(DocumentClass, []);
+			var instance:DocumentClass = Type.createInstance (DocumentClass, []);
 			
-			if (Std.is (instance, flash.display.DisplayObject)) {
+			/*if (Std.is (instance, openfl.display.DisplayObject)) {
 				
-				flash.Lib.current.addChild (cast instance);
+				openfl.Lib.current.addChild (cast instance);
 				
-			} else {
-				
-				trace ("Error: No entry point found");
-				trace ("If you are using DCE with a static main, you may need to @:keep the function");
-				
-			}
+			}*/
 			
 		}
+		
+		openfl.Lib.current.stage.dispatchEvent (new openfl.events.Event (openfl.events.Event.RESIZE, false, false));
 		
 	}
 	
 	
-	private static function sound_onComplete (event:Event):Void {
+	#if neko
+	@:noCompletion public static function __init__ () {
 		
-		assetsLoaded++;
-		
-		preloader.onUpdate (assetsLoaded, total);
-		
-		if (assetsLoaded == total) {
-			
-			start ();
-			
-		}
+		var loader = new neko.vm.Loader (untyped $loader);
+		loader.addPath (haxe.io.Path.directory (Sys.executablePath ()));
+		loader.addPath ("./");
+		loader.addPath ("@executable_path/");
 		
 	}
-	
-	
-	private static function sound_onIOError (event:IOErrorEvent):Void {
-		
-		// if it is actually valid, it will load later when requested
-		
-		assetsLoaded++;
-		
-		preloader.onUpdate (assetsLoaded, total);
-		
-		if (assetsLoaded == total) {
-			
-			start ();
-			
-		}
-		
-	}
+	#end
 	
 	
 }
@@ -362,7 +240,7 @@ import openfl.Lib;
 @:keep class DocumentClass extends Main {}
 
 
-#elseif macro
+#else
 
 
 import haxe.macro.Context;
@@ -382,15 +260,17 @@ class DocumentClass {
 			if (searchTypes.pack.length == 2 && searchTypes.pack[1] == "display" && searchTypes.name == "DisplayObject") {
 				
 				var fields = Context.getBuildFields ();
+				
 				var method = macro {
 					
-					this.stage = flash.Lib.current.stage;
+					openfl.Lib.current.addChild (this);
 					super ();
-					dispatchEvent (new Event (Event.ADDED_TO_STAGE, false, false));
+					dispatchEvent (new openfl.events.Event (openfl.events.Event.ADDED_TO_STAGE, false, false));
 					
 				}
 				
 				fields.push ({ name: "new", access: [ APublic ], kind: FFun({ args: [], expr: method, params: [], ret: macro :Void }), pos: Context.currentPos () });
+				
 				return fields;
 				
 			}
@@ -400,24 +280,6 @@ class DocumentClass {
 		}
 		
 		return null;
-		
-	}
-	
-	
-}
-
-
-#else
-
-
-import Main;
-
-class ApplicationMain {
-	
-	
-	public static function main () {
-		
-		
 		
 	}
 	

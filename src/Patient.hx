@@ -15,13 +15,15 @@ class Patient extends Person
   private static inline var RANDOM_WAIT_TO_REVISIT_CLINIC_MS:Int = 10000;
   private static inline var RANDOM_WAIT_TO_RESOLVE_BLOOD:Int = 5000;
   private static inline var REALLY_SICK_MOVESPEED:Float = 0.7;
+  private static inline var MAX_DENIED_TRANSFUSIONS:Int = 2;
 
   private var recently_got_blood:Bool; // if true, JUST left hospital
   private var blood_received:BloodType;
+  private var denied_transfuions:Int;
 
   public function new(main:MainScene){
     super(main);
-    
+
     sprite.add(SICK_BEFORE, toGenderGFX([GFX_SICK_BEFORE]) );
     sprite.add(HEALTHY_AFTER, toGenderGFX([GFX_HEALTHY_AFTER]) );
     sprite.add(SICK_AFTER, toGenderGFX([GFX_SICK_AFTER]) );
@@ -103,8 +105,8 @@ class Patient extends Person
 
     // go to random spot outside
     this.destination = {
-      x : Std.random(MainScene.SCREEN_WIDTH) * .75,
-      y : Std.random(MainScene.SCREEN_HEIGHT) * .75
+      x : Math.random() * MainScene.SCREEN_WIDTH * .75,
+      y : Math.random() * MainScene.SCREEN_HEIGHT * .75
     };
   }
 
@@ -122,23 +124,36 @@ class Patient extends Person
         // ok, make happy, run off map, and remove entity
         sprite.play(HEALTHY_AFTER);
         this.destination = {
-          x : -100,
-          y : Std.random(MainScene.SCREEN_HEIGHT) * 1.35
+          x : -100.0,
+          y : Math.random() * MainScene.SCREEN_HEIGHT * 1.35
         };
       }else{
         // bad blood, get sicker, move a bit really slowly, then die
         this.move_speed = REALLY_SICK_MOVESPEED;
         this.destination = {
-          x : Std.random(MainScene.SCREEN_WIDTH) * .95,
-          y : Std.random(MainScene.SCREEN_HEIGHT) * .86
+          x : Math.random() * MainScene.SCREEN_WIDTH * .95,
+          y : Math.random() * MainScene.SCREEN_HEIGHT * .86
         };
       }
 
     }else{ // did not get blood, go back in to clinic
-      haxe.Timer.delay(function():Void
-      {
-        destination = { x : Clinic.DOOR_X, y : Clinic.DOOR_Y };
-      }, Std.random(RANDOM_WAIT_TO_REVISIT_CLINIC_MS));
+
+      if( this.denied_transfuions++ >= MAX_DENIED_TRANSFUSIONS ){
+        // patient needed blood, didn't get, kill him
+        this.receive_blood(BloodType.NULL);
+        this.move_speed = REALLY_SICK_MOVESPEED;
+        this.destination = {
+          x : Math.random() * MainScene.SCREEN_WIDTH * .95,
+          y : Math.random() * MainScene.SCREEN_HEIGHT * .86
+        };
+
+      }else{
+        // go back to clinic and ask again
+        haxe.Timer.delay(function():Void
+        {
+          destination = { x : Clinic.DOOR_X, y : Clinic.DOOR_Y };
+        }, Std.random(RANDOM_WAIT_TO_REVISIT_CLINIC_MS));
+      }
     }
 
     recently_got_blood = false;

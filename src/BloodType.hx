@@ -8,6 +8,7 @@ enum BloodType
   B_NEG;
   O_POS;
   O_NEG;
+  NULL;
 }
 
 class BloodTypeTools
@@ -26,6 +27,7 @@ class BloodTypeTools
       case BloodType.B_NEG:   "b-";
       case BloodType.O_POS:   "o+";
       case BloodType.O_NEG:   "o-";
+      case BloodType.NULL:    "none";
     }
   }
 
