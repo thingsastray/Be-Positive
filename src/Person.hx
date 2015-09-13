@@ -102,9 +102,13 @@ class Person extends Entity
   private static inline function badge_text(bt:BloodType):String
   {
     var str = Std.string(bt);
-    str = StringTools.replace(str, "_POS", "+");
-    str = StringTools.replace(str, "_NEG", "-");
-    return str;
+    if(str == "NULL"){
+      return "none";
+    }else{
+      str = StringTools.replace(str, "_POS", "+");
+      str = StringTools.replace(str, "_NEG", "-");
+      return str;
+    }
   }
 
 

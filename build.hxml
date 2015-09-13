@@ -3,4 +3,4 @@
 -main Gulpfile
 -lib nodejs
 -js gulpfile.js
--cmd cp gulpfile.js release/
+-cmd cp gulpfile.js Be-Positive/

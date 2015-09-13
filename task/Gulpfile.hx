@@ -5,7 +5,7 @@
 
   tasks:
     - default : runs http server with live reload
-    - test : todo 
+    - test : todo
 */
 import js.Node;
 
@@ -30,12 +30,12 @@ class Gulpfile
 {
   public static inline var WEBROOT:String = "./bin/html5";
   public static inline var RELEASE_WEBROOT:String = "./";
-  public static inline var RELEASE_BUILD_TASK:String = "./release";
+  public static inline var RELEASE_BUILD_TASK:String = "./Be-Positive";
 
   private static var gulp:Gulp = Node.require("gulp");
   private static var connect:GulpConnect = Node.require("gulp-connect");
   private static var uglify:Dynamic->Void = Node.require("gulp-uglify");
-  
+
   public static function main()
   {
     gulp.task('default', ['connect','watch']);
@@ -91,5 +91,5 @@ class Gulpfile
       }
     );
   }
-  
+
 }
