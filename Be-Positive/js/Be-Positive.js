@@ -68,12 +68,12 @@ BloodTransfusionRules = {
       }
 
       if (patient.blood_type === BloodType.B_POS) {
-      acceptableBlood = ["B_POS", "B_NEG", "O_POS", "O_NEG"];
+        acceptableBlood = ["B_POS", "B_NEG", "O_POS", "O_NEG"];
         return searchBloodtype(blood_inventory, acceptableBlood);
       }
 
       if (patient.blood_type === BloodType.B_NEG){
-acceptableBlood = ["B_NEG", "O_NEG"];
+        acceptableBlood = ["B_NEG", "O_NEG"];
         return searchBloodtype(blood_inventory, acceptableBlood);
       }
       if (patient.blood_type === BloodType.O_NEG){
